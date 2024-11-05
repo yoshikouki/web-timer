@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { M_PLUS_2 } from "next/font/google";
 import "./globals.css";
+import { ViewTransitionProvider } from "@/components/animated-link/view-transition-provider";
 import { cn } from "@/lib/utils";
 import { Footer } from "./footer";
 
@@ -17,11 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={cn("antialiased", font.className)}>
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <ViewTransitionProvider>
+      <html lang="en" className="dark">
+        <body className={cn("antialiased", font.className)}>
+          {children}
+          <Footer />
+        </body>
+      </html>
+    </ViewTransitionProvider>
   );
 }
