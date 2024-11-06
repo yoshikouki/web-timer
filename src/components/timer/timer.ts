@@ -57,3 +57,44 @@ export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
   duration: baseTimer?.duration ?? 300_000, // 5 minutes
   remainingTime: baseTimer?.duration ?? 300_000,
 });
+
+export const startTimer = (
+  currentTimer: CurrentTimerType,
+): RunningTimerType => {
+  return {
+    ...currentTimer,
+    status: "running",
+    startTime: Date.now(),
+    remainingTime: currentTimer.duration,
+  };
+};
+
+export const tickTimer = (currentTimer: CurrentTimerType): RunningTimerType => {
+  if (currentTimer.status !== "running") {
+    throw new Error("Timer is not running");
+  }
+  const elapsedTime = Date.now() - currentTimer.startTime;
+  return {
+    ...currentTimer,
+    remainingTime: currentTimer.duration - elapsedTime,
+  };
+};
+
+export const stopTimer = (currentTimer: CurrentTimerType): StoppedTimerType => {
+  switch (currentTimer.status) {
+    case "running":
+      return {
+        ...currentTimer,
+        status: "stopped",
+      };
+    case "paused": {
+      const { pausedTime, ...rest } = currentTimer;
+      return {
+        ...rest,
+        status: "stopped",
+      };
+    }
+    default:
+      throw new Error("Timer is not running or paused");
+  }
+};

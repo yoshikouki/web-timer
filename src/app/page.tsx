@@ -1,4 +1,5 @@
 import { Timer } from "@/components/timer";
+import { TimerController } from "@/components/timer/timer-controller";
 import { TimerProvider } from "@/components/timer/timer-provider";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
           <Timer />
         </div>
       </main>
+      <TimerController />
     </TimerProvider>
   );
 }
