@@ -13,37 +13,38 @@ import {
 import {
   type CurrentTimerType,
   type TimersType,
-  initialCurrentTimer,
-  initialTimers,
+  initReadyTimer,
+  initTimers,
 } from "./timer";
 
 type TimerContextType = {
   timers: TimersType;
   setTimers: Dispatch<SetStateAction<TimersType>>;
+  currentTimer: CurrentTimerType;
+  setCurrentTimer: Dispatch<SetStateAction<CurrentTimerType>>;
   timerControlSettings: TimerControllerSettingsType;
   setTimerControlSettings: Dispatch<
     SetStateAction<TimerControllerSettingsType>
   >;
-  currentTimer: CurrentTimerType;
-  setCurrentTimer: Dispatch<SetStateAction<CurrentTimerType>>;
 };
 
 export const TimerContext = createContext<TimerContextType>({
-  timers: initialTimers,
+  timers: [],
   setTimers: () => {},
+  currentTimer: initReadyTimer(),
+  setCurrentTimer: () => {},
   timerControlSettings: initialTimerControllerSettings,
   setTimerControlSettings: () => {},
-  currentTimer: initialCurrentTimer,
-  setCurrentTimer: () => {},
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [timers, setTimers] = useState(initialTimers);
+  const [timers, setTimers] = useState(initTimers());
+  const [currentTimer, setCurrentTimer] = useState<CurrentTimerType>(
+    initReadyTimer(timers[0]),
+  );
   const [timerControlSettings, setTimerControlSettings] = useState(
     initialTimerControllerSettings,
   );
-  const [currentTimer, setCurrentTimer] =
-    useState<CurrentTimerType>(initialCurrentTimer);
   return (
     <TimerContext.Provider
       value={{

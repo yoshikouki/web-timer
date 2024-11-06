@@ -48,12 +48,12 @@ type StoppedTimerType = {
   remainingTime: number; // ms
 };
 
-export const initialTimers: TimersType = [];
+export const initTimers = (): TimersType => [initReadyTimer()];
 
-export const initialCurrentTimer: CurrentTimerType = {
-  id: crypto.randomUUID(),
+export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
+  id: baseTimer?.id ?? crypto.randomUUID(),
   status: "ready",
   startTime: null,
-  duration: 300_000, // 5 minutes
-  remainingTime: 300_000,
-};
+  duration: baseTimer?.duration ?? 300_000, // 5 minutes
+  remainingTime: baseTimer?.duration ?? 300_000,
+});
