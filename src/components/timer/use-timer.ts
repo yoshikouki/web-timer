@@ -1,5 +1,11 @@
 import { useContext, useRef } from "react";
-import { startTimer, stopTimer, tickTimer } from "./timer";
+import {
+  pauseTimer,
+  resumeTimer,
+  startTimer,
+  stopTimer,
+  tickTimer,
+} from "./timer";
 import { TimerContext } from "./timer-provider";
 
 export const useTimer = () => {
@@ -30,6 +36,20 @@ export const useTimer = () => {
     );
   };
 
+  const pause = () => {
+    setCurrentTimer(pauseTimer);
+    clearInterval(tickIntervalRef.current);
+    tickIntervalRef.current = undefined;
+  };
+
+  const resume = () => {
+    setCurrentTimer(resumeTimer);
+    tickIntervalRef.current = setInterval(
+      tick,
+      timerControlSettings.timerResolution,
+    );
+  };
+
   const stop = () => {
     setCurrentTimer(stopTimer);
     clearInterval(tickIntervalRef.current);
@@ -42,6 +62,8 @@ export const useTimer = () => {
     timerControlSettings,
     setTimerControlSettings,
     start,
+    pause,
+    resume,
     stop,
   };
 };

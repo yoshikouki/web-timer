@@ -71,11 +71,38 @@ export const startTimer = (
 
 export const tickTimer = (currentTimer: CurrentTimerType): RunningTimerType => {
   if (currentTimer.status !== "running") {
-    throw new Error("Timer is not running");
+    throw new Error(`Timer is not running. status: ${currentTimer.status}`);
   }
   const elapsedTime = Date.now() - currentTimer.startTime;
   return {
     ...currentTimer,
+    remainingTime: currentTimer.duration - elapsedTime,
+  };
+};
+
+export const pauseTimer = (currentTimer: CurrentTimerType): PausedTimerType => {
+  if (currentTimer.status !== "running") {
+    throw new Error(`Timer is not running. status: ${currentTimer.status}`);
+  }
+  return {
+    ...currentTimer,
+    status: "paused",
+    pausedTime: Date.now(),
+  };
+};
+
+export const resumeTimer = (
+  currentTimer: CurrentTimerType,
+): RunningTimerType => {
+  if (currentTimer.status !== "paused") {
+    throw new Error(`Timer is not paused. status: ${currentTimer.status}`);
+  }
+  const { pausedTime, ...rest } = currentTimer;
+  const elapsedTime = pausedTime - currentTimer.startTime;
+  return {
+    ...rest,
+    status: "running",
+    startTime: Date.now() - elapsedTime,
     remainingTime: currentTimer.duration - elapsedTime,
   };
 };
@@ -95,6 +122,8 @@ export const stopTimer = (currentTimer: CurrentTimerType): StoppedTimerType => {
       };
     }
     default:
-      throw new Error("Timer is not running or paused");
+      throw new Error(
+        `Timer is not running or paused. status: ${currentTimer.status}`,
+      );
   }
 };
