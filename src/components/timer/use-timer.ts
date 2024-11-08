@@ -1,6 +1,7 @@
 import { useContext, useRef } from "react";
 import {
   pauseTimer,
+  resetTimer,
   resumeTimer,
   startTimer,
   stopTimer,
@@ -56,6 +57,10 @@ export const useTimer = () => {
     tickIntervalRef.current = undefined;
   };
 
+  const reset = () => {
+    setCurrentTimer(resetTimer);
+  };
+
   const absRemainingTime = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingTime % 1000;
   const s = Math.floor(absRemainingTime / 1000) % 60;
@@ -83,5 +88,6 @@ export const useTimer = () => {
     pause,
     resume,
     stop,
+    reset,
   };
 };

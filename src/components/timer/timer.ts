@@ -127,3 +127,12 @@ export const stopTimer = (currentTimer: CurrentTimerType): StoppedTimerType => {
       );
   }
 };
+
+export const resetTimer = (currentTimer: CurrentTimerType): ReadyTimerType => {
+  return {
+    ...currentTimer,
+    status: "ready",
+    startTime: null,
+    remainingTime: currentTimer.duration,
+  };
+};

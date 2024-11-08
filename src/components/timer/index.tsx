@@ -5,8 +5,8 @@ import { useTimer } from "./use-timer";
 export const Timer = () => {
   const { time } = useTimer();
   return (
-    <p className="font-bold text-[13vw] tabular-nums">
+    <div className="font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
       {time.mm}:{time.ss}
-    </p>
+    </div>
   );
 };

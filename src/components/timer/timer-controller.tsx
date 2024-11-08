@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { useTimer } from "./use-timer";
 
 export const TimerController = () => {
-  const { time, status, start, pause, resume, stop } = useTimer();
+  const { status, start, pause, resume, reset } = useTimer();
   return (
     <div className="fixed bottom-0 flex w-full items-center justify-center py-4">
       {(status === "ready" || status === "stopped") && (
@@ -19,29 +19,19 @@ export const TimerController = () => {
         </Button>
       )}
       {status === "running" && (
-        <>
-          <Button
-            onClick={stop}
-            variant="ghost"
-            size="icon"
-            className="[&_svg]:size-6"
-          >
-            <SquareIcon className="fill-foreground stroke-none" />
-          </Button>
-          <Button
-            onClick={pause}
-            variant="ghost"
-            size="icon"
-            className="[&_svg]:size-6"
-          >
-            <PauseIcon className="fill-foreground stroke-none" />
-          </Button>
-        </>
+        <Button
+          onClick={pause}
+          variant="ghost"
+          size="icon"
+          className="[&_svg]:size-6"
+        >
+          <PauseIcon className="fill-foreground stroke-none" />
+        </Button>
       )}
       {status === "paused" && (
         <>
           <Button
-            onClick={stop}
+            onClick={reset}
             variant="ghost"
             size="icon"
             className="[&_svg]:size-6"
