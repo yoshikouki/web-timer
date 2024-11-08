@@ -5,11 +5,10 @@ import { Button } from "../ui/button";
 import { useTimer } from "./use-timer";
 
 export const TimerController = () => {
-  const { currentTimer, start, pause, resume, stop } = useTimer();
+  const { time, status, start, pause, resume, stop } = useTimer();
   return (
     <div className="fixed bottom-0 flex w-full items-center justify-center py-4">
-      {(currentTimer.status === "ready" ||
-        currentTimer.status === "stopped") && (
+      {(status === "ready" || status === "stopped") && (
         <Button
           onClick={start}
           variant="ghost"
@@ -19,7 +18,7 @@ export const TimerController = () => {
           <PlayIcon className="fill-foreground stroke-none" />
         </Button>
       )}
-      {currentTimer.status === "running" && (
+      {status === "running" && (
         <>
           <Button
             onClick={stop}
@@ -39,7 +38,7 @@ export const TimerController = () => {
           </Button>
         </>
       )}
-      {currentTimer.status === "paused" && (
+      {status === "paused" && (
         <>
           <Button
             onClick={stop}

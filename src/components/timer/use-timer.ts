@@ -56,7 +56,25 @@ export const useTimer = () => {
     tickIntervalRef.current = undefined;
   };
 
+  const absRemainingTime = Math.abs(currentTimer.remainingTime);
+  const ms = absRemainingTime % 1000;
+  const s = Math.floor(absRemainingTime / 1000) % 60;
+  const m = Math.floor(absRemainingTime / 1000 / 60) % 60;
+  const h = Math.floor(absRemainingTime / 1000 / 60 / 60);
+  const time = {
+    h,
+    hh: h.toString().padStart(2, "0"),
+    m,
+    mm: m.toString().padStart(2, "0"),
+    s,
+    ss: s.toString().padStart(2, "0"),
+    ms,
+    msPad: ms.toString().padStart(3, "0"),
+  };
+
   return {
+    time,
+    status: currentTimer.status,
     timers,
     currentTimer,
     timerControlSettings,

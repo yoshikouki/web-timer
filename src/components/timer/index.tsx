@@ -3,9 +3,10 @@
 import { useTimer } from "./use-timer";
 
 export const Timer = () => {
-  const { currentTimer } = useTimer();
+  const { time } = useTimer();
   return (
     <p className="font-bold text-[13vw] tabular-nums">
+      {time.mm}:{time.ss}
     </p>
   );
 };
