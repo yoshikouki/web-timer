@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { M_PLUS_2 } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { ViewTransitionProvider } from "@/components/animated-link/view-transition-provider";
 import { cn } from "@/lib/utils";
 import { Footer } from "./footer";
 
-const font = M_PLUS_2({ subsets: ["latin"] });
+const font = Noto_Sans_JP({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
