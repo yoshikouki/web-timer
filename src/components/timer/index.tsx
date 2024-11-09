@@ -1,45 +1,22 @@
 "use client";
-import { Picker, PickerColumn, PickerItem } from "../number-picker";
-import { useTimer } from "./use-timer";
 
-const selections = {
-  minutes: Array.from({ length: 60 }, (_, i) => i),
-  seconds: Array.from({ length: 60 }, (_, i) => i),
-};
+import { NumberWheel } from "./number-wheel";
+import { useTimer } from "./use-timer";
 
 export const Timer = () => {
   const { time, status, updateTime } = useTimer();
 
   return (
-    <div className="flex items-center font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
-      <Picker
-        value={{
-          minutes: time.m,
-          seconds: time.s,
-        }}
-        onChange={(value) => {
-          if (status !== "ready") return;
-          updateTime(value);
-        }}
-        wheelMode={status === "ready" ? "natural" : "off"}
-        itemHeight={160}
-      >
-        <PickerColumn key="minutes" name="minutes">
-          {selections.minutes.map((option) => (
-            <PickerItem key={option} value={option}>
-              {option.toString().padStart(2, "0")}
-            </PickerItem>
-          ))}
-        </PickerColumn>
-        <div className="flex items-center justify-center">:</div>
-        <PickerColumn key="seconds" name="seconds">
-          {selections.seconds.map((option) => (
-            <PickerItem key={option} value={option}>
-              {option.toString().padStart(2, "0")}
-            </PickerItem>
-          ))}
-        </PickerColumn>
-      </Picker>
+    <div className="flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
+      <span className="inline-flex items-center justify-center">
+        <NumberWheel number={Number.parseInt(time.mm[0])} />
+        <NumberWheel number={Number.parseInt(time.mm[1])} />
+      </span>
+      <span className="font-normal opacity-30">:</span>
+      <span className="inline-flex items-center justify-center">
+        <NumberWheel number={Number.parseInt(time.ss[0])} />
+        <NumberWheel number={Number.parseInt(time.ss[1])} />
+      </span>
     </div>
   );
 };
