@@ -141,18 +141,6 @@ function PickerRoot<TType extends PickerValue>(props: PickerRootProps<TType>) {
     ...restProps
   } = props;
 
-  const highlightStyle = useMemo<CSSProperties>(
-    () => ({
-      height: itemHeight,
-      marginTop: -(itemHeight / 2),
-      position: "absolute",
-      top: "50%",
-      left: 0,
-      width: "100%",
-      pointerEvents: "none",
-    }),
-    [itemHeight],
-  );
   const containerStyle = useMemo<CSSProperties>(
     () => ({
       height: `${height}px`,
@@ -206,34 +194,6 @@ function PickerRoot<TType extends PickerValue>(props: PickerRootProps<TType>) {
           {children}
         </PickerDataContext.Provider>
       </PickerActionsContext.Provider>
-      <div style={highlightStyle}>
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: "auto",
-            left: 0,
-            right: "auto",
-            width: "100%",
-            height: "1px",
-            background: "#d9d9d9",
-            transform: "scaleY(0.5)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "auto",
-            bottom: 0,
-            left: 0,
-            right: "auto",
-            width: "100%",
-            height: "1px",
-            background: "#d9d9d9",
-            transform: "scaleY(0.5)",
-          }}
-        />
-      </div>
     </div>
   );
 }
