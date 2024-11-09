@@ -5,12 +5,8 @@ import { Picker, PickerColumn, PickerItem } from "../number-picker";
 import { useTimer } from "./use-timer";
 
 const selections = {
-  minutes: [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-  ],
-  seconds: [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-  ],
+  minutes: Array.from({ length: 60 }, (_, i) => i),
+  seconds: Array.from({ length: 60 }, (_, i) => i),
 };
 
 export const Timer = () => {
@@ -31,7 +27,7 @@ export const Timer = () => {
         <PickerColumn key="minutes" name="minutes">
           {selections.minutes.map((option) => (
             <PickerItem key={option} value={option}>
-              {option}
+              {option.toString().padStart(2, "0")}
             </PickerItem>
           ))}
         </PickerColumn>
@@ -39,7 +35,7 @@ export const Timer = () => {
         <PickerColumn key="seconds" name="seconds">
           {selections.seconds.map((option) => (
             <PickerItem key={option} value={option}>
-              {option}
+              {option.toString().padStart(2, "0")}
             </PickerItem>
           ))}
         </PickerColumn>
