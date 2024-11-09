@@ -1,3 +1,5 @@
+import { randomID } from "@/lib/utils";
+
 export type TimersType = BaseTimerType[];
 
 type BaseTimerType = {
@@ -51,7 +53,7 @@ type StoppedTimerType = {
 export const initTimers = (): TimersType => [initReadyTimer()];
 
 export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
-  id: baseTimer?.id ?? crypto.randomUUID(),
+  id: baseTimer?.id ?? randomID(),
   status: "ready",
   startTime: null,
   duration: baseTimer?.duration ?? 300_000, // 5 minutes
