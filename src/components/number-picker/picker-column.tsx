@@ -181,9 +181,9 @@ function PickerColumn({
       if (event.deltaY === 0) {
         return;
       }
-      let delta = event.deltaY * 0.1;
-      if (Math.abs(delta) < itemHeight) {
-        delta = itemHeight * Math.sign(delta);
+      let delta = event.deltaY * 3;
+      if (itemHeight / 3 < Math.abs(delta) && Math.abs(delta) < itemHeight) {
+        delta = (itemHeight * Math.sign(delta)) / 20;
       }
       if (wheelMode === "normal") {
         delta = -delta;
@@ -212,7 +212,7 @@ function PickerColumn({
       }
       wheelingTimer.current = setTimeout(() => {
         handleWheelEnd();
-      }, 200) as unknown as number;
+      }, 100) as unknown as number;
     },
     [handleWheelEnd, handleWheeling, wheelMode],
   );
