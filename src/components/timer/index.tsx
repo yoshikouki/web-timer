@@ -13,14 +13,15 @@ export const Timer = () => {
   return (
     <div className="flex items-center font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
       <Picker
-        wheelMode="natural"
         value={{
           minutes: time.m,
           seconds: time.s,
         }}
         onChange={(value) => {
+          if (status !== "ready") return;
           updateTime(value);
         }}
+        wheelMode={status === "ready" ? "natural" : "off"}
         itemHeight={160}
       >
         <PickerColumn key="minutes" name="minutes">

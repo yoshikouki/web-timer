@@ -129,14 +129,18 @@ function PickerColumn({
 
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
+      if (wheelMode === "off") return;
+
       setStartTouchY(event.targetTouches[0].pageY);
       setStartScrollerTranslate(scrollerTranslate);
     },
-    [scrollerTranslate],
+    [scrollerTranslate, wheelMode],
   );
 
   const handleTouchMove = useCallback(
     (event: TouchEvent) => {
+      if (wheelMode === "off") return;
+
       if (event.cancelable) {
         event.preventDefault();
       }
@@ -149,7 +153,13 @@ function PickerColumn({
         startScrollerTranslate + event.targetTouches[0].pageY - startTouchY;
       updateScrollerWhileMoving(nextScrollerTranslate);
     },
-    [isMoving, startScrollerTranslate, startTouchY, updateScrollerWhileMoving],
+    [
+      isMoving,
+      startScrollerTranslate,
+      startTouchY,
+      updateScrollerWhileMoving,
+      wheelMode,
+    ],
   );
 
   const handleTouchEnd = useCallback(() => {
