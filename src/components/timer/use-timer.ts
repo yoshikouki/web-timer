@@ -6,13 +6,15 @@ import {
   startTimer,
   stopTimer,
   tickTimer,
+  updateTimer,
+  updateTimers,
 } from "./timer";
 import { TimerContext } from "./timer-provider";
 
 export const useTimer = () => {
   const {
     timers,
-    // setTimers,
+    setTimers,
     currentTimer,
     setCurrentTimer,
     timerControlSettings,
@@ -61,6 +63,12 @@ export const useTimer = () => {
     setCurrentTimer(resetTimer);
   };
 
+  const updateTime = (value: { minutes: number; seconds: number }) => {
+    const newTimer = updateTimer(currentTimer, value);
+    setCurrentTimer(newTimer);
+    setTimers(updateTimers(timers, newTimer));
+  };
+
   const absRemainingTime = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingTime % 1000;
   const s = Math.floor(absRemainingTime / 1000) % 60;
@@ -89,5 +97,6 @@ export const useTimer = () => {
     resume,
     stop,
     reset,
+    updateTime,
   };
 };

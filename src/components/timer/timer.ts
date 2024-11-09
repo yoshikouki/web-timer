@@ -52,6 +52,21 @@ type StoppedTimerType = {
 
 export const initTimers = (): TimersType => [initReadyTimer()];
 
+export const updateTimers = (
+  timers: TimersType,
+  newTimer: CurrentTimerType,
+) => {
+  const newTimers = timers.map((timer) =>
+    timer.id === newTimer.id
+      ? {
+          ...timer,
+          duration: newTimer.duration,
+        }
+      : timer,
+  );
+  return newTimers;
+};
+
 export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
   id: baseTimer?.id ?? randomID(),
   status: "ready",
@@ -136,5 +151,15 @@ export const resetTimer = (currentTimer: CurrentTimerType): ReadyTimerType => {
     status: "ready",
     startTime: null,
     remainingTime: currentTimer.duration,
+  };
+};
+
+export const updateTimer = (
+  currentTimer: CurrentTimerType,
+  value: { minutes: number; seconds: number },
+): CurrentTimerType => {
+  return {
+    ...currentTimer,
+    duration: value.minutes * 60_000 + value.seconds * 1_000,
   };
 };

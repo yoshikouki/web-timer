@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { Picker, PickerColumn, PickerItem } from "../number-picker";
 import { useTimer } from "./use-timer";
 
@@ -10,18 +8,19 @@ const selections = {
 };
 
 export const Timer = () => {
-  const { time } = useTimer();
-  const [pickerValue, setPickerValue] = useState({
-    minutes: time.m,
-    seconds: time.s,
-  });
+  const { time, status, updateTime } = useTimer();
 
   return (
     <div className="flex items-center font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
       <Picker
-        value={pickerValue}
-        onChange={setPickerValue}
         wheelMode="natural"
+        value={{
+          minutes: time.m,
+          seconds: time.s,
+        }}
+        onChange={(value) => {
+          updateTime(value);
+        }}
         itemHeight={160}
       >
         <PickerColumn key="minutes" name="minutes">
