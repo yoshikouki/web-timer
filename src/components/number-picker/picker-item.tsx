@@ -1,11 +1,12 @@
+import { cn } from "@/lib/utils";
 import {
   type HTMLProps,
   type ReactNode,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
 } from "react";
+import styles from "./number-picker.module.css";
 import { usePickerActions, usePickerData } from "./picker";
 import { useColumnData } from "./picker-column";
 
@@ -24,7 +25,13 @@ function isFunction(
   return typeof functionToCheck === "function";
 }
 
-function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
+function PickerItem({
+  style,
+  children,
+  value,
+  className,
+  ...restProps
+}: PickerItemProps) {
   const optionRef = useRef<HTMLDivElement | null>(null);
   const { itemHeight, value: pickerValue } = usePickerData("PickerItem");
   const pickerActions = usePickerActions("PickerItem");
@@ -35,16 +42,6 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
     [key, pickerActions, value],
   );
 
-  const itemStyle = useMemo(
-    () => ({
-      height: `${itemHeight}px`,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }),
-    [itemHeight],
-  );
-
   const handleClick = useCallback(() => {
     pickerActions.change(key, value);
   }, [pickerActions, key, value]);
@@ -52,11 +49,12 @@ function PickerItem({ style, children, value, ...restProps }: PickerItemProps) {
   return (
     <div
       style={{
-        ...itemStyle,
+        height: `${itemHeight}px`,
         ...style,
       }}
       ref={optionRef}
       onClick={handleClick}
+      className={cn(styles.pickerItem, className)}
       {...restProps}
     >
       {isFunction(children)

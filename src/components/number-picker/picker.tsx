@@ -1,7 +1,7 @@
 // [adcentury/react-mobile-picker: An iOS like selector/picker component for web](https://github.com/adcentury/react-mobile-picker)
 
+import { cn } from "@/lib/utils";
 import {
-  type CSSProperties,
   type HTMLProps,
   type MutableRefObject,
   createContext,
@@ -10,6 +10,7 @@ import {
   useMemo,
   useReducer,
 } from "react";
+import styles from "./number-picker.module.css";
 
 const DEFAULT_HEIGHT = 216;
 const DEFAULT_ITEM_HEIGHT = 36;
@@ -138,23 +139,9 @@ function PickerRoot<TType extends PickerValue>(props: PickerRootProps<TType>) {
     height = DEFAULT_HEIGHT,
     itemHeight = DEFAULT_ITEM_HEIGHT,
     wheelMode = DEFAULT_WHEEL_MODE,
+    className,
     ...restProps
   } = props;
-
-  const containerStyle = useMemo<CSSProperties>(
-    () => ({
-      height: `${height}px`,
-      position: "relative",
-      display: "flex",
-      justifyContent: "center",
-      overflow: "hidden",
-      maskImage:
-        "linear-gradient(to top, transparent, transparent 5%, white 20%, white 80%, transparent 95%, transparent)",
-      WebkitMaskImage:
-        "linear-gradient(to top, transparent, transparent 5%, white 20%, white 80%, transparent 95%, transparent)",
-    }),
-    [height],
-  );
 
   const [optionGroups, dispatch] = useReducer(pickerReducer, {});
 
@@ -184,9 +171,10 @@ function PickerRoot<TType extends PickerValue>(props: PickerRootProps<TType>) {
   return (
     <div
       style={{
-        ...containerStyle,
+        height: `${height}px`,
         ...style,
       }}
+      className={cn(styles.pickerContainer, className)}
       {...restProps}
     >
       <PickerActionsContext.Provider value={pickerActions}>

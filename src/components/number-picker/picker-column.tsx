@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   type CSSProperties,
   type HTMLProps,
@@ -9,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
+import styles from "./number-picker.module.css";
 import { usePickerActions, usePickerData } from "./picker";
 
 interface PickerColumnProps extends HTMLProps<HTMLDivElement> {
@@ -38,6 +40,7 @@ function PickerColumn({
   style,
   children,
   name: key,
+  className,
   ...restProps
 }: PickerColumnProps) {
   const {
@@ -114,8 +117,6 @@ function PickerColumn({
 
   const updateScrollerWhileMoving = useCallback(
     (nextScrollerTranslate: number) => {
-      if (nextScrollerTranslate < minTranslate) {
-        nextScrollerTranslate =
           minTranslate - Math.pow(minTranslate - nextScrollerTranslate, 0.8);
       } else if (nextScrollerTranslate > maxTranslate) {
         nextScrollerTranslate =
@@ -239,30 +240,23 @@ function PickerColumn({
     };
   }, [handleTouchMove, handleWheel]);
 
-  const columnStyle = useMemo<CSSProperties>(
-    () => ({
-      flex: "1 1 0%",
-      maxHeight: "100%",
-      transitionProperty: "transform",
-      transitionTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
-      transitionDuration: isMoving ? "0ms" : "300ms",
-      transform: `translate3d(0, ${scrollerTranslate}px, 0)`,
-    }),
-    [scrollerTranslate, isMoving],
-  );
-
   const columnData = useMemo(() => ({ key }), [key]);
 
   return (
     <div
       style={{
-        ...columnStyle,
+        transform: `translate3d(0, ${scrollerTranslate}px, 0)`,
         ...style,
       }}
       ref={containerRef}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
+      className={cn(
+        styles.pickerColumn,
+        isMoving && styles.movingPickerColumn,
+        className,
+      )}
       {...restProps}
     >
       <PickerColumnDataContext.Provider value={columnData}>
