@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Picker from "../number-picker/picker";
-import PickerColumn from "../number-picker/picker-column";
-import PickerItem from "../number-picker/picker-item";
+import { Picker, PickerColumn, PickerItem } from "../number-picker";
 import { useTimer } from "./use-timer";
 
 const selections = {
@@ -37,7 +35,7 @@ export const Timer = () => {
             </PickerItem>
           ))}
         </PickerColumn>
-        :
+        <div className="flex items-center justify-center">:</div>
         <PickerColumn key="seconds" name="seconds">
           {selections.seconds.map((option) => (
             <PickerItem key={option} value={option}>

@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import {
-  type CSSProperties,
   type HTMLProps,
   createContext,
   useCallback,
@@ -51,7 +50,7 @@ function PickerColumn({
     optionGroups,
   } = usePickerData("PickerColumn");
 
-  // Caculate the selected index
+  // Calculate the selected index
   const value = useMemo(() => groupValue[key], [groupValue, key]);
   const options = useMemo(() => optionGroups[key] || [], [key, optionGroups]);
   const selectedIndex = useMemo(() => {
@@ -62,7 +61,7 @@ function PickerColumn({
     return index;
   }, [options, value]);
 
-  // Caculate the translate of scroller
+  // Calculate the translate of scroller
   const minTranslate = useMemo(
     () => height / 2 - itemHeight * options.length + itemHeight / 2,
     [height, itemHeight, options],
@@ -117,12 +116,13 @@ function PickerColumn({
 
   const updateScrollerWhileMoving = useCallback(
     (nextScrollerTranslate: number) => {
-          minTranslate - Math.pow(minTranslate - nextScrollerTranslate, 0.8);
-      } else if (nextScrollerTranslate > maxTranslate) {
-        nextScrollerTranslate =
-          maxTranslate + Math.pow(nextScrollerTranslate - maxTranslate, 0.8);
-      }
-      setScrollerTranslate(nextScrollerTranslate);
+      const adjustedTranslate =
+        nextScrollerTranslate < minTranslate
+          ? minTranslate - (minTranslate - nextScrollerTranslate) ** 0.8
+          : nextScrollerTranslate > maxTranslate
+            ? maxTranslate + (nextScrollerTranslate - maxTranslate) ** 0.8
+            : nextScrollerTranslate;
+      setScrollerTranslate(adjustedTranslate);
     },
     [maxTranslate, minTranslate],
   );
@@ -188,7 +188,6 @@ function PickerColumn({
       if (wheelMode === "normal") {
         delta = -delta;
       }
-
       const nextScrollerTranslate = scrollerTranslate + delta;
       updateScrollerWhileMoving(nextScrollerTranslate);
     },
@@ -204,22 +203,18 @@ function PickerColumn({
       if (wheelMode === "off") {
         return;
       }
-
       if (event.cancelable) {
         event.preventDefault();
       }
-
       handleWheeling(event);
-
       if (wheelingTimer.current) {
         clearTimeout(wheelingTimer.current);
       }
-
       wheelingTimer.current = setTimeout(() => {
         handleWheelEnd();
       }, 200) as unknown as number;
     },
-    [handleWheelEnd, handleWheeling, wheelingTimer, wheelMode],
+    [handleWheelEnd, handleWheeling, wheelMode],
   );
 
   // 'touchmove' and 'wheel' should not be passive
