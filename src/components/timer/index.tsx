@@ -32,7 +32,7 @@ export const Timer = () => {
       <WheelPicker
         className="inline-flex items-center justify-center"
         value={time.s}
-        options={sequenceNumbers(60, 10)}
+        options={sequenceNumbers(6, 10)}
         onChange={(value) => {
           updateTime({ minutes: time.m, seconds: value });
         }}
