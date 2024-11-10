@@ -5,8 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const sequenceNumbers = (length: number) =>
-  Array.from({ length }, (_, i) => i);
+export const sequenceNumbers = (length: number, offset = 1) =>
+  Array.from({ length }, (_, i) => i * offset);
 
 export function randomID() {
   const id = crypto.randomUUID?.() ?? manualUUIDv4();

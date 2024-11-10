@@ -1,6 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, sequenceNumbers } from "@/lib/utils";
+import { WheelPicker } from "../wheel-picker";
 import { NumberWheel } from "./number-wheel";
 import { useTimer } from "./use-timer";
 
@@ -9,10 +10,17 @@ export const Timer = () => {
 
   return (
     <div className="flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
-      <span className="inline-flex items-center justify-center">
+      <WheelPicker
+        className="inline-flex items-center justify-center"
+        value={time.m}
+        options={sequenceNumbers(60)}
+        onChange={(value) => {
+          updateTime({ minutes: value, seconds: time.s });
+        }}
+      >
         <NumberWheel number={Number.parseInt(time.mm[0])} />
         <NumberWheel number={Number.parseInt(time.mm[1])} />
-      </span>
+      </WheelPicker>
       <span
         className={cn(
           "font-normal opacity-30 transition-opacity duration-300",
@@ -21,10 +29,17 @@ export const Timer = () => {
       >
         :
       </span>
-      <span className="inline-flex items-center justify-center">
+      <WheelPicker
+        className="inline-flex items-center justify-center"
+        value={time.s}
+        options={sequenceNumbers(60, 10)}
+        onChange={(value) => {
+          updateTime({ minutes: time.m, seconds: value });
+        }}
+      >
         <NumberWheel number={Number.parseInt(time.ss[0])} />
         <NumberWheel number={Number.parseInt(time.ss[1])} />
-      </span>
+      </WheelPicker>
     </div>
   );
 };

@@ -64,6 +64,10 @@ export const useTimer = () => {
   };
 
   const updateTime = (value: { minutes: number; seconds: number }) => {
+    if (currentTimer.status !== "ready") {
+      console.error("Timer is required to be ready to update time");
+      return;
+    }
     const newTimer = updateTimer(currentTimer, value);
     setCurrentTimer(newTimer);
     setTimers(updateTimers(timers, newTimer));
