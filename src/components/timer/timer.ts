@@ -158,8 +158,10 @@ export const updateTimer = (
   currentTimer: CurrentTimerType,
   value: { minutes: number; seconds: number },
 ): CurrentTimerType => {
+  const duration = value.minutes * 60_000 + value.seconds * 1_000;
   return {
     ...currentTimer,
-    duration: value.minutes * 60_000 + value.seconds * 1_000,
+    duration,
+    remainingTime: duration,
   };
 };
