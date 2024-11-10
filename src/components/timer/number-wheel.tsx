@@ -9,6 +9,14 @@ interface NumberWheelProps {
   className?: string;
 }
 
+const WHEEL_SIZE_RATIO = 0.8;
+const getWheelSize = () =>
+  Math.max(
+    document.documentElement.clientHeight || 0,
+    document.documentElement.clientWidth || 0,
+    window.innerHeight || 0,
+  ) * WHEEL_SIZE_RATIO;
+
 export const NumberWheel: React.FC<NumberWheelProps> = ({
   number,
   className,
@@ -17,18 +25,10 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
   const translateZ = wheelSize * 0.5;
 
   useEffect(() => {
-    const updateWheelSize = () => {
-      const vh = Math.max(
-        document.documentElement.clientHeight || 0,
-        document.documentElement.clientWidth || 0,
-        window.innerHeight || 0,
-        window.innerWidth || 0,
-      );
-      setWheelSize(vh * 0.8);
-    };
-    updateWheelSize();
-    window.addEventListener("resize", updateWheelSize);
-    return () => window.removeEventListener("resize", updateWheelSize);
+    const resizeWheelSize = () => setWheelSize(getWheelSize());
+    resizeWheelSize();
+    window.addEventListener("resize", resizeWheelSize);
+    return () => window.removeEventListener("resize", resizeWheelSize);
   }, []);
 
   return (
