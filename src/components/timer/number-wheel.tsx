@@ -24,10 +24,10 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
   options = sequenceNumbers(10),
 }) => {
   const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
+  const optionAngle = 360 / options.length;
+  const [wheelAngle, setWheelAngle] = useState(() => value * optionAngle);
   const [wheelSize, setWheelSize] = useState(100);
   const wheelRadius = wheelSize * 0.5;
-  const optionAngle = 360 / options.length;
-  const wheelAngle = value * optionAngle;
 
   useEffect(() => {
     const resizeWheelSize = () => setWheelSize(getWheelSize());
@@ -35,6 +35,17 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
     window.addEventListener("resize", resizeWheelSize);
     return () => window.removeEventListener("resize", resizeWheelSize);
   }, []);
+
+  useEffect(() => {
+    setWheelAngle((prevAngle) => {
+      const targetAngle = value * optionAngle;
+      const currentAngle = prevAngle % 360;
+      let deltaAngle = targetAngle - currentAngle;
+      if (deltaAngle > 180) deltaAngle -= 360;
+      if (deltaAngle < -180) deltaAngle += 360;
+      return prevAngle + deltaAngle;
+    });
+  }, [value, optionAngle]);
 
   return (
     <div
