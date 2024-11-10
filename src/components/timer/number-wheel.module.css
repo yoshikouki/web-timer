@@ -1,0 +1,16 @@
+.wheelContainerGradient {
+  mask-image: linear-gradient(
+    to top,
+    transparent,
+    white 10%,
+    white 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to top,
+    transparent,
+    white 10%,
+    white 90%,
+    transparent
+  );
+}

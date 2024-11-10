@@ -22,6 +22,31 @@ export const useTimer = () => {
   } = useContext(TimerContext);
   const tickIntervalRef = useRef<NodeJS.Timeout>();
 
+  const absRemainingMs = Math.abs(currentTimer.remainingTime);
+  const ms = absRemainingMs % 1000;
+  const fullSeconds = Math.floor(absRemainingMs / 1000);
+  const s = fullSeconds % 60;
+  const fullMinutes = Math.floor(fullSeconds / 60);
+  const m = fullMinutes % 60;
+  const h = Math.floor(fullMinutes / 60);
+  const elapsedSeconds =
+    Math.floor(currentTimer.duration - currentTimer.remainingTime) / 1000;
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  const time = {
+    h,
+    hh: h.toString().padStart(2, "0"),
+    m,
+    mm: m.toString().padStart(2, "0"),
+    s,
+    ss: s.toString().padStart(2, "0"),
+    ms,
+    msPad: ms.toString().padStart(3, "0"),
+    fullSeconds,
+    fullMinutes,
+    elapsedSeconds,
+    elapsedMinutes,
+  };
+
   const tick = () => {
     setCurrentTimer((prev) => {
       const newTimer = tickTimer(prev);
@@ -70,28 +95,13 @@ export const useTimer = () => {
     setTimers(updateTimers(timers, newTimer));
   };
 
-  const absRemainingTime = Math.abs(currentTimer.remainingTime);
-  const ms = absRemainingTime % 1000;
-  const s = Math.floor(absRemainingTime / 1000) % 60;
-  const m = Math.floor(absRemainingTime / 1000 / 60) % 60;
-  const h = Math.floor(absRemainingTime / 1000 / 60 / 60);
-  const time = {
-    h,
-    hh: h.toString().padStart(2, "0"),
-    m,
-    mm: m.toString().padStart(2, "0"),
-    s,
-    ss: s.toString().padStart(2, "0"),
-    ms,
-    msPad: ms.toString().padStart(3, "0"),
-  };
-
   return {
     time,
     status: currentTimer.status,
     timers,
     currentTimer,
     timerControlSettings,
+    isOvertime: currentTimer.remainingTime < 0,
     setTimerControlSettings,
     start,
     pause,

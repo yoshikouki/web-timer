@@ -6,10 +6,17 @@ import { NumberWheel } from "./number-wheel";
 import { useTimer } from "./use-timer";
 
 export const Timer = () => {
-  const { time, status, updateTime } = useTimer();
+  const { time, status, updateTime, isOvertime } = useTimer();
+  const paddedFullMinutes = time.fullMinutes.toString().padStart(3, "0");
 
   return (
-    <div className="flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums">
+    <div
+      className={cn(
+        "flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums transition-all",
+        !["ready", "running"].includes(status) && "opacity-70",
+        isOvertime && "text-destructive",
+      )}
+    >
       <WheelPicker
         className="inline-flex items-center justify-center"
         value={time.m}
@@ -18,13 +25,17 @@ export const Timer = () => {
           updateTime({ minutes: value, seconds: time.s });
         }}
       >
-        <NumberWheel value={time.mm[0]} />
-        <NumberWheel value={time.mm[1]} />
+        <NumberWheel
+          value={paddedFullMinutes[0]}
+          className={cn(paddedFullMinutes[0] === "0" && "hidden opacity-0")}
+        />
+        <NumberWheel value={paddedFullMinutes[1]} />
+        <NumberWheel value={paddedFullMinutes[2]} />
       </WheelPicker>
       <span
         className={cn(
-          "font-normal opacity-30 transition-opacity duration-300",
-          time.ms < 300 && "opacity-20",
+          "font-normal opacity-20 transition-opacity duration-500 ease-in-out",
+          0 < time.ms && time.ms < 500 && "opacity-10",
         )}
       >
         :

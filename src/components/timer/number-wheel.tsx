@@ -1,8 +1,9 @@
 "use client";
 
+import { type FC, useEffect, useState } from "react";
+
 import { cn, sequenceNumbers } from "@/lib/utils";
-import type React from "react";
-import { useEffect, useState } from "react";
+import style from "./number-wheel.module.css";
 
 const WHEEL_SIZE_RATIO = 0.8;
 const getWheelSize = () =>
@@ -18,7 +19,7 @@ interface NumberWheelProps {
   options?: number[];
 }
 
-export const NumberWheel: React.FC<NumberWheelProps> = ({
+export const NumberWheel: FC<NumberWheelProps> = ({
   value: _value,
   className,
   options = sequenceNumbers(10),
@@ -26,7 +27,7 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
   const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
   const optionAngle = 360 / options.length;
   const [wheelAngle, setWheelAngle] = useState(() => value * optionAngle);
-  const [wheelSize, setWheelSize] = useState(100);
+  const [wheelSize, setWheelSize] = useState(3000);
   const wheelRadius = wheelSize * 0.5;
 
   useEffect(() => {
@@ -49,7 +50,11 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
 
   return (
     <div
-      className={cn("relative h-[27vw] w-[16vw] overflow-hidden", className)}
+      className={cn(
+        "relative h-[27vw] w-[16vw] overflow-hidden",
+        style.wheelContainerGradient,
+        className,
+      )}
       aria-label={`Current number: ${value}`}
     >
       <div
