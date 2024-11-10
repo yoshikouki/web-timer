@@ -18,8 +18,8 @@ export const Timer = () => {
           updateTime({ minutes: value, seconds: time.s });
         }}
       >
-        <NumberWheel number={Number.parseInt(time.mm[0])} />
-        <NumberWheel number={Number.parseInt(time.mm[1])} />
+        <NumberWheel value={time.mm[0]} />
+        <NumberWheel value={time.mm[1]} />
       </WheelPicker>
       <span
         className={cn(
@@ -37,8 +37,8 @@ export const Timer = () => {
           updateTime({ minutes: time.m, seconds: value });
         }}
       >
-        <NumberWheel number={Number.parseInt(time.ss[0])} />
-        <NumberWheel number={Number.parseInt(time.ss[1])} />
+        <NumberWheel value={time.ss[0]} />
+        <NumberWheel value={time.ss[1]} />
       </WheelPicker>
     </div>
   );

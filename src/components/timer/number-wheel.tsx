@@ -4,11 +4,6 @@ import { cn, sequenceNumbers } from "@/lib/utils";
 import type React from "react";
 import { useEffect, useState } from "react";
 
-interface NumberWheelProps {
-  number: number;
-  className?: string;
-}
-
 const WHEEL_SIZE_RATIO = 0.8;
 const getWheelSize = () =>
   Math.max(
@@ -17,12 +12,22 @@ const getWheelSize = () =>
     window.innerHeight || 0,
   ) * WHEEL_SIZE_RATIO;
 
+interface NumberWheelProps {
+  value: number | string;
+  className?: string;
+  options?: number[];
+}
+
 export const NumberWheel: React.FC<NumberWheelProps> = ({
-  number,
+  value: _value,
   className,
+  options = sequenceNumbers(10),
 }) => {
+  const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
   const [wheelSize, setWheelSize] = useState(100);
-  const translateZ = wheelSize * 0.5;
+  const wheelRadius = wheelSize * 0.5;
+  const optionAngle = 360 / options.length;
+  const wheelAngle = value * optionAngle;
 
   useEffect(() => {
     const resizeWheelSize = () => setWheelSize(getWheelSize());
@@ -34,29 +39,29 @@ export const NumberWheel: React.FC<NumberWheelProps> = ({
   return (
     <div
       className={cn("relative h-[27vw] w-[16vw] overflow-hidden", className)}
-      aria-label={`Current number: ${number}`}
+      aria-label={`Current number: ${value}`}
     >
       <div
         className="h-full w-full transition-transform duration-500 ease-in-out"
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateX(${number * 36}deg)`,
+          transform: `rotateX(${wheelAngle}deg)`,
         }}
       >
-        {sequenceNumbers(10).map((n) => (
+        {options.map((option) => (
           <div
-            key={n}
+            key={option}
             className={cn(
               "absolute flex h-full w-full items-center justify-center opacity-30 transition-opacity duration-300 ease-in-out",
-              n === number && "opacity-100",
+              option === value && "opacity-100",
             )}
             style={{
               backfaceVisibility: "hidden",
-              transform: `rotateX(${n * -36}deg) translateZ(${translateZ}px)`,
+              transform: `rotateX(${option * -optionAngle}deg) translateZ(${wheelRadius}px)`,
             }}
-            aria-hidden={n !== number}
+            aria-hidden={option !== value}
           >
-            {n}
+            {option}
           </div>
         ))}
       </div>
