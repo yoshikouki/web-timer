@@ -23,9 +23,9 @@ export const TimerController = () => {
           onClick={pause}
           variant="ghost"
           size="icon"
-          className="[&_svg]:size-6"
+          className="group [&_svg]:size-6"
         >
-          <PauseIcon className="fill-foreground stroke-none" />
+          <PauseIcon className="fill-foreground stroke-none opacity-30 group-hover:opacity-100" />
         </Button>
       )}
       {status === "paused" && (
@@ -46,6 +46,7 @@ export const TimerController = () => {
           >
             <PlayIcon className="fill-foreground stroke-none" />
           </Button>
+          <div className="size-10" />
         </>
       )}
     </div>
