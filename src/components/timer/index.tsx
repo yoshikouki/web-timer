@@ -37,7 +37,7 @@ export const Timer = () => {
           updateTime({ minutes: time.m, seconds: value });
         }}
       >
-        <NumberWheel value={time.ss[0]} />
+        <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
         <NumberWheel value={time.ss[1]} />
       </WheelPicker>
     </div>
