@@ -9,8 +9,8 @@ export default function Home() {
         <div className="flex flex-col gap-4">
           <Timer />
         </div>
+        <TimerController />
       </main>
-      <TimerController />
     </TimerProvider>
   );
 }

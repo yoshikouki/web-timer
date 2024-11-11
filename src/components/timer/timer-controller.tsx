@@ -1,54 +1,117 @@
 "use client";
 
-import { PauseIcon, PlayIcon, SquareIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  ListIcon,
+  PauseIcon,
+  PlayIcon,
+  SettingsIcon,
+  SquareIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { useTimer } from "./use-timer";
 
 export const TimerController = () => {
   const { status, start, pause, resume, reset } = useTimer();
+
   return (
-    <div className="fixed bottom-0 flex w-full items-center justify-center py-4">
-      {(status === "ready" || status === "stopped") && (
-        <Button
-          onClick={start}
-          variant="ghost"
-          size="icon"
-          className="[&_svg]:size-6"
-        >
-          <PlayIcon className="fill-foreground stroke-none" />
-        </Button>
-      )}
-      {status === "running" && (
-        <Button
-          onClick={pause}
-          variant="ghost"
-          size="icon"
-          className="group [&_svg]:size-6"
-        >
-          <PauseIcon className="fill-foreground stroke-none opacity-30 group-hover:opacity-100" />
-        </Button>
-      )}
-      {status === "paused" && (
-        <>
+    <div className="fixed bottom-0 flex w-full items-center justify-center md:static">
+      <div className="flex w-full items-center justify-center gap-10 px-4 py-4 md:items-start md:gap-20">
+        <div>
           <Button
-            onClick={reset}
+            onClick={() => {
+              switch (status) {
+                case "paused":
+                  reset();
+                  break;
+                default:
+                  break;
+              }
+            }}
             variant="ghost"
             size="icon"
-            className="[&_svg]:size-6"
+            className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
           >
-            <SquareIcon className="fill-foreground stroke-none" />
+            <ListIcon
+              className={cn(
+                "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
+                status === "paused" &&
+                  "absolute opacity-0 group-hover:opacity-0",
+                status === "running" && "opacity-30",
+              )}
+            />
+            <SquareIcon
+              className={cn(
+                "fill-foreground stroke-none opacity-30 transition-all duration-300 ease-in-out group-hover:opacity-100",
+                status !== "paused" &&
+                  "absolute opacity-0 group-hover:opacity-0",
+              )}
+            />
           </Button>
+        </div>
+        <div className="relative">
           <Button
-            onClick={resume}
+            onClick={() => {
+              switch (status) {
+                case "ready":
+                  start();
+                  break;
+                case "running":
+                  pause();
+                  break;
+                case "paused":
+                  resume();
+                  break;
+                case "stopped":
+                  reset();
+                  break;
+                default:
+                  break;
+              }
+            }}
             variant="ghost"
             size="icon"
-            className="[&_svg]:size-6"
+            className={cn(
+              "group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20",
+            )}
           >
-            <PlayIcon className="fill-foreground stroke-none" />
+            <PlayIcon
+              className={cn(
+                "fill-foreground stroke-none opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
+                status === "running" &&
+                  "absolute opacity-0 group-hover:opacity-0",
+              )}
+            />
+            <PauseIcon
+              className={cn(
+                "fill-foreground stroke-none opacity-30 transition-all duration-300 ease-in-out group-hover:opacity-100",
+                status !== "running" &&
+                  "absolute opacity-0 group-hover:opacity-0",
+              )}
+            />
           </Button>
-          <div className="size-10" />
-        </>
-      )}
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              switch (status) {
+                default:
+                  break;
+              }
+            }}
+            variant="ghost"
+            size="icon"
+            className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
+          >
+            <SettingsIcon
+              className={cn(
+                "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
+                status === "running" && "opacity-30",
+              )}
+            />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
