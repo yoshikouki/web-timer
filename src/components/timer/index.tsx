@@ -1,13 +1,16 @@
 "use client";
 
+import { fonts } from "@/app/fonts";
 import { cn, sequenceNumbers } from "@/lib/utils";
 import { WheelPicker } from "../wheel-picker";
 import { NumberWheel } from "./number-wheel";
 import { useTimer } from "./use-timer";
 
 export const Timer = () => {
-  const { time, status, updateTime, isOvertime } = useTimer();
+  const { time, status, updateTime, isOvertime, timerControlSettings } =
+    useTimer();
   const paddedFullMinutes = time.fullMinutes.toString().padStart(3, "0");
+  const font = fonts[timerControlSettings.font];
 
   return (
     <div
@@ -15,6 +18,7 @@ export const Timer = () => {
         "flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums transition-all",
         !["ready", "running"].includes(status) && "opacity-70",
         isOvertime && "text-destructive",
+        font.className,
       )}
     >
       <WheelPicker
