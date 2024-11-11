@@ -21,9 +21,7 @@ export const useTimer = () => {
     setTimerControlSettings,
   } = useContext(TimerContext);
   const tickIntervalRef = useRef<NodeJS.Timeout>();
-  const beepAudioRef = useRef<HTMLAudioElement>(
-    new Audio("/audio/sfx/simple_01.mp3"),
-  );
+  const beepAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const absRemainingMs = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingMs % 1000;
@@ -56,7 +54,7 @@ export const useTimer = () => {
       if (0 < newTimer.remainingTime) return newTimer;
       // Just passed 0
       if (0 <= prev.remainingTime) {
-        beepAudioRef.current.play();
+        beepAudioRef.current?.play();
       }
       // TODO: handle overflow
       return newTimer;
@@ -69,6 +67,7 @@ export const useTimer = () => {
       tick,
       timerControlSettings.timerResolution,
     );
+    beepAudioRef.current = new Audio("/audio/sfx/simple_01.mp3");
     beepAudioRef.current.load();
   };
 
