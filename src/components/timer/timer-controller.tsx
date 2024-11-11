@@ -2,10 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import {
-  ListIcon,
+  HistoryIcon,
   PauseIcon,
   PlayIcon,
-  SettingsIcon,
+  Settings2Icon,
   SquareIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -32,7 +32,7 @@ export const TimerController = () => {
             size="icon"
             className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
           >
-            <ListIcon
+            <HistoryIcon
               className={cn(
                 "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
                 status === "paused" &&
@@ -103,7 +103,7 @@ export const TimerController = () => {
             size="icon"
             className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
           >
-            <SettingsIcon
+            <Settings2Icon
               className={cn(
                 "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
                 status === "running" && "opacity-30",
