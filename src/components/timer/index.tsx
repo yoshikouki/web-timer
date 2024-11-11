@@ -24,7 +24,7 @@ export const Timer = () => {
       <WheelPicker
         className="inline-flex items-center justify-center"
         value={time.m}
-        options={sequenceNumbers(60)}
+        options={sequenceNumbers(1000)}
         onChange={(value) => {
           updateTime({ minutes: value, seconds: time.s });
         }}
