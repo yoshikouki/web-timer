@@ -9,6 +9,7 @@ import {
   SquareIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
+import { TimerControllerSettings } from "./timer-controller-settings";
 import { useTimer } from "./use-timer";
 
 export const TimerController = () => {
@@ -16,7 +17,7 @@ export const TimerController = () => {
 
   return (
     <div className="fixed bottom-0 flex w-full items-center justify-center md:static">
-      <div className="flex w-full items-center justify-center gap-10 px-4 py-4 md:items-start md:gap-20">
+      <div className="flex w-full items-center justify-between gap-10 px-7 py-7 md:justify-center md:gap-20">
         <div>
           <Button
             onClick={() => {
@@ -91,7 +92,7 @@ export const TimerController = () => {
             />
           </Button>
         </div>
-        <div>
+        <TimerControllerSettings>
           <Button
             onClick={() => {
               switch (status) {
@@ -110,7 +111,7 @@ export const TimerController = () => {
               )}
             />
           </Button>
-        </div>
+        </TimerControllerSettings>
       </div>
     </div>
   );
