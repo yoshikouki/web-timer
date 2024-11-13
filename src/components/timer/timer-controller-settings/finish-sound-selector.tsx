@@ -50,17 +50,16 @@ export const FinishSoundSelector = () => {
               className="w-full justify-between py-0 pr-0"
             >
               {finishSoundOption.name}
-              <Button
-                variant="ghost"
-                // size="icon"
-                className="pr-4 pl-2"
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+              <div
+                className="py-2 pr-4 pl-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   playFinishSound(finishSoundOption.path);
                 }}
               >
                 <BellRingIcon className="h-4 w-4" />
-              </Button>
+              </div>
             </Button>
           ))}
         </div>
