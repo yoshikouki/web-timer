@@ -21,54 +21,38 @@ export const FontSelector = () => {
       }}
     >
       <SelectTrigger className="h-full w-full py-[2px] pl-0">
-        <SelectValue placeholder="Font" />
+        <SelectValue placeholder="Font" asChild>
+          <FontOption font={timerControlSettings.font} />
+        </SelectValue>
       </SelectTrigger>
       <SelectContent className="w-full">
         <SelectItem value="poppins" className="py-[2px] pl-0">
-          <div
-            className={cn(
-              "grid grid-cols-[90px_1fr] px-4 py-2 tabular-nums",
-              fonts.poppins.className,
-            )}
-          >
-            <span className="text-left">01:23:45</span>
-            <span className="text-left">Poppins</span>
-          </div>
+          <FontOption font="poppins" />
         </SelectItem>
         <SelectItem value="sora" className="py-[2px] pl-0">
-          <div
-            className={cn(
-              "grid grid-cols-[90px_1fr] px-4 py-2 tabular-nums",
-              fonts.sora.className,
-            )}
-          >
-            <span className="text-left">01:23:45</span>
-            <span className="text-left">Sora</span>
-          </div>
+          <FontOption font="sora" />
         </SelectItem>
         <SelectItem value="teko" className="py-[2px] pl-0">
-          <div
-            className={cn(
-              "grid grid-cols-[90px_1fr] px-4 py-2 tabular-nums",
-              fonts.teko.className,
-            )}
-          >
-            <span className="text-left">01:23:45</span>
-            <span className="text-left">Teko</span>
-          </div>
+          <FontOption font="teko" />
         </SelectItem>
         <SelectItem value="comfortaa" className="py-[2px] pl-0">
-          <div
-            className={cn(
-              "grid grid-cols-[90px_1fr] px-4 py-2 tabular-nums",
-              fonts.comfortaa.className,
-            )}
-          >
-            <span className="text-left">01:23:45</span>
-            <span className="text-left">Comfortaa</span>
-          </div>
+          <FontOption font="comfortaa" />
         </SelectItem>
       </SelectContent>
     </Select>
+  );
+};
+
+const FontOption = ({ font }: { font: TimerControllerFont }) => {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-[90px_1fr] px-4 py-2 tabular-nums",
+        fonts[font].className,
+      )}
+    >
+      <span className="text-left">01:23:45</span>
+      <span className="text-left capitalize">{font}</span>
+    </div>
   );
 };
