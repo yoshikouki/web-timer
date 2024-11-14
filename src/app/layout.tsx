@@ -1,9 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ViewTransitionProvider } from "@/components/animated-link/view-transition-provider";
+import { HeadTitle, HeadTitleProvider } from "@/components/head-title";
 import { cn } from "@/lib/utils";
 import { Footer } from "./footer";
-import { HeadTitle, HeadTitleProvider } from "@/components/head-title";
 
 const font = Inter({ subsets: ["latin"] });
 
