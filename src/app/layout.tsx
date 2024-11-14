@@ -3,6 +3,7 @@ import "./globals.css";
 import { ViewTransitionProvider } from "@/components/animated-link/view-transition-provider";
 import { cn } from "@/lib/utils";
 import { Footer } from "./footer";
+import { HeadTitle, HeadTitleProvider } from "@/components/head-title";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -15,12 +16,17 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitionProvider>
-      <html lang="en" className="dark">
-        <body className={cn("antialiased", font.className)}>
-          {children}
-          <Footer />
-        </body>
-      </html>
+      <HeadTitleProvider>
+        <html lang="en" className="dark">
+          <head>
+            <HeadTitle />
+          </head>
+          <body className={cn("antialiased", font.className)}>
+            {children}
+            <Footer />
+          </body>
+        </html>
+      </HeadTitleProvider>
     </ViewTransitionProvider>
   );
 }
