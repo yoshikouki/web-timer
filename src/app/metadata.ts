@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://web-timer.vercel.app/"),
   title,
   description,
-  keywords: [],
+  keywords: ["timer", "stopwatch", "countdown", "pomodoro", "pomodoro timer"],
   authors: { name: "yoshikouki", url: "https://yoshikouki.com/" },
   icons: [
     {
