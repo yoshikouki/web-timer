@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/select";
 import { BellRingIcon } from "lucide-react";
 import { type FinishSoundOptionKeys, finishSoundOptions } from "../settings";
-import { useTimerSettings } from "../use-timer-settings";
+import { useTimer } from "../use-timer";
 
 export const FinishSoundSelector = () => {
-  const { timerControlSettings, update } = useTimerSettings();
+  const { timerControlSettings, updateTimerControlSettings } = useTimer();
 
   const playFinishSound = (path: string) => {
     const audio = new Audio(path);
@@ -23,11 +23,11 @@ export const FinishSoundSelector = () => {
     <Select
       value={timerControlSettings.finishSound}
       onValueChange={(value: FinishSoundOptionKeys) => {
-        update({ finishSound: value });
+        updateTimerControlSettings({ finishSound: value });
       }}
     >
       <SelectTrigger className="h-auto py-0">
-        <SelectValue placeholder="Font" asChild>
+        <SelectValue placeholder="Finish sound" asChild>
           <div className="flex h-10 w-full items-center justify-between">
             <div className="leading-none">
               {timerControlSettings.finishSound}

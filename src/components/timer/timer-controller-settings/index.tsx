@@ -8,10 +8,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { BellIcon } from "lucide-react";
+import { BellIcon, Volume2Icon } from "lucide-react";
 import type { ReactNode } from "react";
-import { finishSoundOptions } from "../settings";
-import { useTimerSettings } from "../use-timer-settings";
+import { useTimer } from "../use-timer";
 import { FinishSoundSelector } from "./finish-sound-selector";
 import { FontSelector } from "./font-selector";
 
@@ -20,17 +19,7 @@ export const TimerControllerSettings = ({
 }: {
   children: ReactNode;
 }) => {
-  const { timerControlSettings } = useTimerSettings();
-
-  const playFinishSound = () => {
-    const finishSoundOption = finishSoundOptions.find(
-      (option) => option.key === timerControlSettings.finishSound,
-    );
-    if (!finishSoundOption) return;
-    const audio = new Audio(finishSoundOption.path);
-    audio.volume = timerControlSettings.finishSoundVolume;
-    audio.play();
-  };
+  const { timerControlSettings, playFinishSound } = useTimer();
 
   return (
     <Popover>
@@ -53,17 +42,20 @@ export const TimerControllerSettings = ({
               <FontSelector />
             </div>
             <div className="grid gap-2">
-              <h4 className="flex items-center gap-1 font-medium">
+              <div className="flex items-center justify-between gap-1">
+                <h4 className="flex items-center gap-1 font-medium">
+                  <BellIcon className="h-4 w-4" />
+                  Finish sound
+                </h4>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="flex h-6 min-h-fit w-6 items-center justify-center [&_svg]:size-4"
-                  onMouseDown={playFinishSound}
+                  className="flex h-10 items-center justify-center [&_svg]:size-4"
+                  onMouseDown={() => playFinishSound()}
                 >
-                  <BellIcon className="h-4 w-4" />
+                  <Volume2Icon className="h-4 w-4" />
                 </Button>
-                Sound
-              </h4>
+              </div>
               <FinishSoundSelector />
             </div>
           </div>

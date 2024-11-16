@@ -4,6 +4,7 @@ import {
   type Dispatch,
   type SetStateAction,
   createContext,
+  useRef,
   useState,
 } from "react";
 import {
@@ -26,6 +27,8 @@ type TimerContextType = {
   setTimerControlSettings: Dispatch<
     SetStateAction<TimerControllerSettingsType>
   >;
+  finishSoundAudio: HTMLAudioElement | null;
+  setFinishSoundAudio: Dispatch<SetStateAction<HTMLAudioElement | null>>;
 };
 
 export const TimerContext = createContext<TimerContextType>({
@@ -35,6 +38,8 @@ export const TimerContext = createContext<TimerContextType>({
   setCurrentTimer: () => {},
   timerControlSettings: initialTimerControllerSettings,
   setTimerControlSettings: () => {},
+  finishSoundAudio: null,
+  setFinishSoundAudio: () => {},
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
@@ -45,6 +50,9 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   const [timerControlSettings, setTimerControlSettings] = useState(
     initialTimerControllerSettings,
   );
+  const [finishSoundAudio, setFinishSoundAudio] =
+    useState<HTMLAudioElement | null>(null);
+
   return (
     <TimerContext.Provider
       value={{
@@ -54,6 +62,8 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
         setTimerControlSettings,
         currentTimer,
         setCurrentTimer,
+        finishSoundAudio,
+        setFinishSoundAudio,
       }}
     >
       {children}

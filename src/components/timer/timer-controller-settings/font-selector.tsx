@@ -8,16 +8,16 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { TimerControllerFont } from "../settings";
-import { useTimerSettings } from "../use-timer-settings";
+import { useTimer } from "../use-timer";
 
 export const FontSelector = () => {
-  const { timerControlSettings, update } = useTimerSettings();
+  const { timerControlSettings, updateTimerControlSettings } = useTimer();
 
   return (
     <Select
       value={timerControlSettings.font}
       onValueChange={(value: TimerControllerFont) => {
-        update({ font: value });
+        updateTimerControlSettings({ font: value });
       }}
     >
       <SelectTrigger className="h-full w-full py-[2px] pl-0">

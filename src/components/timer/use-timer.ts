@@ -1,5 +1,9 @@
+import { isSamePath } from "@/lib/url";
 import { useContext, useRef } from "react";
-import { finishSoundOptions } from "./settings";
+import {
+  type TimerControllerSettingsType,
+  finishSoundOptions,
+} from "./settings";
 import {
   pauseTimer,
   resetTimer,
@@ -20,9 +24,10 @@ export const useTimer = () => {
     setCurrentTimer,
     timerControlSettings,
     setTimerControlSettings,
+    finishSoundAudio,
+    setFinishSoundAudio,
   } = useContext(TimerContext);
   const tickIntervalRef = useRef<NodeJS.Timeout>();
-  const beepAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const absRemainingMs = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingMs % 1000;
@@ -55,7 +60,7 @@ export const useTimer = () => {
       if (0 < newTimer.remainingTime) return newTimer;
       // Just passed 0
       if (0 <= prev.remainingTime) {
-        beepAudioRef.current?.play();
+        playFinishSound();
       }
       // TODO: handle overflow
       return newTimer;
@@ -68,7 +73,7 @@ export const useTimer = () => {
       tick,
       timerControlSettings.timerResolution,
     );
-    setFinishSound();
+    prepareFinishSound();
   };
 
   const pause = () => {
@@ -102,12 +107,53 @@ export const useTimer = () => {
     setTimers(updateTimers(timers, newTimer));
   };
 
-  const setFinishSound = () => {
+  const prepareFinishSound = (
+    settings?: Partial<TimerControllerSettingsType>,
+  ) => {
+    const { finishSound, finishSoundVolume } = {
+      ...timerControlSettings,
+      ...settings,
+    };
     const finishSoundPath = finishSoundOptions.find(
-      (option) => option.key === timerControlSettings.finishSound,
+      (option) => option.key === finishSound,
     )?.path;
-    beepAudioRef.current = new Audio(finishSoundPath);
-    beepAudioRef.current.load();
+    if (!finishSoundPath) return null;
+    if (isSamePath(finishSoundAudio?.src, finishSoundPath))
+      return finishSoundAudio;
+    const sound = finishSoundAudio || new Audio(finishSoundPath);
+    sound.src = finishSoundPath;
+    sound.volume = finishSoundVolume;
+    sound.load();
+    setFinishSoundAudio(sound);
+    return sound;
+  };
+
+  const playFinishSound = () => {
+    console.log("playFinishSound1", finishSoundAudio?.src);
+    const sound = prepareFinishSound();
+    console.log("playFinishSound2", sound?.src);
+    if (!sound) return;
+    sound.volume = timerControlSettings.finishSoundVolume;
+    sound.currentTime = 0;
+    sound.play();
+  };
+
+  const updateTimerControlSettings = (
+    timerControlSettings: Partial<TimerControllerSettingsType>,
+  ) => {
+    setTimerControlSettings((prev) => {
+      const newTimerControlSettings = {
+        ...prev,
+        ...timerControlSettings,
+      };
+      if (
+        newTimerControlSettings.finishSound ||
+        newTimerControlSettings.finishSoundVolume
+      ) {
+        prepareFinishSound(newTimerControlSettings);
+      }
+      return newTimerControlSettings;
+    });
   };
 
   return {
@@ -124,5 +170,7 @@ export const useTimer = () => {
     stop,
     reset,
     updateTime,
+    playFinishSound,
+    updateTimerControlSettings,
   };
 };
