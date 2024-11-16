@@ -26,11 +26,11 @@ export const FontSelector = () => {
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="w-full">
-        <SelectItem value="poppins" className="py-[2px] pl-0">
-          <FontOption font="poppins" />
-        </SelectItem>
         <SelectItem value="sora" className="py-[2px] pl-0">
           <FontOption font="sora" />
+        </SelectItem>
+        <SelectItem value="poppins" className="py-[2px] pl-0">
+          <FontOption font="poppins" />
         </SelectItem>
         <SelectItem value="teko" className="py-[2px] pl-0">
           <FontOption font="teko" />
