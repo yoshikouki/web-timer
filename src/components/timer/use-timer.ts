@@ -1,4 +1,5 @@
 import { useContext, useRef } from "react";
+import { finishSoundOptions } from "./settings";
 import {
   pauseTimer,
   resetTimer,
@@ -67,8 +68,7 @@ export const useTimer = () => {
       tick,
       timerControlSettings.timerResolution,
     );
-    beepAudioRef.current = new Audio("/audio/sfx/simple_01.mp3");
-    beepAudioRef.current.load();
+    setFinishSound();
   };
 
   const pause = () => {
@@ -100,6 +100,14 @@ export const useTimer = () => {
     const newTimer = updateTimer(currentTimer, value);
     setCurrentTimer(newTimer);
     setTimers(updateTimers(timers, newTimer));
+  };
+
+  const setFinishSound = () => {
+    const finishSoundPath = finishSoundOptions.find(
+      (option) => option.key === timerControlSettings.finishSound,
+    )?.path;
+    beepAudioRef.current = new Audio(finishSoundPath);
+    beepAudioRef.current.load();
   };
 
   return {
