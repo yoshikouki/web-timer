@@ -69,11 +69,11 @@ export const useTimer = () => {
 
   const start = () => {
     setCurrentTimer(startTimer);
+    prepareFinishSound();
     tickIntervalRef.current = setInterval(
       tick,
       timerControlSettings.timerResolution,
     );
-    prepareFinishSound();
   };
 
   const pause = () => {
@@ -129,9 +129,7 @@ export const useTimer = () => {
   };
 
   const playFinishSound = () => {
-    console.log("playFinishSound1", finishSoundAudio?.src);
     const sound = prepareFinishSound();
-    console.log("playFinishSound2", sound?.src);
     if (!sound) return;
     sound.volume = timerControlSettings.finishSoundVolume;
     sound.currentTime = 0;
