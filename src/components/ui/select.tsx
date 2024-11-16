@@ -121,23 +121,52 @@ const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
+  <SelectItemContainer ref={ref} {...props}>
+    <SelectItemIndicator />
+    <SelectItemText>{children}</SelectItemText>
+  </SelectItemContainer>
+));
+SelectItem.displayName = SelectPrimitive.Item.displayName;
+
+const SelectItemContainer = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+>(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none",
+      "focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
     {...props}
   >
-    <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-      <SelectPrimitive.ItemIndicator>
-        <CheckIcon className="h-4 w-4" />
-      </SelectPrimitive.ItemIndicator>
-    </span>
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    {children}
   </SelectPrimitive.Item>
 ));
-SelectItem.displayName = SelectPrimitive.Item.displayName;
+SelectItemContainer.displayName = SelectPrimitive.Item.displayName;
+
+const SelectItemText = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.ItemText>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ItemText>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.ItemText ref={ref} className={className} {...props} />
+));
+SelectItemText.displayName = SelectPrimitive.ItemText.displayName;
+
+const SelectItemIndicator = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.ItemIndicator>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ItemIndicator>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.ItemIndicator
+    ref={ref}
+    {...props}
+    className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center"
+  >
+    <CheckIcon className="h-4 w-4" />
+  </SelectPrimitive.ItemIndicator>
+));
+SelectItemIndicator.displayName = SelectPrimitive.ItemIndicator.displayName;
 
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
@@ -159,6 +188,9 @@ export {
   SelectContent,
   SelectLabel,
   SelectItem,
+  SelectItemContainer,
+  SelectItemText,
+  SelectItemIndicator,
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,

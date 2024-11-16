@@ -1,18 +1,17 @@
-import { BellRingIcon, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { finishSoundOptions } from "../settings";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { BellRingIcon } from "lucide-react";
+import { type FinishSoundOptionKeys, finishSoundOptions } from "../settings";
 import { useTimerSettings } from "../use-timer-settings";
 
 export const FinishSoundSelector = () => {
   const { timerControlSettings, update } = useTimerSettings();
-  const [isOpen, setIsOpen] = useState(false);
 
   const playFinishSound = (path: string) => {
     const audio = new Audio(path);
@@ -21,49 +20,42 @@ export const FinishSoundSelector = () => {
   };
 
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      className="w-full space-y-2"
+    <Select
+      value={timerControlSettings.finishSound}
+      onValueChange={(value: FinishSoundOptionKeys) => {
+        update({ finishSound: value });
+      }}
     >
-      <CollapsibleTrigger asChild>
-        <Button
-          variant={isOpen ? "default" : "outline"}
-          className="w-full justify-between py-2"
-        >
-          {timerControlSettings.finishSound}
-          <ChevronsUpDown className="h-4 w-4" />
-          <span className="sr-only">Toggle</span>
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-2">
-        <div className="flex flex-wrap gap-2">
-          {finishSoundOptions.map((finishSoundOption) => (
+      <SelectTrigger className="h-auto py-0">
+        <SelectValue placeholder="Font" asChild>
+          <div className="flex h-10 w-full items-center justify-between">
+            <div className="leading-none">
+              {timerControlSettings.finishSound}
+            </div>
+          </div>
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        {finishSoundOptions.map((finishSoundOption) => (
+          <div key={finishSoundOption.key} className="flex">
             <Button
-              key={finishSoundOption.key}
-              onClick={() => {
-                update({ finishSound: finishSoundOption.key });
-                setIsOpen(false);
+              variant="ghost"
+              size="icon"
+              className="flex h-10 w-10 items-center justify-center [&_svg]:size-4"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                playFinishSound(finishSoundOption.path);
               }}
-              variant="outline"
-              size="default"
-              className="w-full justify-between py-0 pr-0"
             >
-              {finishSoundOption.name}
-              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-              <div
-                className="py-2 pr-4 pl-2"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  playFinishSound(finishSoundOption.path);
-                }}
-              >
-                <BellRingIcon className="h-4 w-4" />
-              </div>
+              <BellRingIcon className="h-4 w-4" />
             </Button>
-          ))}
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
+            <SelectItem value={finishSoundOption.key} className="py-0">
+              {finishSoundOption.name}
+            </SelectItem>
+          </div>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
