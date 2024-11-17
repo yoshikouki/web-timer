@@ -8,10 +8,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { BellIcon, Volume2Icon } from "lucide-react";
+import { BellIcon, Volume1Icon, Volume2Icon, VolumeIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTimer } from "../use-timer";
 import { FinishSoundSelector } from "./finish-sound-selector";
+import { FinishSoundVolumeSlider } from "./finish-sound-volume-slider";
 import { FontSelector } from "./font-selector";
 
 export const TimerControllerSettings = ({
@@ -41,6 +42,7 @@ export const TimerControllerSettings = ({
               </h4>
               <FontSelector />
             </div>
+
             <div className="grid gap-2">
               <div className="flex items-center justify-between gap-1">
                 <h4 className="flex items-center gap-1 font-medium">
@@ -57,6 +59,22 @@ export const TimerControllerSettings = ({
                 </Button>
               </div>
               <FinishSoundSelector />
+            </div>
+
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between gap-1">
+                <h4 className="flex items-center gap-1 font-medium">
+                  {timerControlSettings.finishSoundVolume === 0 ? (
+                    <VolumeIcon className="h-4 w-4" />
+                  ) : timerControlSettings.finishSoundVolume < 0.5 ? (
+                    <Volume1Icon className="h-4 w-4" />
+                  ) : (
+                    <Volume2Icon className="h-4 w-4" />
+                  )}
+                  Finish sound volume
+                </h4>
+              </div>
+              <FinishSoundVolumeSlider />
             </div>
           </div>
         </div>
