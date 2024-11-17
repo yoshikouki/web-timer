@@ -11,13 +11,8 @@ import { type FinishSoundOptionKeys, finishSoundOptions } from "../settings";
 import { useTimer } from "../use-timer";
 
 export const FinishSoundSelector = () => {
-  const { timerControlSettings, updateTimerControlSettings } = useTimer();
-
-  const playFinishSound = (path: string) => {
-    const audio = new Audio(path);
-    audio.volume = timerControlSettings.finishSoundVolume;
-    audio.play();
-  };
+  const { timerControlSettings, updateTimerControlSettings, playFinishSound } =
+    useTimer();
 
   return (
     <Select
@@ -45,7 +40,7 @@ export const FinishSoundSelector = () => {
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                playFinishSound(finishSoundOption.path);
+                playFinishSound();
               }}
             >
               <BellRingIcon className="h-4 w-4" />
