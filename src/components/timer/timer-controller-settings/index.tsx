@@ -14,6 +14,7 @@ import { useTimer } from "../use-timer";
 import { FinishSoundSelector } from "./finish-sound-selector";
 import { FinishSoundVolumeSlider } from "./finish-sound-volume-slider";
 import { FontSelector } from "./font-selector";
+import { HorizontalLayoutToggle } from "./horizontal-layout-toggle";
 
 export const TimerControllerSettings = ({
   children,
@@ -29,6 +30,10 @@ export const TimerControllerSettings = ({
         <div className="grid gap-10">
           <div className="py-2">
             <h3 className="font-medium leading-none">Settings</h3>
+          </div>
+
+          <div className="grid gap-2">
+            <HorizontalLayoutToggle />
           </div>
 
           <div className="grid gap-2">
