@@ -18,7 +18,7 @@ export const Timer = () => {
         "flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums transition-all",
         !["ready", "running"].includes(status) && "opacity-70",
         isOvertime && "text-destructive",
-        timerControlSettings.horizontalLayout && "rotate-90",
+        timerControlSettings.orientation === "horizontal" && "rotate-90",
         font.className,
       )}
     >

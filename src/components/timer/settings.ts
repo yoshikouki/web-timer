@@ -24,7 +24,7 @@ export type TimerControllerSettingsType = {
   theme: "dark" | "light";
   showSeconds: boolean;
   showMilliseconds: boolean;
-  horizontalLayout: boolean;
+  orientation: "horizontal" | "vertical";
 
   // Sound
   finishSound: FinishSoundOptionKeys;
@@ -40,7 +40,7 @@ export const initialTimerControllerSettings: TimerControllerSettingsType = {
   theme: "dark",
   showSeconds: true,
   showMilliseconds: false,
-  horizontalLayout: false,
+  orientation: "vertical",
   finishSound: "default",
   finishSoundVolume: 1.0,
 

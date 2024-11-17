@@ -8,9 +8,11 @@ export const HorizontalLayoutToggle = () => {
     <Toggle
       variant="outline"
       aria-label="Horizontal layout"
-      pressed={timerControlSettings.horizontalLayout}
+      pressed={timerControlSettings.orientation === "horizontal"}
       onPressedChange={(checked) => {
-        updateTimerControlSettings({ horizontalLayout: checked });
+        updateTimerControlSettings({
+          orientation: checked ? "horizontal" : "vertical",
+        });
       }}
       className="h-10 w-fit px-4"
     >
