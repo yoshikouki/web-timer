@@ -52,10 +52,7 @@ export const TimerControllerSettings = ({
               </Button>
             </div>
             <FinishSoundSelector />
-          </div>
-
-          <div className="grid gap-2">
-            <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center justify-between gap-2 py-4">
               <h4 className="flex items-center gap-1 font-medium">
                 {timerControlSettings.finishSoundVolume === 0 ? (
                   <VolumeIcon className="h-4 w-4" />
@@ -64,10 +61,10 @@ export const TimerControllerSettings = ({
                 ) : (
                   <Volume2Icon className="h-4 w-4" />
                 )}
-                Finish sound volume
+                <span className="sr-only">Finish sound volume</span>
               </h4>
+              <FinishSoundVolumeSlider />
             </div>
-            <FinishSoundVolumeSlider />
           </div>
 
           <div className="grid gap-5">
