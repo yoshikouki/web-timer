@@ -1,55 +1,23 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import {
-  HistoryIcon,
-  PauseIcon,
-  PlayIcon,
-  Settings2Icon,
-  SquareIcon,
-} from "lucide-react";
+import { PauseIcon, PlayIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { TimerControllerSettings } from "./timer-controller-settings";
 import { useTimer } from "./use-timer";
 
 export const TimerController = () => {
-  const { status, start, pause, resume, reset } = useTimer();
+  const { status, timerControlSettings, start, pause, resume, reset } =
+    useTimer();
 
   return (
-    <div className="fixed bottom-0 flex w-full items-center justify-center md:static">
-      <div className="flex w-full items-center justify-between gap-10 px-7 py-7 md:justify-center md:gap-20">
-        <div>
-          <Button
-            onClick={() => {
-              switch (status) {
-                case "paused":
-                  reset();
-                  break;
-                default:
-                  break;
-              }
-            }}
-            variant="ghost"
-            size="icon"
-            className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
-          >
-            <HistoryIcon
-              className={cn(
-                "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
-                status === "paused" &&
-                  "absolute opacity-0 group-hover:opacity-0",
-                status === "running" && "opacity-30",
-              )}
-            />
-            <SquareIcon
-              className={cn(
-                "fill-foreground stroke-none opacity-30 transition-all duration-300 ease-in-out group-hover:opacity-100",
-                status !== "paused" &&
-                  "absolute opacity-0 group-hover:opacity-0",
-              )}
-            />
-          </Button>
-        </div>
+    <div
+      className={cn(
+        "fixed bottom-0 flex items-center justify-center md:static",
+        timerControlSettings.orientation === "horizontal" &&
+          "absolute bottom-auto left-0 rotate-90 md:absolute",
+      )}
+    >
+      <div className="flex w-full items-center justify-center gap-10 px-7 py-7">
         <div className="relative">
           <Button
             onClick={() => {
@@ -70,10 +38,11 @@ export const TimerController = () => {
                   break;
               }
             }}
-            variant="ghost"
+            variant={status === "running" ? "ghost" : "outline"}
             size="icon"
             className={cn(
-              "group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20",
+              "group h-auto rounded-full p-4 transition-all duration-300 md:p-7 [&_svg]:size-8 md:[&_svg]:size-20",
+              status === "running" ? "rounded-lg" : "rounded-full",
             )}
           >
             <PlayIcon
@@ -92,26 +61,6 @@ export const TimerController = () => {
             />
           </Button>
         </div>
-        <TimerControllerSettings>
-          <Button
-            onClick={() => {
-              switch (status) {
-                default:
-                  break;
-              }
-            }}
-            variant="ghost"
-            size="icon"
-            className="group transition-all duration-300 [&_svg]:size-8 md:[&_svg]:size-20"
-          >
-            <Settings2Icon
-              className={cn(
-                "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
-                status === "running" && "opacity-30",
-              )}
-            />
-          </Button>
-        </TimerControllerSettings>
       </div>
     </div>
   );

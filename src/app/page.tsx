@@ -1,5 +1,5 @@
 import { Timer } from "@/components/timer";
-import { TimerController } from "@/components/timer/timer-controller";
+import { TimerHeader } from "@/components/timer/timer-header";
 import { TimerProvider } from "@/components/timer/timer-provider";
 import { HeadTitleController } from "./head-title-controller";
 
@@ -7,11 +7,9 @@ export default function Home() {
   return (
     <TimerProvider>
       <HeadTitleController />
-      <main className="flex min-h-svh flex-col items-center justify-center gap-10 py-20">
-        <div className="flex flex-col gap-4">
-          <Timer />
-        </div>
-        <TimerController />
+      <TimerHeader />
+      <main className="flex h-full min-h-svh w-full flex-col items-center justify-center gap-10 py-20">
+        <Timer />
       </main>
     </TimerProvider>
   );
