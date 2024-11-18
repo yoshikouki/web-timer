@@ -4,8 +4,14 @@ import {
   type Dispatch,
   type SetStateAction,
   createContext,
+  useEffect,
   useState,
 } from "react";
+import {
+  loadCurrentTimer,
+  loadTimerControlSettings,
+  loadTimers,
+} from "./local-storage";
 import {
   type TimerControllerSettingsType,
   initialTimerControllerSettings,
@@ -42,15 +48,26 @@ export const TimerContext = createContext<TimerContextType>({
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [timers, setTimers] = useState(initTimers());
+  const [timers, setTimers] = useState<TimersType>(initTimers());
   const [currentTimer, setCurrentTimer] = useState<CurrentTimerType>(
     initReadyTimer(timers[0]),
   );
-  const [timerControlSettings, setTimerControlSettings] = useState(
-    initialTimerControllerSettings,
-  );
+  const [timerControlSettings, setTimerControlSettings] =
+    useState<TimerControllerSettingsType>(initialTimerControllerSettings);
   const [finishSoundAudio, setFinishSoundAudio] =
     useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (loadTimerControlSettings()) {
+      setTimerControlSettings(loadTimerControlSettings());
+    }
+    if (loadCurrentTimer()) {
+      setCurrentTimer(loadCurrentTimer());
+    }
+    if (loadTimers()) {
+      setTimers(loadTimers());
+    }
+  }, []);
 
   return (
     <TimerContext.Provider

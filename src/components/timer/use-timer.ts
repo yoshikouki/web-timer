@@ -1,5 +1,7 @@
 import { isSamePath } from "@/lib/url";
 import { useContext, useRef } from "react";
+import { storeTimerControlSettings, storeTimers } from "./local-storage";
+import { storeCurrentTimer } from "./local-storage";
 import {
   type TimerControllerSettingsType,
   finishSoundOptions,
@@ -105,6 +107,8 @@ export const useTimer = () => {
     const newTimer = updateTimer(currentTimer, value);
     setCurrentTimer(newTimer);
     setTimers(updateTimers(timers, newTimer));
+    storeCurrentTimer(newTimer);
+    storeTimers(timers);
   };
 
   const prepareFinishSound = (
@@ -150,6 +154,7 @@ export const useTimer = () => {
       ) {
         prepareFinishSound(newTimerControlSettings);
       }
+      storeTimerControlSettings(newTimerControlSettings);
       return newTimerControlSettings;
     });
   };
