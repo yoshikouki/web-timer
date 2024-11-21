@@ -1,31 +1,45 @@
-const clients = new Set<ReadableStreamDefaultController<Uint8Array>>();
+type TimerId = string;
+type TimerClient = ReadableStreamDefaultController<Uint8Array>;
 
-const addClient = (controller: ReadableStreamDefaultController<Uint8Array>) => {
-  clients.add(controller);
+const clientsByTimer = new Map<TimerId, Set<TimerClient>>();
+
+const addClient = (id: TimerId, controller: TimerClient) => {
+  const clientSet = clientsByTimer.get(id) || new Set<TimerClient>();
+  clientSet.add(controller);
+  clientsByTimer.set(id, clientSet);
 };
 
-const removeClient = (
-  controller: ReadableStreamDefaultController<Uint8Array>,
-) => {
-  clients.delete(controller);
+const removeClient = (id: TimerId, controller: TimerClient) => {
+  const clientSet = clientsByTimer.get(id);
+  if (!clientSet) return;
+  clientSet.delete(controller);
+  if (clientSet.size === 0) {
+    clientsByTimer.delete(id);
+  }
 };
 
-const broadcast = (data: Record<string, unknown>) => {
+const broadcast = (id: TimerId, data: Record<string, unknown>) => {
   const encodedData = new TextEncoder().encode(
     `data: ${JSON.stringify(data)}\n\n`,
   );
-  for (const controller of clients) {
+  const clientSet = clientsByTimer.get(id);
+  if (!clientSet) return;
+  for (const controller of clientSet) {
     controller.enqueue(encodedData);
   }
 };
 
-export const GET = async (request: Request) => {
+export const GET = async (
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) => {
+  const { id } = await params;
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {
-      addClient(controller);
+      addClient(id, controller);
 
       const closeStream = () => {
-        removeClient(controller);
+        removeClient(id, controller);
         controller.close();
       };
       request.signal.addEventListener("abort", closeStream);
@@ -44,10 +58,14 @@ export const GET = async (request: Request) => {
   });
 };
 
-export const PATCH = async (_request: Request) => {
+export const PATCH = async (
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) => {
   try {
+    const { id } = await params;
     const data = { time: new Date().toISOString() };
-    broadcast(data);
+    broadcast(id, data);
     return new Response(null, { status: 204 }); // No Content
   } catch (_error) {
     return new Response("Error processing PATCH request", { status: 500 });
