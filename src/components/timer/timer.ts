@@ -18,7 +18,7 @@ const ReadyTimerSchema = z.object({
   duration: z.number(), // ms
   remainingTime: z.number(), // ms
 });
-type ReadyTimerType = z.infer<typeof ReadyTimerSchema>;
+export type ReadyTimerType = z.infer<typeof ReadyTimerSchema>;
 
 const RunningTimerSchema = z.object({
   id: z.string(),
@@ -27,7 +27,7 @@ const RunningTimerSchema = z.object({
   duration: z.number(), // ms
   remainingTime: z.number(), // ms
 });
-type RunningTimerType = z.infer<typeof RunningTimerSchema>;
+export type RunningTimerType = z.infer<typeof RunningTimerSchema>;
 
 const PausedTimerSchema = z.object({
   id: z.string(),
@@ -37,7 +37,7 @@ const PausedTimerSchema = z.object({
   remainingTime: z.number(), // ms
   pausedTime: z.number(), // ms
 });
-type PausedTimerType = z.infer<typeof PausedTimerSchema>;
+export type PausedTimerType = z.infer<typeof PausedTimerSchema>;
 
 const StoppedTimerSchema = z.object({
   id: z.string(),
@@ -46,7 +46,7 @@ const StoppedTimerSchema = z.object({
   duration: z.number(), // ms
   remainingTime: z.number(), // ms
 });
-type StoppedTimerType = z.infer<typeof StoppedTimerSchema>;
+export type StoppedTimerType = z.infer<typeof StoppedTimerSchema>;
 
 // TimerType has common properties
 export const CurrentTimerSchema = z.union([
@@ -57,7 +57,12 @@ export const CurrentTimerSchema = z.union([
 ]);
 export type CurrentTimerType = z.infer<typeof CurrentTimerSchema>;
 
-export const initTimers = (): TimersType => [initReadyTimer()];
+export const initTimers = (): TimersType => [
+  {
+    id: randomID(),
+    duration: 300_000,
+  },
+];
 
 export const updateTimers = (
   timers: TimersType,
@@ -82,9 +87,20 @@ export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
   remainingTime: baseTimer?.duration ?? 300_000,
 });
 
+const commonTimerProps = (
+  _currentTimer: CurrentTimerType,
+): Omit<CurrentTimerType, "pausedTime"> => {
+  const { pausedTime, ...commonProps } = {
+    ..._currentTimer,
+    pausedTime: "pausedTime" in _currentTimer ? _currentTimer.pausedTime : null,
+  };
+  return commonProps;
+};
+
 export const startTimer = (
-  currentTimer: CurrentTimerType,
+  _currentTimer: CurrentTimerType,
 ): RunningTimerType => {
+  const currentTimer = commonTimerProps(_currentTimer);
   return {
     ...currentTimer,
     status: "running",
@@ -94,23 +110,32 @@ export const startTimer = (
 };
 
 export const tickTimer = (currentTimer: CurrentTimerType): RunningTimerType => {
-  if (currentTimer.status !== "running") {
-    throw new Error(`Timer is not running. status: ${currentTimer.status}`);
+  switch (currentTimer.status) {
+    case "running": {
+      const elapsedTime = Date.now() - currentTimer.startTime;
+      return {
+        ...currentTimer,
+        remainingTime: currentTimer.duration - elapsedTime,
+      };
+    }
+    case "paused": {
+      return resumeTimer(currentTimer);
+    }
+    default:
+      return {
+        ...currentTimer,
+        status: "running",
+        startTime: currentTimer.startTime ?? Date.now(),
+      };
   }
-  const elapsedTime = Date.now() - currentTimer.startTime;
-  return {
-    ...currentTimer,
-    remainingTime: currentTimer.duration - elapsedTime,
-  };
 };
 
 export const pauseTimer = (currentTimer: CurrentTimerType): PausedTimerType => {
-  if (currentTimer.status !== "running") {
-    throw new Error(`Timer is not running. status: ${currentTimer.status}`);
-  }
+  if (currentTimer.status === "paused") return currentTimer;
   return {
     ...currentTimer,
     status: "paused",
+    startTime: currentTimer.startTime ?? Date.now(),
     pausedTime: Date.now(),
   };
 };
@@ -136,29 +161,16 @@ export const resumeTimer = (
 };
 
 export const stopTimer = (currentTimer: CurrentTimerType): StoppedTimerType => {
-  switch (currentTimer.status) {
-    case "running":
-      return {
-        ...currentTimer,
-        status: "stopped",
-      };
-    case "paused": {
-      const { pausedTime, ...rest } = currentTimer;
-      return {
-        ...rest,
-        status: "stopped",
-      };
-    }
-    default:
-      throw new Error(
-        `Timer is not running or paused. status: ${currentTimer.status}`,
-      );
-  }
+  return {
+    ...commonTimerProps(currentTimer),
+    status: "stopped",
+    startTime: currentTimer.startTime ?? Date.now(),
+  };
 };
 
 export const resetTimer = (currentTimer: CurrentTimerType): ReadyTimerType => {
   return {
-    ...currentTimer,
+    ...commonTimerProps(currentTimer),
     status: "ready",
     startTime: null,
     remainingTime: currentTimer.duration,
