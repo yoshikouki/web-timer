@@ -1,4 +1,7 @@
-import { TimerEventMessageSchema } from "@/schema/timer-event";
+import {
+  TimerEventMessageSchema,
+  type TimerEventMessageType,
+} from "@/schema/timer-event";
 
 type TimerId = string;
 type TimerClient = ReadableStreamDefaultController<Uint8Array>;
@@ -20,7 +23,7 @@ const removeClient = (id: TimerId, controller: TimerClient) => {
   }
 };
 
-const broadcast = async (id: TimerId, data: Record<string, unknown>) => {
+const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
   const encodedData = new TextEncoder().encode(
     `data: ${JSON.stringify(data)}\n\n`,
   );
@@ -70,7 +73,7 @@ export const PATCH = async (
     if (!parsed.success) {
       return new Response("Invalid request body", { status: 400 });
     }
-    broadcast(id, { event: parsed.data.event });
+    broadcast(id, parsed.data);
     return new Response(null, { status: 204 }); // No Content
   } catch (_error) {
     return new Response("Error processing PATCH request", { status: 500 });

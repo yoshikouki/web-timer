@@ -2,16 +2,17 @@
 
 import { useTimer } from "@/components/timer/use-timer";
 import {
+  type TimerActionEventType,
   TimerEventMessageSchema,
-  type TimerEventType,
+  type TimerEventMessageType,
 } from "@/schema/timer-event";
 import { useEffect, useRef } from "react";
 
-const pushEvent = async (id: string, event: TimerEventType) => {
+const pushEvent = async (id: string, event: TimerActionEventType["event"]) => {
   return await push(id, { event });
 };
 
-const push = async (id: string, data: Record<string, unknown>) => {
+const push = async (id: string, data: TimerEventMessageType) => {
   return await fetch(`/timers/${id}/events`, {
     method: "PATCH",
     body: JSON.stringify(data),
@@ -30,6 +31,7 @@ export const useSharedTimer = ({
     resume: resumeTimer,
     stop: stopTimer,
     reset: resetTimer,
+    updateTime: updateCurrentTimer,
     ...timer
   } = useTimer();
 
@@ -48,9 +50,15 @@ export const useSharedTimer = ({
   const stop = async () => {
     await pushEvent(id, "stop");
   };
+  const updateTime = async (time: { minutes: number; seconds: number }) => {
+    await push(id, {
+      event: "updateTime",
+      time,
+    });
+  };
 
-  const onEventMessage = (event: TimerEventType) => {
-    switch (event) {
+  const onEventMessage = (message: TimerEventMessageType) => {
+    switch (message.event) {
       case "start":
         startTimer();
         break;
@@ -66,8 +74,10 @@ export const useSharedTimer = ({
       case "reset":
         resetTimer();
         break;
+      case "updateTime":
+        updateCurrentTimer(message.time);
+        break;
       default:
-        console.warn(`Unknown timer event: ${event}`);
         break;
     }
   };
@@ -81,13 +91,15 @@ export const useSharedTimer = ({
     const eventSource = eventSourceRef.current;
     if (!eventSource) return () => eventSourceRef.current?.close();
     eventSource.onmessage = (event) => {
-      const { event: timerEvent } = TimerEventMessageSchema.parse(
-        JSON.parse(event.data),
-      );
-      onEventMessage(timerEvent);
+      const parsed = TimerEventMessageSchema.safeParse(JSON.parse(event.data));
+      if (!parsed.success) {
+        console.error("Invalid timer event message", event.data);
+        return;
+      }
+      onEventMessage(parsed.data);
     };
     eventSource.onerror = () => {
-      console.error("SSE connection error");
+      console.error("Server-Sent Events connection error");
       eventSource.close();
     };
     return () => {
@@ -101,6 +113,7 @@ export const useSharedTimer = ({
     resume,
     stop,
     reset,
+    updateTime,
     ...timer,
   };
 };
