@@ -1,3 +1,4 @@
+import { CurrentTimerSchema } from "@/components/timer/timer";
 import { z } from "zod";
 
 export const TimerActionEventSchema = z.object({
@@ -13,8 +14,14 @@ export const TimerMutationEventSchema = z.object({
   }),
 });
 
+export const TimerCurrentTimerEventSchema = z.object({
+  event: z.literal("currentTimer"),
+  currentTimer: CurrentTimerSchema,
+});
+
 export const TimerEventMessageSchema = z.union([
   TimerActionEventSchema,
   TimerMutationEventSchema,
+  TimerCurrentTimerEventSchema,
 ]);
 export type TimerEventMessageType = z.infer<typeof TimerEventMessageSchema>;

@@ -166,6 +166,7 @@ export const useTimer = () => {
     currentTimer,
     timerControlSettings,
     isOvertime: currentTimer.remainingTime < 0,
+    setCurrentTimer,
     setTimerControlSettings,
     start,
     pause,

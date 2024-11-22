@@ -77,6 +77,12 @@ export const useSharedTimer = ({
       case "updateTime":
         updateCurrentTimer(message.time);
         break;
+      case "currentTimer":
+        timer.setCurrentTimer(message.currentTimer);
+        if (message.currentTimer.status === "running") {
+          resumeTimer();
+        }
+        break;
       default:
         break;
     }

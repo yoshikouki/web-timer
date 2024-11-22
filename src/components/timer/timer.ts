@@ -1,4 +1,5 @@
 import { randomID } from "@/lib/utils";
+import { z } from "zod";
 
 export type TimersType = BaseTimerType[];
 
@@ -7,48 +8,54 @@ type BaseTimerType = {
   duration: number;
 };
 
-// ReadyTimerType -> RunningTimerType -> StoppedTimerType
-//                   RunningTimerType <-> PausedTimerType -> StoppedTimerType
+// ReadyTimer -> RunningTimer -> StoppedTimer
+//               RunningTimer <-> PausedTimer -> StoppedTimer
+
+const ReadyTimerSchema = z.object({
+  id: z.string(),
+  status: z.literal("ready"),
+  startTime: z.null(),
+  duration: z.number(), // ms
+  remainingTime: z.number(), // ms
+});
+type ReadyTimerType = z.infer<typeof ReadyTimerSchema>;
+
+const RunningTimerSchema = z.object({
+  id: z.string(),
+  status: z.literal("running"),
+  startTime: z.number(),
+  duration: z.number(), // ms
+  remainingTime: z.number(), // ms
+});
+type RunningTimerType = z.infer<typeof RunningTimerSchema>;
+
+const PausedTimerSchema = z.object({
+  id: z.string(),
+  status: z.literal("paused"),
+  startTime: z.number(),
+  duration: z.number(),
+  remainingTime: z.number(), // ms
+  pausedTime: z.number(), // ms
+});
+type PausedTimerType = z.infer<typeof PausedTimerSchema>;
+
+const StoppedTimerSchema = z.object({
+  id: z.string(),
+  status: z.literal("stopped"),
+  startTime: z.number(),
+  duration: z.number(), // ms
+  remainingTime: z.number(), // ms
+});
+type StoppedTimerType = z.infer<typeof StoppedTimerSchema>;
 
 // TimerType has common properties
-export type CurrentTimerType =
-  | RunningTimerType
-  | ReadyTimerType
-  | PausedTimerType
-  | StoppedTimerType;
-
-type ReadyTimerType = {
-  id: string;
-  status: "ready";
-  startTime: null;
-  duration: number; // ms
-  remainingTime: number; // ms
-};
-
-type RunningTimerType = {
-  id: string;
-  status: "running";
-  startTime: number;
-  duration: number; // ms
-  remainingTime: number; // ms
-};
-
-type PausedTimerType = {
-  id: string;
-  status: "paused";
-  startTime: number;
-  duration: number;
-  pausedTime: number; // ms
-  remainingTime: number; // ms
-};
-
-type StoppedTimerType = {
-  id: string;
-  status: "stopped";
-  startTime: number;
-  duration: number; // ms
-  remainingTime: number; // ms
-};
+export const CurrentTimerSchema = z.union([
+  RunningTimerSchema,
+  ReadyTimerSchema,
+  PausedTimerSchema,
+  StoppedTimerSchema,
+]);
+export type CurrentTimerType = z.infer<typeof CurrentTimerSchema>;
 
 export const initTimers = (): TimersType => [initReadyTimer()];
 
@@ -112,7 +119,11 @@ export const resumeTimer = (
   currentTimer: CurrentTimerType,
 ): RunningTimerType => {
   if (currentTimer.status !== "paused") {
-    throw new Error(`Timer is not paused. status: ${currentTimer.status}`);
+    return {
+      ...currentTimer,
+      status: "running",
+      startTime: currentTimer.startTime ?? Date.now(),
+    };
   }
   const { pausedTime, ...rest } = currentTimer;
   const elapsedTime = pausedTime - currentTimer.startTime;

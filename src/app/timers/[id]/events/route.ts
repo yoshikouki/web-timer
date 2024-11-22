@@ -1,4 +1,14 @@
 import {
+  type CurrentTimerType,
+  initReadyTimer,
+  pauseTimer,
+  resetTimer,
+  resumeTimer,
+  startTimer,
+  stopTimer,
+  updateTimer,
+} from "@/components/timer/timer";
+import {
   TimerEventMessageSchema,
   type TimerEventMessageType,
 } from "@/schema/timer-event";
@@ -7,11 +17,53 @@ type TimerId = string;
 type TimerClient = ReadableStreamDefaultController<Uint8Array>;
 
 const clientsByTimer = new Map<TimerId, Set<TimerClient>>();
+const timers = new Map<TimerId, CurrentTimerType>();
+
+const initTimer = (id: TimerId) => {
+  const timer = timers.get(id) ?? initReadyTimer();
+  timers.set(id, timer);
+  console.log("initTimer", timer);
+  return timer;
+};
+
+const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
+  const currentTimer = initTimer(id);
+  let newTimer = currentTimer;
+  switch (data.event) {
+    case "start":
+      newTimer = startTimer(currentTimer);
+      break;
+    case "pause":
+      newTimer = pauseTimer(currentTimer);
+      break;
+    case "resume":
+      newTimer = resumeTimer(currentTimer);
+      break;
+    case "stop":
+      newTimer = stopTimer(currentTimer);
+      break;
+    case "reset":
+      newTimer = resetTimer(currentTimer);
+      break;
+    case "updateTime":
+      newTimer = updateTimer(currentTimer, data.time);
+      break;
+  }
+  console.log("newTimer", newTimer);
+  timers.set(id, newTimer);
+};
 
 const addClient = (id: TimerId, controller: TimerClient) => {
+  const timer = initTimer(id);
   const clientSet = clientsByTimer.get(id) || new Set<TimerClient>();
   clientSet.add(controller);
   clientsByTimer.set(id, clientSet);
+  controller.enqueue(
+    encodeTimerEventMessage({
+      event: "currentTimer",
+      currentTimer: timer,
+    }),
+  );
 };
 
 const removeClient = (id: TimerId, controller: TimerClient) => {
@@ -23,10 +75,12 @@ const removeClient = (id: TimerId, controller: TimerClient) => {
   }
 };
 
+const encodeTimerEventMessage = (data: TimerEventMessageType) => {
+  return new TextEncoder().encode(`data: ${JSON.stringify(data)}\n\n`);
+};
+
 const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
-  const encodedData = new TextEncoder().encode(
-    `data: ${JSON.stringify(data)}\n\n`,
-  );
+  const encodedData = encodeTimerEventMessage(data);
   const clientSet = clientsByTimer.get(id);
   if (!clientSet) return;
   for (const controller of clientSet) {
@@ -73,6 +127,7 @@ export const PATCH = async (
     if (!parsed.success) {
       return new Response("Invalid request body", { status: 400 });
     }
+    updateCurrentTimer(id, parsed.data);
     broadcast(id, parsed.data);
     return new Response(null, { status: 204 }); // No Content
   } catch (_error) {
