@@ -35,6 +35,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@flydotio/dockerfile": "^0.5.9",
+    "@types/bun": "^1.1.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
