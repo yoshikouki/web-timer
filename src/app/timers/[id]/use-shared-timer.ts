@@ -1,8 +1,22 @@
 "use client";
 
 import { useTimer } from "@/components/timer/use-timer";
-import { TimerEventSchema } from "@/schema/timer-event";
+import {
+  TimerEventMessageSchema,
+  type TimerEventType,
+} from "@/schema/timer-event";
 import { useEffect, useRef } from "react";
+
+const pushEvent = async (id: string, event: TimerEventType) => {
+  return await push(id, { event });
+};
+
+const push = async (id: string, data: Record<string, unknown>) => {
+  return await fetch(`/timers/${id}/events`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+};
 
 export const useSharedTimer = ({
   id,
@@ -20,37 +34,22 @@ export const useSharedTimer = ({
   } = useTimer();
 
   const start = async () => {
-    await fetch(`/timers/${id}/events`, {
-      method: "PATCH",
-      body: JSON.stringify({ event: "start" }),
-    });
+    await pushEvent(id, "start");
   };
   const pause = async () => {
-    await fetch(`/timers/${id}/events`, {
-      method: "PATCH",
-      body: JSON.stringify({ event: "pause" }),
-    });
+    await pushEvent(id, "pause");
   };
   const resume = async () => {
-    await fetch(`/timers/${id}/events`, {
-      method: "PATCH",
-      body: JSON.stringify({ event: "resume" }),
-    });
+    await pushEvent(id, "resume");
   };
   const reset = async () => {
-    await fetch(`/timers/${id}/events`, {
-      method: "PATCH",
-      body: JSON.stringify({ event: "reset" }),
-    });
+    await pushEvent(id, "reset");
   };
   const stop = async () => {
-    await fetch(`/timers/${id}/events`, {
-      method: "PATCH",
-      body: JSON.stringify({ event: "stop" }),
-    });
+    await pushEvent(id, "stop");
   };
 
-  const onSSE = (event: string) => {
+  const onEventMessage = (event: TimerEventType) => {
     switch (event) {
       case "start":
         startTimer();
@@ -82,10 +81,10 @@ export const useSharedTimer = ({
     const eventSource = eventSourceRef.current;
     if (!eventSource) return () => eventSourceRef.current?.close();
     eventSource.onmessage = (event) => {
-      const { event: timerEvent } = TimerEventSchema.parse(
+      const { event: timerEvent } = TimerEventMessageSchema.parse(
         JSON.parse(event.data),
       );
-      onSSE(timerEvent);
+      onEventMessage(timerEvent);
     };
     eventSource.onerror = () => {
       console.error("SSE connection error");

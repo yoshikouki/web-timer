@@ -1,4 +1,4 @@
-import { TimerEventSchema } from "@/schema/timer-event";
+import { TimerEventMessageSchema } from "@/schema/timer-event";
 
 type TimerId = string;
 type TimerClient = ReadableStreamDefaultController<Uint8Array>;
@@ -66,7 +66,7 @@ export const PATCH = async (
 ) => {
   try {
     const { id } = await params;
-    const parsed = TimerEventSchema.safeParse(await request.json());
+    const parsed = TimerEventMessageSchema.safeParse(await request.json());
     if (!parsed.success) {
       return new Response("Invalid request body", { status: 400 });
     }

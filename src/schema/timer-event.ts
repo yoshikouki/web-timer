@@ -1,5 +1,14 @@
 import { z } from "zod";
 
-export const TimerEventSchema = z.object({
-  event: z.enum(["start", "pause", "resume", "stop", "reset"]),
+export type TimerEventType = z.infer<typeof TimerEventSchema>;
+export const TimerEventSchema = z.enum([
+  "start",
+  "pause",
+  "resume",
+  "stop",
+  "reset",
+]);
+
+export const TimerEventMessageSchema = z.object({
+  event: TimerEventSchema,
 });
