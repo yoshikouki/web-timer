@@ -20,7 +20,9 @@ const clientsByTimer = new Map<TimerId, Set<TimerClient>>();
 const timers = new Map<TimerId, CurrentTimerType>();
 
 const initTimer = (id: TimerId) => {
-  const timer = timers.get(id) ?? initReadyTimer();
+  const storedTimer = timers.get(id);
+  if (storedTimer) return storedTimer;
+  const timer = initReadyTimer();
   timers.set(id, timer);
   return timer;
 };
