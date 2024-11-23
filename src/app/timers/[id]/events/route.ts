@@ -84,9 +84,9 @@ const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
   const clientsSet = clientsByTimer.get(id);
   if (!clientsSet) return;
   console.log("clientsSet.size", clientsSet.size);
-  for (const controller of clientsSet) {
-    controller.enqueue(encodedData);
-  }
+  await Promise.all(
+    Array.from(clientsSet).map((controller) => controller.enqueue(encodedData)),
+  );
 };
 
 export const GET = async (
