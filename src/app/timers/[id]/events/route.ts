@@ -80,8 +80,9 @@ const removeClient = (id: TimerId, controller: TimerClient) => {
   }
 };
 
+const encoder = new TextEncoder();
 const encodeTimerEventMessage = (data: TimerEventMessageType) => {
-  return new TextEncoder().encode(`data: ${JSON.stringify(data)}\n\n`);
+  return encoder.encode(`data: ${JSON.stringify(data)}\n\n`);
 };
 
 const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
