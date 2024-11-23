@@ -1,5 +1,5 @@
 import { isSamePath } from "@/lib/url";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { storeTimerControlSettings, storeTimers } from "./local-storage";
 import { storeCurrentTimer } from "./local-storage";
 import {
@@ -29,7 +29,8 @@ export const useTimer = () => {
     finishSoundAudio,
     setFinishSoundAudio,
   } = useContext(TimerContext);
-  const tickIntervalRef = useRef<NodeJS.Timeout>();
+
+  const tickIntervalRef = useRef<Timer>();
 
   const absRemainingMs = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingMs % 1000;
@@ -68,14 +69,18 @@ export const useTimer = () => {
       return newTimer;
     });
   };
-
-  const start = () => {
-    setCurrentTimer(startTimer);
-    prepareFinishSound();
+  const loopTick = () => {
+    clearInterval(tickIntervalRef.current);
     tickIntervalRef.current = setInterval(
       tick,
       timerControlSettings.timerResolution,
     );
+  };
+
+  const start = () => {
+    setCurrentTimer(startTimer);
+    prepareFinishSound();
+    loopTick();
   };
 
   const pause = () => {
@@ -86,10 +91,7 @@ export const useTimer = () => {
 
   const resume = () => {
     setCurrentTimer(resumeTimer);
-    tickIntervalRef.current = setInterval(
-      tick,
-      timerControlSettings.timerResolution,
-    );
+    loopTick();
   };
 
   const stop = () => {
@@ -158,6 +160,10 @@ export const useTimer = () => {
       return newTimerControlSettings;
     });
   };
+
+  useEffect(() => {
+    return () => clearInterval(tickIntervalRef.current);
+  }, []);
 
   return {
     time,
