@@ -81,9 +81,10 @@ const encodeTimerEventMessage = (data: TimerEventMessageType) => {
 
 const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
   const encodedData = encodeTimerEventMessage(data);
-  const clientSet = clientsByTimer.get(id);
-  if (!clientSet) return;
-  for (const controller of clientSet) {
+  const clientsSet = clientsByTimer.get(id);
+  if (!clientsSet) return;
+  console.log("clientsSet.size", clientsSet.size);
+  for (const controller of clientsSet) {
     controller.enqueue(encodedData);
   }
 };
