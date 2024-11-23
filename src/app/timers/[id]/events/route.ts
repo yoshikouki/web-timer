@@ -22,7 +22,6 @@ const timers = new Map<TimerId, CurrentTimerType>();
 const initTimer = (id: TimerId) => {
   const timer = timers.get(id) ?? initReadyTimer();
   timers.set(id, timer);
-  console.log("initTimer", timer);
   return timer;
 };
 
@@ -49,7 +48,6 @@ const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
       newTimer = updateTimer(currentTimer, data.time);
       break;
   }
-  console.log("newTimer", newTimer);
   timers.set(id, newTimer);
 };
 
