@@ -3,9 +3,13 @@
 import { cn } from "@/lib/utils";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { useTimer } from "./use-timer";
+import type { useTimer as useTimerHook } from "./use-timer";
 
-export const TimerController = () => {
+export const TimerController = ({
+  useTimer,
+}: {
+  useTimer: () => ReturnType<typeof useTimerHook>;
+}) => {
   const { status, timerControlSettings, start, pause, resume, reset } =
     useTimer();
 

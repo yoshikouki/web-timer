@@ -7,9 +7,12 @@ import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { NumberWheel } from "./number-wheel";
 import { TimerController } from "./timer-controller";
-import { useTimer } from "./use-timer";
+import { useTimer as useTimerHook } from "./use-timer";
 
-export const Timer = () => {
+export const Timer = (props?: {
+  useTimer?: () => ReturnType<typeof useTimerHook>;
+}) => {
+  const useTimer = props?.useTimer || useTimerHook;
   const { time, status, updateTime, isOvertime, timerControlSettings, reset } =
     useTimer();
   const paddedFullMinutes = time.fullMinutes.toString().padStart(3, "0");
@@ -84,7 +87,7 @@ export const Timer = () => {
         </div>
       </div>
 
-      <TimerController />
+      <TimerController useTimer={useTimer} />
     </div>
   );
 };
