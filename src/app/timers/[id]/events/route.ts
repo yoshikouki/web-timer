@@ -29,7 +29,7 @@ const initTimer = (id: TimerId) => {
 
 const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
   const currentTimer = initTimer(id);
-  let newTimer = currentTimer;
+  let newTimer: CurrentTimerType;
   switch (data.event) {
     case "start":
       newTimer = startTimer(currentTimer);
@@ -47,10 +47,15 @@ const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
       newTimer = resetTimer(currentTimer);
       break;
     case "updateTime":
+      if (currentTimer.status !== "ready") return;
       newTimer = updateTimer(currentTimer, data.time);
       break;
+    default:
+      return;
   }
+  if (!newTimer) return;
   timers.set(id, newTimer);
+  return newTimer;
 };
 
 const addClient = (id: TimerId, controller: TimerClient) => {
@@ -128,10 +133,12 @@ export const PATCH = async (
     if (!parsed.success) {
       return new Response("Invalid request body", { status: 400 });
     }
-    updateCurrentTimer(id, parsed.data);
+    const newTimer = updateCurrentTimer(id, parsed.data);
+    if (!newTimer) return new Response("Invalid request", { status: 400 });
     broadcast(id, parsed.data);
     return new Response(null, { status: 204 }); // No Content
-  } catch (_error) {
+  } catch (error) {
+    console.error(error);
     return new Response("Error processing PATCH request", { status: 500 });
   }
 };

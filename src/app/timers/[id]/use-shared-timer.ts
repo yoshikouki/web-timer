@@ -51,6 +51,7 @@ export const useSharedTimer = ({
     await pushEvent(id, "stop");
   };
   const updateTime = async (time: { minutes: number; seconds: number }) => {
+    if (timer.currentTimer.status !== "ready") return;
     await push(id, {
       event: "updateTime",
       time,
