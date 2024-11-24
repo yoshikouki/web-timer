@@ -77,6 +77,7 @@ const removeClient = (id: TimerId, controller: TimerClient) => {
   clientSet.delete(controller);
   if (clientSet.size === 0) {
     clientsByTimer.delete(id);
+    timers.delete(id);
   }
 };
 
@@ -91,7 +92,15 @@ const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
   if (!clientsSet) return;
   console.log("clientsSet.size", clientsSet.size);
   await Promise.all(
-    Array.from(clientsSet).map((controller) => controller.enqueue(encodedData)),
+    Array.from(clientsSet).map((controller) => {
+      try {
+        controller.enqueue(encodedData);
+      } catch (error) {
+        console.error("Error broadcasting event", error);
+        removeClient(id, controller);
+        controller.close();
+      }
+    }),
   );
 };
 
@@ -100,17 +109,21 @@ export const GET = async (
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id } = await params;
+  let controller: TimerClient;
   const stream = new ReadableStream<Uint8Array>({
-    start(controller) {
-      addClient(id, controller);
-
-      const closeStream = () => {
-        removeClient(id, controller);
-        controller.close();
-      };
-      request.signal.addEventListener("abort", closeStream);
+    start: (ctrl) => {
+      controller = ctrl;
+      addClient(id, ctrl);
+    },
+    cancel: () => {
+      removeClient(id, controller);
     },
   });
+  const closeStream = () => {
+    removeClient(id, controller);
+    controller.close();
+  };
+  request.signal.addEventListener("abort", closeStream);
 
   const streamHeaders: HeadersInit = {
     "Content-Type": "text/event-stream",
