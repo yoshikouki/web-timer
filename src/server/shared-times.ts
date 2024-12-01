@@ -38,7 +38,6 @@ const createTimer = (data: CurrentTimerType) => {
     ...data,
   };
   timers.set(timer.id, timer);
-  console.debug("createTimer", timer);
   return timer;
 };
 
@@ -70,7 +69,6 @@ const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
   }
   if (!newTimer) return;
   timers.set(id, newTimer);
-  console.debug("updateCurrentTimer", newTimer);
   return newTimer;
 };
 
@@ -88,7 +86,7 @@ const addClient = (id: TimerId, controller: TimerClient) => {
 };
 
 const removeClient = (id: TimerId, controller: TimerClient) => {
-  console.debug("removeClient", id);
+  console.debug("DEBUG: removeClient", id);
   controller.close();
   const clientSet = clientsByTimer.get(id);
   if (!clientSet) return;

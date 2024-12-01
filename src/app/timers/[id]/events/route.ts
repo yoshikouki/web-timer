@@ -8,18 +8,18 @@ export const GET = async (
   let controller: TimerClient;
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
+      console.debug("DEBUG: Stream started", id);
       controller = ctrl;
       sharedTimer.sse.addClient(id, ctrl);
-      console.debug("Stream started", id);
     },
-    cancel: () => {
+    cancel: (arg) => {
+      console.debug("DEBUG: Stream cancelled", arg, id);
       sharedTimer.sse.removeClient(id, controller);
-      console.debug("Stream cancelled", id);
     },
   });
   const closeStream = () => {
+    console.debug("DEBUG: Request aborted", id);
     sharedTimer.sse.removeClient(id, controller);
-    console.debug("Request aborted", id);
   };
   request.signal.addEventListener("abort", closeStream);
 
@@ -43,10 +43,14 @@ export const PATCH = async (
     const { id } = await params;
     const parsed = sharedTimer.parseTimerEvent(await request.json());
     if (!parsed.success) {
+      console.error("Invalid request body", parsed.error);
       return new Response("Invalid request body", { status: 400 });
     }
     const newTimer = sharedTimer.updateCurrentTimer(id, parsed.data);
-    if (!newTimer) return new Response("Invalid request", { status: 400 });
+    if (!newTimer) {
+      console.error("Invalid request", parsed.data);
+      return new Response("Invalid request", { status: 400 });
+    }
     sharedTimer.sse.broadcast(id, parsed.data);
     return new Response(null, { status: 204 }); // No Content
   } catch (error) {
