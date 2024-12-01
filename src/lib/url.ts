@@ -1,3 +1,5 @@
+import type { TimerId } from "@/server/shared-times";
+
 // Compare URLs in the following formats:
 // "http://localhost:8888/audio/sfx/maoudamashii_se_onepoint26.mp3"
 // "https://localhost:8888/audio/sfx/maoudamashii_se_onepoint26.mp3"
@@ -19,4 +21,8 @@ const normalizePath = (path: string) => {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;
     return normalizedPath.replace(/\/+$/, "");
   }
+};
+
+export const url = {
+  sharedTimer: (id: TimerId) => `/timers/${id}`,
 };

@@ -13,17 +13,31 @@ import {
   type TimerEventMessageType,
 } from "@/schema/timer-event";
 
-type TimerId = string;
+export type TimerId = string;
 export type TimerClient = ReadableStreamDefaultController<Uint8Array>;
 
 const clientsByTimer = new Map<TimerId, Set<TimerClient>>();
 const timers = new Map<TimerId, CurrentTimerType>();
 
-const initTimer = (id: TimerId) => {
-  const storedTimer = timers.get(id);
-  if (storedTimer) return storedTimer;
-  const timer = initReadyTimer();
-  timers.set(id, timer);
+const initTimer = (_id?: TimerId) => {
+  if (_id) {
+    const storedTimer = timers.get(_id);
+    if (storedTimer) return storedTimer;
+  }
+  const timer = {
+    ...initReadyTimer(),
+    ...(_id ? { id: _id } : {}),
+  };
+  timers.set(timer.id, timer);
+  return timer;
+};
+
+const createTimer = (data: CurrentTimerType) => {
+  const timer = {
+    ...initReadyTimer(),
+    ...data,
+  };
+  timers.set(timer.id, timer);
   return timer;
 };
 
@@ -118,6 +132,7 @@ const sharedTimer = {
     removeClient,
     broadcast,
   },
+  createTimer,
   updateCurrentTimer,
   parseTimerEvent,
 };
