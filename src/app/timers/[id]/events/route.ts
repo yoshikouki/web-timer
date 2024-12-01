@@ -3,12 +3,15 @@ import {
   type Controller,
   sharedTimer,
 } from "@/server/shared-times";
+import { cookies } from "next/headers";
 
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id: channelId } = await params;
+  const cookieStore = await cookies();
+
   let controller: Controller;
   let clientId: ClientId;
 
@@ -19,7 +22,9 @@ export const GET = async (
       clientId = sharedTimer.sse.addClient({
         channelId: channelId,
         controller,
+        clientId: cookieStore.get("shared-timer-client-id")?.value,
       });
+      cookieStore.set("shared-timer-client-id", clientId);
     },
     cancel: (arg) => {
       console.log("DEBUG: Stream cancelled", arg, channelId);
@@ -41,15 +46,13 @@ export const GET = async (
     sharedTimer.sse.removeClient({ channelId, clientId });
   };
 
-  const streamHeaders: HeadersInit = {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-  };
-
   return new Response(stream, {
     status: 200,
-    headers: streamHeaders,
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    },
   });
 };
 
