@@ -48,6 +48,11 @@ export class SSE {
       connectedAt: new Date(),
     });
     this.channels.set(channelId, channel);
+    console.log({
+      clients: this.channels.get(channelId)?.size,
+      channelId,
+      channels: this.channels.size,
+    });
     this.onAddClient?.({ channelId, controller });
     return clientId;
   }

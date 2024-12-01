@@ -17,7 +17,7 @@ export const GET = async (
 
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
-      console.log("DEBUG: Stream started", channelId);
+      console.log("DEBUG: Start stream", channelId);
       controller = ctrl;
       clientId = sharedTimer.sse.addClient({
         channelId: channelId,
@@ -27,22 +27,22 @@ export const GET = async (
       cookieStore.set("shared-timer-client-id", clientId);
     },
     cancel: (arg) => {
-      console.log("DEBUG: Stream cancelled", arg, channelId);
+      console.log("DEBUG: Cancel stream", arg, channelId);
       sharedTimer.sse.removeClient({ channelId, clientId });
     },
     pull: (ctrl) => {
       if (request.signal.aborted) {
-        console.log("DEBUG: Request aborted on pull", channelId);
+        console.log("DEBUG: Abort signal on pulling stream", channelId);
         sharedTimer.sse.removeClient({ channelId, clientId });
       }
     },
   });
   request.signal.addEventListener("abort", () => {
-    console.log("DEBUG: Request aborted on event listener", channelId);
+    console.log("DEBUG: Abort signal on event listener", channelId);
     sharedTimer.sse.removeClient({ channelId, clientId });
   });
   request.signal.onabort = () => {
-    console.log("DEBUG: Request aborted on onabort", channelId);
+    console.log("DEBUG: Abort signal on onabort", channelId);
     sharedTimer.sse.removeClient({ channelId, clientId });
   };
 
