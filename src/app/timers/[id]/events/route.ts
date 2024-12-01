@@ -61,18 +61,18 @@ export const PATCH = async (
   { params }: { params: Promise<{ id: string }> },
 ) => {
   try {
-    const { id } = await params;
+    const { id: channelId } = await params;
     const parsed = sharedTimer.parseTimerEvent(await request.json());
     if (!parsed.success) {
       console.error("Invalid request body", parsed.error);
       return new Response("Invalid request body", { status: 400 });
     }
-    const newTimer = sharedTimer.updateCurrentTimer(id, parsed.data);
+    const newTimer = sharedTimer.updateCurrentTimer(channelId, parsed.data);
     if (!newTimer) {
       console.error("Invalid request", parsed.data);
       return new Response("Invalid request", { status: 400 });
     }
-    sharedTimer.sse.broadcast(id, parsed.data);
+    sharedTimer.sse.broadcast(channelId, parsed.data);
     return new Response(null, { status: 204 }); // No Content
   } catch (error) {
     console.error(error);

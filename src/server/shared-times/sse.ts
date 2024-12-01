@@ -84,8 +84,8 @@ export class SSE {
     this.onRemoveClient?.({ channelId, channel });
   }
 
-  broadcast = async (id: ChannelId, data: Record<string, unknown>) => {
-    const clients = this.channels.get(id);
+  broadcast = async (channelId: ChannelId, data: Record<string, unknown>) => {
+    const clients = this.channels.get(channelId);
     if (!clients) return;
     const encodedData = this.encode(data);
     await Promise.all(
@@ -94,7 +94,7 @@ export class SSE {
           client.controller.enqueue(encodedData);
         } catch (error) {
           console.error("Error broadcasting event", error);
-          this.removeClient(id, client.id);
+          this.removeClient({ channelId, clientId: client.id });
         }
       }),
     );
