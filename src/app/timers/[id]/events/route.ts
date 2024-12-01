@@ -1,35 +1,44 @@
-import { type SSEClient, sharedTimer } from "@/server/shared-times";
+import {
+  type ClientId,
+  type Controller,
+  sharedTimer,
+} from "@/server/shared-times";
 
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) => {
-  const { id } = await params;
-  let controller: SSEClient;
+  const { id: channelId } = await params;
+  let controller: Controller;
+  let clientId: ClientId;
+
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
-      console.log("DEBUG: Stream started", id);
+      console.log("DEBUG: Stream started", channelId);
       controller = ctrl;
-      sharedTimer.sse.addClient(id, ctrl);
+      clientId = sharedTimer.sse.addClient({
+        channelId: channelId,
+        controller,
+      });
     },
     cancel: (arg) => {
-      console.log("DEBUG: Stream cancelled", arg, id);
-      sharedTimer.sse.removeClient(id, controller);
+      console.log("DEBUG: Stream cancelled", arg, channelId);
+      sharedTimer.sse.removeClient({ channelId, clientId });
     },
     pull: (ctrl) => {
       if (request.signal.aborted) {
-        console.log("DEBUG: Request aborted on pull", id);
-        sharedTimer.sse.removeClient(id, ctrl);
+        console.log("DEBUG: Request aborted on pull", channelId);
+        sharedTimer.sse.removeClient({ channelId, clientId });
       }
     },
   });
   request.signal.addEventListener("abort", () => {
-    console.log("DEBUG: Request aborted on event listener", id);
-    sharedTimer.sse.removeClient(id, controller);
+    console.log("DEBUG: Request aborted on event listener", channelId);
+    sharedTimer.sse.removeClient({ channelId, clientId });
   });
   request.signal.onabort = () => {
-    console.log("DEBUG: Request aborted on onabort", id);
-    sharedTimer.sse.removeClient(id, controller);
+    console.log("DEBUG: Request aborted on onabort", channelId);
+    sharedTimer.sse.removeClient({ channelId, clientId });
   };
 
   const streamHeaders: HeadersInit = {

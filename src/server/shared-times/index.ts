@@ -13,12 +13,12 @@ import {
   type TimerEventMessageType,
 } from "@/schema/timer-event";
 
-import { SSE, type SSEChannelId } from "./sse";
+import { type ChannelId, SSE } from "./sse";
 export * from "./sse";
 
-const timers = new Map<SSEChannelId, CurrentTimerType>();
+const timers = new Map<ChannelId, CurrentTimerType>();
 
-const initTimer = (_id?: SSEChannelId) => {
+const initTimer = (_id?: ChannelId) => {
   if (_id) {
     const storedTimer = timers.get(_id);
     if (storedTimer) return storedTimer;
@@ -40,7 +40,7 @@ const createTimer = (data: CurrentTimerType) => {
   return timer;
 };
 
-const updateCurrentTimer = (id: SSEChannelId, data: TimerEventMessageType) => {
+const updateCurrentTimer = (id: ChannelId, data: TimerEventMessageType) => {
   const currentTimer = initTimer(id);
   let newTimer: CurrentTimerType;
   switch (data.event) {
@@ -95,8 +95,8 @@ const sharedTimer = {
         }),
       );
     },
-    onRemoveClient: ({ channelId, clients }) => {
-      if (0 < clients.size) return;
+    onRemoveClient: ({ channelId, channel }) => {
+      if (0 < channel.size) return;
       timers.delete(channelId);
     },
   }),

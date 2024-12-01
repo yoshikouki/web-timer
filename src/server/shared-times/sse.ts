@@ -1,18 +1,24 @@
-export type SSEChannelId = string;
-export type SSEClient = ReadableStreamDefaultController<Uint8Array>;
+export type ChannelId = string;
+export type Client = {
+  id: ClientId;
+  controller: Controller;
+  connectedAt: Date;
+};
+export type ClientId = string;
+export type Controller = ReadableStreamDefaultController<Uint8Array>;
 
 type AddClientCallback = (props: {
-  channelId: SSEChannelId;
-  controller: SSEClient;
+  channelId: ChannelId;
+  controller: Controller;
 }) => void;
+
 type RemoveClientCallback = (props: {
-  channelId: SSEChannelId;
-  controller: SSEClient;
-  clients: Set<SSEClient>;
+  channelId: ChannelId;
+  channel: Map<ClientId, Client>;
 }) => void;
 
 export class SSE {
-  private channels: Map<SSEChannelId, Set<SSEClient>> = new Map();
+  private channels: Map<ChannelId, Map<ClientId, Client>> = new Map();
   private encoder = new TextEncoder();
 
   private onAddClient: AddClientCallback | undefined;
@@ -26,17 +32,36 @@ export class SSE {
     this.onRemoveClient = params?.onRemoveClient;
   }
 
-  addClient(channelId: SSEChannelId, controller: SSEClient) {
-    const clientSet = this.channels.get(channelId) || new Set();
-    clientSet.add(controller);
-    this.channels.set(channelId, clientSet);
+  addClient({
+    channelId,
+    controller,
+    clientId = crypto.randomUUID(),
+  }: {
+    channelId: ChannelId;
+    controller: Controller;
+    clientId?: ClientId;
+  }): ClientId {
+    const channel = this.channels.get(channelId) || new Map();
+    channel.set(clientId, {
+      id: clientId,
+      controller,
+      connectedAt: new Date(),
+    });
+    this.channels.set(channelId, channel);
     this.onAddClient?.({ channelId, controller });
+    return clientId;
   }
 
-  removeClient(channelId: SSEChannelId, controller: SSEClient) {
+  removeClient({
+    channelId,
+    clientId,
+  }: { channelId: ChannelId; clientId: ClientId }) {
     console.log("DEBUG: removeClient", channelId);
+    const channel = this.channels.get(channelId);
+    const client = channel?.get(clientId);
+    if (!channel || !client) return;
     try {
-      controller.close();
+      client.controller.close();
     } catch (error) {
       if (
         error instanceof Error &&
@@ -47,26 +72,24 @@ export class SSE {
         console.error("Error closing controller", error);
       }
     }
-    const clientSet = this.channels.get(channelId);
-    if (!clientSet) return;
-    clientSet.delete(controller);
-    if (clientSet.size === 0) {
+    channel.delete(clientId);
+    if (channel.size === 0) {
       this.channels.delete(channelId);
     }
-    this.onRemoveClient?.({ channelId, controller, clients: clientSet });
+    this.onRemoveClient?.({ channelId, channel });
   }
 
-  broadcast = async (id: SSEChannelId, data: Record<string, unknown>) => {
-    const encodedData = this.encode(data);
+  broadcast = async (id: ChannelId, data: Record<string, unknown>) => {
     const clients = this.channels.get(id);
     if (!clients) return;
+    const encodedData = this.encode(data);
     await Promise.all(
-      Array.from(clients).map((controller) => {
+      Array.from(clients.values()).map((client) => {
         try {
-          controller.enqueue(encodedData);
+          client.controller.enqueue(encodedData);
         } catch (error) {
           console.error("Error broadcasting event", error);
-          this.removeClient(id, controller);
+          this.removeClient(id, client.id);
         }
       }),
     );

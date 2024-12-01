@@ -1,4 +1,4 @@
-import type { SSEChannelId } from "@/server/shared-times";
+import type { ChannelId } from "@/server/shared-times";
 
 // Compare URLs in the following formats:
 // "http://localhost:8888/audio/sfx/maoudamashii_se_onepoint26.mp3"
@@ -24,5 +24,5 @@ const normalizePath = (path: string) => {
 };
 
 export const url = {
-  sharedTimer: (id: SSEChannelId) => `/timers/${id}`,
+  sharedTimer: (id: ChannelId) => `/timers/${id}`,
 };
