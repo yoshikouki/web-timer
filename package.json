@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "bunx @biomejs/biome check . && next lint",
+    "lint": "bunx @biomejs/biome check .",
     "format": "bunx @biomejs/biome check --write .",
     "format:unsafe": "bunx @biomejs/biome check --write --unsafe .",
     "update:all": "bun update --latest"
