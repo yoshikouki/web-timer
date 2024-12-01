@@ -48,11 +48,17 @@ export class SSE {
       connectedAt: new Date(),
     });
     this.channels.set(channelId, channel);
-    console.log({
-      clients: this.channels.get(channelId)?.size,
-      channelId,
-      channels: this.channels.size,
-    });
+    console.log(
+      JSON.stringify(
+        {
+          clients: this.channels.get(channelId)?.size,
+          channelId,
+          channels: this.channels.size,
+        },
+        null,
+        0,
+      ),
+    );
     this.onAddClient?.({ channelId, controller });
     return clientId;
   }
@@ -61,7 +67,6 @@ export class SSE {
     channelId,
     clientId,
   }: { channelId: ChannelId; clientId: ClientId }) {
-    console.log("DEBUG: removeClient", channelId);
     const channel = this.channels.get(channelId);
     const client = channel?.get(clientId);
     if (!channel || !client) return;

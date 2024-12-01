@@ -5,6 +5,8 @@ import {
 } from "@/server/shared-times";
 import { cookies } from "next/headers";
 
+const COOKIE_NAME = "shared-timer-client-id";
+
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -17,34 +19,26 @@ export const GET = async (
 
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
-      console.log("DEBUG: Start stream", channelId);
       controller = ctrl;
       clientId = sharedTimer.sse.addClient({
         channelId: channelId,
         controller,
-        clientId: cookieStore.get("shared-timer-client-id")?.value,
+        clientId: cookieStore.get(COOKIE_NAME)?.value,
       });
-      cookieStore.set("shared-timer-client-id", clientId);
+      cookieStore.set(COOKIE_NAME, clientId);
     },
-    cancel: (arg) => {
-      console.log("DEBUG: Cancel stream", arg, channelId);
+    cancel: () => {
       sharedTimer.sse.removeClient({ channelId, clientId });
     },
-    pull: (ctrl) => {
-      if (request.signal.aborted) {
-        console.log("DEBUG: Abort signal on pulling stream", channelId);
-        sharedTimer.sse.removeClient({ channelId, clientId });
-      }
+    pull: () => {
+      if (!request.signal.aborted) return;
+      sharedTimer.sse.removeClient({ channelId, clientId });
     },
   });
   request.signal.addEventListener("abort", () => {
-    console.log("DEBUG: Abort signal on event listener", channelId);
     sharedTimer.sse.removeClient({ channelId, clientId });
   });
-  request.signal.onabort = () => {
-    console.log("DEBUG: Abort signal on onabort", channelId);
-    sharedTimer.sse.removeClient({ channelId, clientId });
-  };
+  console.log("DEBUG: request.signal", request.signal, request.signal.aborted);
 
   return new Response(stream, {
     status: 200,
