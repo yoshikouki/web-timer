@@ -8,20 +8,30 @@ export const GET = async (
   let controller: TimerClient;
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
-      console.debug("DEBUG: Stream started", id);
+      console.log("DEBUG: Stream started", id);
       controller = ctrl;
       sharedTimer.sse.addClient(id, ctrl);
     },
     cancel: (arg) => {
-      console.debug("DEBUG: Stream cancelled", arg, id);
+      console.log("DEBUG: Stream cancelled", arg, id);
       sharedTimer.sse.removeClient(id, controller);
     },
+    pull: (ctrl) => {
+      console.log("DEBUG: Stream pulled", id);
+      if (request.signal.aborted) {
+        console.log("DEBUG: Request aborted on pull", id);
+        sharedTimer.sse.removeClient(id, ctrl);
+      }
+    },
   });
-  const closeStream = () => {
-    console.debug("DEBUG: Request aborted", id);
+  request.signal.addEventListener("abort", () => {
+    console.log("DEBUG: Request aborted on event listener", id);
+    sharedTimer.sse.removeClient(id, controller);
+  });
+  request.signal.onabort = () => {
+    console.log("DEBUG: Request aborted on onabort", id);
     sharedTimer.sse.removeClient(id, controller);
   };
-  request.signal.addEventListener("abort", closeStream);
 
   const streamHeaders: HeadersInit = {
     "Content-Type": "text/event-stream",

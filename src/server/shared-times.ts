@@ -86,7 +86,7 @@ const addClient = (id: TimerId, controller: TimerClient) => {
 };
 
 const removeClient = (id: TimerId, controller: TimerClient) => {
-  console.debug("DEBUG: removeClient", id);
+  console.log("DEBUG: removeClient", id);
   controller.close();
   const clientSet = clientsByTimer.get(id);
   if (!clientSet) return;
