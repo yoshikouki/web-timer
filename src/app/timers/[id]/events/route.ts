@@ -1,11 +1,11 @@
-import { type TimerClient, sharedTimer } from "@/server/shared-times";
+import { type SSEClient, sharedTimer } from "@/server/shared-times";
 
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id } = await params;
-  let controller: TimerClient;
+  let controller: SSEClient;
   const stream = new ReadableStream<Uint8Array>({
     start: (ctrl) => {
       console.log("DEBUG: Stream started", id);
@@ -17,7 +17,6 @@ export const GET = async (
       sharedTimer.sse.removeClient(id, controller);
     },
     pull: (ctrl) => {
-      console.log("DEBUG: Stream pulled", id);
       if (request.signal.aborted) {
         console.log("DEBUG: Request aborted on pull", id);
         sharedTimer.sse.removeClient(id, ctrl);

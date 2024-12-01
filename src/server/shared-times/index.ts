@@ -13,13 +13,12 @@ import {
   type TimerEventMessageType,
 } from "@/schema/timer-event";
 
-export type TimerId = string;
-export type TimerClient = ReadableStreamDefaultController<Uint8Array>;
+import { SSE, type SSEChannelId } from "./sse";
+export * from "./sse";
 
-const clientsByTimer = new Map<TimerId, Set<TimerClient>>();
-const timers = new Map<TimerId, CurrentTimerType>();
+const timers = new Map<SSEChannelId, CurrentTimerType>();
 
-const initTimer = (_id?: TimerId) => {
+const initTimer = (_id?: SSEChannelId) => {
   if (_id) {
     const storedTimer = timers.get(_id);
     if (storedTimer) return storedTimer;
@@ -41,7 +40,7 @@ const createTimer = (data: CurrentTimerType) => {
   return timer;
 };
 
-const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
+const updateCurrentTimer = (id: SSEChannelId, data: TimerEventMessageType) => {
   const currentTimer = initTimer(id);
   let newTimer: CurrentTimerType;
   switch (data.event) {
@@ -72,31 +71,6 @@ const updateCurrentTimer = (id: TimerId, data: TimerEventMessageType) => {
   return newTimer;
 };
 
-const addClient = (id: TimerId, controller: TimerClient) => {
-  const timer = initTimer(id);
-  const clientSet = clientsByTimer.get(id) || new Set<TimerClient>();
-  clientSet.add(controller);
-  clientsByTimer.set(id, clientSet);
-  controller.enqueue(
-    encodeTimerEventMessage({
-      event: "currentTimer",
-      currentTimer: timer,
-    }),
-  );
-};
-
-const removeClient = (id: TimerId, controller: TimerClient) => {
-  console.log("DEBUG: removeClient", id);
-  controller.close();
-  const clientSet = clientsByTimer.get(id);
-  if (!clientSet) return;
-  clientSet.delete(controller);
-  if (clientSet.size === 0) {
-    clientsByTimer.delete(id);
-    timers.delete(id);
-  }
-};
-
 const parseTimerEvent = (data: unknown) => {
   const result = TimerEventMessageSchema.safeParse(data);
   if (!result.success) {
@@ -110,29 +84,22 @@ const encodeTimerEventMessage = (data: TimerEventMessageType) => {
   return encoder.encode(`data: ${JSON.stringify(data)}\n\n`);
 };
 
-const broadcast = async (id: TimerId, data: TimerEventMessageType) => {
-  const encodedData = encodeTimerEventMessage(data);
-  const clientsSet = clientsByTimer.get(id);
-  if (!clientsSet) return;
-  console.log("clientsSet.size", clientsSet.size);
-  await Promise.all(
-    Array.from(clientsSet).map((controller) => {
-      try {
-        controller.enqueue(encodedData);
-      } catch (error) {
-        console.error("Error broadcasting event", error);
-        removeClient(id, controller);
-      }
-    }),
-  );
-};
-
 const sharedTimer = {
-  sse: {
-    addClient,
-    removeClient,
-    broadcast,
-  },
+  sse: new SSE({
+    onAddClient: ({ channelId, controller }) => {
+      const timer = initTimer(channelId);
+      controller.enqueue(
+        encodeTimerEventMessage({
+          event: "currentTimer",
+          currentTimer: timer,
+        }),
+      );
+    },
+    onRemoveClient: ({ channelId, clients }) => {
+      if (0 < clients.size) return;
+      timers.delete(channelId);
+    },
+  }),
   createTimer,
   updateCurrentTimer,
   parseTimerEvent,
