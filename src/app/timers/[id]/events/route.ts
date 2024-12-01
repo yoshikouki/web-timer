@@ -10,14 +10,16 @@ export const GET = async (
     start: (ctrl) => {
       controller = ctrl;
       sharedTimer.sse.addClient(id, ctrl);
+      console.debug("Stream started", id);
     },
     cancel: () => {
       sharedTimer.sse.removeClient(id, controller);
+      console.debug("Stream cancelled", id);
     },
   });
   const closeStream = () => {
     sharedTimer.sse.removeClient(id, controller);
-    controller.close();
+    console.debug("Request aborted", id);
   };
   request.signal.addEventListener("abort", closeStream);
 
