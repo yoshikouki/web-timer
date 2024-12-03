@@ -38,7 +38,6 @@ export const GET = async (
   request.signal.addEventListener("abort", () => {
     sharedTimer.sse.removeClient({ channelId, clientId });
   });
-  console.log("DEBUG: request.signal", request.signal, request.signal.aborted);
 
   return new Response(stream, {
     status: 200,
