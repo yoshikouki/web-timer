@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { Settings2Icon } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { AnimatedLink } from "../animated-link";
 import { Button } from "../ui/button";
 import { TimerControllerSettings } from "./timer-controller-settings";
 import { useTimer } from "./use-timer";
@@ -14,7 +14,7 @@ export const TimerHeader = () => {
   return (
     <>
       <TimerHeaderContainer className="fixed left-0">
-        <Link href="/">
+        <AnimatedLink href="/">
           <h1
             className={cn(
               "font-bold text-2xl opacity-100 transition-opacity duration-300 ease-in-out",
@@ -23,7 +23,7 @@ export const TimerHeader = () => {
           >
             Web Timer
           </h1>
-        </Link>
+        </AnimatedLink>
       </TimerHeaderContainer>
 
       <TimerHeaderContainer className="right-0">
