@@ -15,12 +15,8 @@ export const QRCode = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const width = Math.min(
-      containerRef.current.clientWidth,
-      containerRef.current.clientHeight,
-    );
-    setSize(width);
-    renderedSizeRef.current = width;
+    setSize(containerRef.current.clientWidth);
+    renderedSizeRef.current = containerRef.current.clientWidth;
   }, []);
 
   const onZoom = () => {
