@@ -1,7 +1,9 @@
 import { HeadTitleController } from "@/app/head-title-controller";
 import { TimerHeader } from "@/components/timer/timer-header";
 import { TimerProvider } from "@/components/timer/timer-provider";
+import { url } from "@/lib/url";
 import { CopyLink } from "./copy-link";
+import { QRCode } from "./qr-code";
 import { SharedTimer } from "./shared-timer";
 
 export default async function TimerPage({
@@ -27,6 +29,7 @@ export default async function TimerPage({
             </p>
           </div>
           <CopyLink />
+          <QRCode url={url.sharedTimers.show(id, { url: true })} />
         </section>
       </main>
     </TimerProvider>
