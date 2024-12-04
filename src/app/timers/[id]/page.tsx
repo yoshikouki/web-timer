@@ -21,7 +21,7 @@ export default async function TimerPage({
         <section className="flex h-full min-h-svh w-full items-center justify-center">
           <SharedTimer id={id} />
         </section>
-        <section className="flex flex-col items-start justify-center gap-10">
+        <section className="flex max-w-sm flex-col items-start justify-center gap-10">
           <div className="flex flex-col items-start justify-center gap-2">
             <h2 className="text-center font-bold text-2xl">Share</h2>
             <p className="text-muted-foreground text-sm">

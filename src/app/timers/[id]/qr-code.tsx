@@ -1,27 +1,74 @@
 "use client";
-
 import { cn } from "@/lib/utils";
 import { QRCodeSVG } from "qrcode.react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const QRCode = ({
   url,
   className,
 }: { url: string; className?: string }) => {
   const [size, setSize] = useState(1);
-  const containerRef = (container: HTMLDivElement) => {
-    if (!container) return;
-    setSize(container.clientWidth);
+  const [zoomClassName, setZoomClassName] = useState("");
+  const renderedSizeRef = useRef(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const qrCodeSvgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const width = Math.min(
+      containerRef.current.clientWidth,
+      containerRef.current.clientHeight,
+    );
+    setSize(width);
+    renderedSizeRef.current = width;
+  }, []);
+
+  const onZoom = () => {
+    setZoomClassName((prev) => {
+      const isZoomed = prev !== "";
+      setSize(
+        isZoomed
+          ? renderedSizeRef.current
+          : Math.min(window.innerWidth, window.innerHeight) * 0.9,
+      );
+      return isZoomed ? "" : "fixed inset-0 bg-background/80 p-10";
+    });
   };
+
+  // const onDownload = () => {
+  //   // TODO: WIP
+  //   if (!qrCodeSvgRef.current) return;
+  //   const svg = qrCodeSvgRef.current;
+  //   const svgData = new XMLSerializer().serializeToString(svg);
+  //   const canvas = document.createElement("canvas");
+  //   canvas.width = svg.clientWidth;
+  //   canvas.height = svg.clientHeight;
+  //   const ctx = canvas.getContext("2d");
+  //   const img = new Image();
+  //   img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+  //   ctx?.drawImage(img, 0, 0);
+  //   const a = document.createElement("a");
+  //   a.href = canvas.toDataURL("image/png");
+  //   a.download = "qr-code.png";
+  //   a.click();
+  // };
+
   return (
     <div
       ref={containerRef}
       className={cn(
-        "flex aspect-square w-full items-center justify-center",
+        "group relative flex w-full items-center justify-center",
+        zoomClassName,
         className,
       )}
+      onClick={onZoom}
+      onKeyDown={(event) => {
+        if (event.key !== "q") return;
+        onZoom();
+      }}
     >
       <QRCodeSVG
+        ref={qrCodeSvgRef}
         value={url}
         size={size}
         marginSize={0}
@@ -38,6 +85,14 @@ export const QRCode = ({
         }}
         className="transition-all duration-300"
       />
+      {/* <Button
+        variant="secondary"
+        size="icon"
+        className="absolute rounded-xl p-10 opacity-0 transition-opacity duration-300 group-hover:opacity-80 [&_svg]:size-10"
+        onClick={onDownload}
+      >
+        <DownloadIcon />
+      </Button> */}
     </div>
   );
 };
