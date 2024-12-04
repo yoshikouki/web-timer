@@ -13,7 +13,7 @@ const routes = app.post(
   (c) => {
     const params = c.req.valid("json");
     const timer = sharedTimer.createTimer(params);
-    return c.redirect(url.sharedTimer(timer.id));
+    return c.redirect(url.sharedTimers.show(timer.id));
   },
 );
 

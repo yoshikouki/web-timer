@@ -15,7 +15,7 @@ export const isSamePath = (
 
 const normalizePath = (path: string) => {
   try {
-    const url = new URL(path, "http://localhost");
+    const url = new URL(path, process.env.NEXT_PUBLIC_APP_URL);
     return url.pathname.replace(/\/+$/, ""); // Remove trailing slashes
   } catch {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;
@@ -23,6 +23,27 @@ const normalizePath = (path: string) => {
   }
 };
 
+export const sameOrigin = <T>(callback: (args: T) => string) => {
+  return (_args?: T, _options?: { url: boolean }) => {
+    const { args, options } =
+      _args !== null && typeof _args === "object" && "url" in _args
+        ? { args: undefined, options: _args }
+        : { args: _args, options: _options };
+    const path =
+      args !== undefined ? callback(args) : callback(undefined as unknown as T);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const url = new URL(path, baseUrl);
+
+    if (options?.url) {
+      return url.toString();
+    }
+    return url.pathname;
+  };
+};
+
 export const url = {
-  sharedTimer: (id: ChannelId) => `/timers/${id}`,
+  sharedTimers: {
+    index: sameOrigin(() => "/timers"),
+    show: sameOrigin((id: ChannelId) => `/timers/${id}`),
+  },
 };
