@@ -54,7 +54,7 @@ export const Timer = (props?: {
           <div
             className={cn(
               "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
-              isUpdatable && "opacity-100",
+              isUpdatable && "opacity-50",
             )}
           >
             <Button
@@ -100,7 +100,7 @@ export const Timer = (props?: {
           <div
             className={cn(
               "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
-              isUpdatable && "opacity-100",
+              isUpdatable && "opacity-50",
             )}
           >
             <Button
