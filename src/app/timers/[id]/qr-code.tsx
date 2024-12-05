@@ -1,4 +1,5 @@
 "use client";
+import { safeViewTransition } from "@/components/animated-link/safe-view-transition";
 import { cn } from "@/lib/utils";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +9,7 @@ export const QRCode = ({
   className,
 }: { url: string; className?: string }) => {
   const [size, setSize] = useState(1);
-  const [zoomClassName, setZoomClassName] = useState("");
+  const [isZoomed, setIsZoomed] = useState(false);
   const renderedSizeRef = useRef(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const qrCodeSvgRef = useRef<SVGSVGElement>(null);
@@ -19,17 +20,14 @@ export const QRCode = ({
     renderedSizeRef.current = containerRef.current.clientWidth;
   }, []);
 
-  const onZoom = () => {
-    setZoomClassName((prev) => {
-      const isZoomed = prev !== "";
-      setSize(
-        isZoomed
-          ? renderedSizeRef.current
-          : Math.min(window.innerWidth, window.innerHeight) * 0.9,
-      );
-      return isZoomed ? "" : "fixed inset-0 bg-background/80 p-10";
-    });
-  };
+  const onZoom = safeViewTransition(() => {
+    setIsZoomed((prev) => !prev);
+    setSize(
+      isZoomed
+        ? renderedSizeRef.current
+        : Math.min(window.innerWidth, window.innerHeight) * 0.9,
+    );
+  });
 
   // const onDownload = () => {
   //   // TODO: WIP
@@ -53,8 +51,8 @@ export const QRCode = ({
     <div
       ref={containerRef}
       className={cn(
-        "group relative flex w-full items-center justify-center",
-        zoomClassName,
+        "flex h-full w-full items-center justify-center transition-all duration-300 ease-in-out",
+        isZoomed ? "fixed inset-0 bg-background/80 p-10" : "",
         className,
       )}
       onClick={onZoom}
@@ -63,24 +61,29 @@ export const QRCode = ({
         onZoom();
       }}
     >
-      <QRCodeSVG
-        ref={qrCodeSvgRef}
-        value={url}
-        size={size}
-        marginSize={0}
-        bgColor="transparent"
-        fgColor="currentColor"
-        imageSettings={{
-          src: "/logo.webp",
-          x: undefined,
-          y: undefined,
-          height: size / 2,
-          width: size / 2,
-          opacity: 1,
-          excavate: false,
-        }}
-        className="transition-all duration-300"
-      />
+      <div className="">
+        <QRCodeSVG
+          ref={qrCodeSvgRef}
+          value={url}
+          size={size}
+          marginSize={0}
+          bgColor="transparent"
+          fgColor="currentColor"
+          imageSettings={{
+            src: "/logo.webp",
+            x: undefined,
+            y: undefined,
+            height: size / 2,
+            width: size / 2,
+            opacity: 1,
+            excavate: false,
+          }}
+          className="transition-all duration-300 ease-in-out"
+          style={{
+            viewTransitionName: "qr-code",
+          }}
+        />
+      </div>
       {/* <Button
         variant="secondary"
         size="icon"

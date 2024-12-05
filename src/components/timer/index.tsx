@@ -30,6 +30,9 @@ export const Timer = (props?: {
           timerControlSettings.orientation === "horizontal" && "rotate-90",
           font.className,
         )}
+        style={{
+          viewTransitionName: "web-timer",
+        }}
       >
         <WheelPicker
           className="inline-flex items-center justify-center"
