@@ -2,7 +2,7 @@
 
 import { fonts } from "@/app/fonts";
 import { cn, sequenceNumbers } from "@/lib/utils";
-import { RotateCcwIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, RotateCcwIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { NumberWheel } from "./number-wheel";
@@ -17,6 +17,7 @@ export const Timer = (props?: {
     useTimer();
   const paddedFullMinutes = time.fullMinutes.toString().padStart(3, "0");
   const font = fonts[timerControlSettings.font];
+  const isUpdatable = ["ready"].includes(status);
 
   return (
     <div
@@ -24,7 +25,7 @@ export const Timer = (props?: {
     >
       <div
         className={cn(
-          "relative flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums transition-all",
+          "relative flex items-center justify-center gap-1 font-bold text-[clamp(3rem,25vw,100vh)] tabular-nums transition-all ease-in-out",
           !["ready", "running"].includes(status) && "opacity-70",
           isOvertime && "text-destructive",
           timerControlSettings.orientation === "horizontal" && "rotate-90",
@@ -35,13 +36,13 @@ export const Timer = (props?: {
         }}
       >
         <WheelPicker
-          className="inline-flex items-center justify-center"
+          className="relative inline-flex items-center justify-center"
           value={time.m}
           options={sequenceNumbers(1000)}
           onChange={(value) => {
             updateTime({ minutes: value, seconds: time.s });
           }}
-          isScrollable={status === "ready"}
+          isScrollable={isUpdatable}
         >
           <NumberWheel
             value={paddedFullMinutes[0]}
@@ -49,6 +50,32 @@ export const Timer = (props?: {
           />
           <NumberWheel value={paddedFullMinutes[1]} />
           <NumberWheel value={paddedFullMinutes[2]} />
+
+          <div
+            className={cn(
+              "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              isUpdatable && "opacity-100",
+            )}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                updateTime({ minutes: time.m + 1, seconds: time.s })
+              }
+            >
+              <ChevronUpIcon className="size-6" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                updateTime({ minutes: time.m - 1, seconds: time.s })
+              }
+            >
+              <ChevronDownIcon className="size-6" />
+            </Button>
+          </div>
         </WheelPicker>
         <span
           className={cn(
@@ -59,16 +86,42 @@ export const Timer = (props?: {
           :
         </span>
         <WheelPicker
-          className="inline-flex items-center justify-center"
+          className="relative inline-flex items-center justify-center"
           value={time.s}
           options={sequenceNumbers(6, 10)}
           onChange={(value) => {
             updateTime({ minutes: time.m, seconds: value });
           }}
-          isScrollable={status === "ready"}
+          isScrollable={isUpdatable}
         >
           <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
           <NumberWheel value={time.ss[1]} />
+
+          <div
+            className={cn(
+              "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              isUpdatable && "opacity-100",
+            )}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                updateTime({ minutes: time.m, seconds: time.s + 10 })
+              }
+            >
+              <ChevronUpIcon className="size-6" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                updateTime({ minutes: time.m, seconds: time.s - 10 })
+              }
+            >
+              <ChevronDownIcon className="size-6" />
+            </Button>
+          </div>
         </WheelPicker>
 
         <div className="absolute top-0 right-0 flex items-center justify-center">
