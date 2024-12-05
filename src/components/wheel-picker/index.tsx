@@ -10,6 +10,7 @@ export const WheelPicker = ({
   options,
   scrollThreshold = 40,
   onChange,
+  isScrollable = true,
 }: {
   value: number;
   options: number[];
@@ -17,6 +18,7 @@ export const WheelPicker = ({
   onChange: (value: number) => void;
   children: React.ReactNode;
   className?: string;
+  isScrollable?: boolean;
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollDelta = useRef(0);
@@ -36,6 +38,7 @@ export const WheelPicker = ({
   };
 
   const onWheel = (event: WheelEvent) => {
+    if (!isScrollable) return;
     event.preventDefault();
     // deltaMode 1: line, 0: pixel
     const deltaFactor = event.deltaMode === 1 ? 16 : 1; // 1 line = 16px
@@ -48,7 +51,7 @@ export const WheelPicker = ({
   };
 
   const onTouchMove = (event: TouchEvent) => {
-    if (touchStartY.current === null) return;
+    if (!isScrollable || touchStartY.current === null) return;
     event.preventDefault();
     const currentY = event.touches[0].clientY;
     const deltaY = -(touchStartY.current - currentY);

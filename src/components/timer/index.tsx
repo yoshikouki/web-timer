@@ -41,6 +41,7 @@ export const Timer = (props?: {
           onChange={(value) => {
             updateTime({ minutes: value, seconds: time.s });
           }}
+          isScrollable={status === "ready"}
         >
           <NumberWheel
             value={paddedFullMinutes[0]}
@@ -64,6 +65,7 @@ export const Timer = (props?: {
           onChange={(value) => {
             updateTime({ minutes: time.m, seconds: value });
           }}
+          isScrollable={status === "ready"}
         >
           <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
           <NumberWheel value={time.ss[1]} />
