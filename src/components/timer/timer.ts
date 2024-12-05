@@ -181,7 +181,7 @@ export const updateTimer = (
   currentTimer: CurrentTimerType,
   value: { minutes: number; seconds: number },
 ): CurrentTimerType => {
-  const duration = value.minutes * 60_000 + value.seconds * 1_000;
+  const duration = Math.max(value.minutes * 60_000 + value.seconds * 1_000, 0);
   return {
     ...currentTimer,
     duration,
