@@ -30,7 +30,7 @@ export const useTimer = () => {
     setFinishSoundAudio,
   } = useContext(TimerContext);
 
-  const tickIntervalRef = useRef<Timer>();
+  const tickIntervalRef = useRef<Timer>(undefined);
 
   const absRemainingMs = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingMs % 1000;
