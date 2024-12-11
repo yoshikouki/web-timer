@@ -2,7 +2,7 @@
 
 import { fonts } from "@/app/fonts";
 import { cn, sequenceNumbers } from "@/lib/utils";
-import { ChevronDownIcon, ChevronUpIcon, RotateCcwIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { NumberWheel } from "./number-wheel";
@@ -64,7 +64,7 @@ export const Timer = (props?: {
                 updateTime({ minutes: time.m + 1, seconds: time.s })
               }
             >
-              <ChevronUpIcon className="size-6" />
+              <PlusIcon className="size-6" />
             </Button>
             <Button
               variant="ghost"
@@ -73,7 +73,7 @@ export const Timer = (props?: {
                 updateTime({ minutes: time.m - 1, seconds: time.s })
               }
             >
-              <ChevronDownIcon className="size-6" />
+              <MinusIcon className="size-6" />
             </Button>
           </div>
         </WheelPicker>
@@ -110,7 +110,7 @@ export const Timer = (props?: {
                 updateTime({ minutes: time.m, seconds: time.s + 10 })
               }
             >
-              <ChevronUpIcon className="size-6" />
+              <PlusIcon className="size-6" />
             </Button>
             <Button
               variant="ghost"
@@ -119,7 +119,7 @@ export const Timer = (props?: {
                 updateTime({ minutes: time.m, seconds: time.s - 10 })
               }
             >
-              <ChevronDownIcon className="size-6" />
+              <MinusIcon className="size-6" />
             </Button>
           </div>
         </WheelPicker>
