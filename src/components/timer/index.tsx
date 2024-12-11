@@ -53,25 +53,34 @@ export const Timer = (props?: {
 
           <div
             className={cn(
-              "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              "-translate-y-full absolute top-0 flex h-1/4 min-h-10 w-full flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
               isUpdatable && "opacity-50",
             )}
           >
             <Button
-              variant="ghost"
-              size="icon"
               onClick={() =>
                 updateTime({ minutes: time.m + 1, seconds: time.s })
               }
+              variant="ghost"
+              size="sm"
+              className="h-full hover:bg-transparent active:bg-transparent"
             >
               <PlusIcon className="size-6" />
             </Button>
+          </div>
+          <div
+            className={cn(
+              "absolute bottom-0 flex h-1/4 min-h-10 w-full translate-y-full flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              isUpdatable && "opacity-50",
+            )}
+          >
             <Button
-              variant="ghost"
-              size="icon"
               onClick={() =>
                 updateTime({ minutes: time.m - 1, seconds: time.s })
               }
+              variant="ghost"
+              size="sm"
+              className="h-full hover:bg-transparent active:bg-transparent"
             >
               <MinusIcon className="size-6" />
             </Button>
@@ -99,32 +108,46 @@ export const Timer = (props?: {
 
           <div
             className={cn(
-              "absolute flex h-[150%] flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              "-translate-y-full absolute top-0 flex h-1/4 min-h-10 w-full flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
               isUpdatable && "opacity-50",
             )}
           >
             <Button
-              variant="ghost"
-              size="icon"
               onClick={() =>
                 updateTime({ minutes: time.m, seconds: time.s + 10 })
               }
+              variant="ghost"
+              size="sm"
+              className="h-full hover:bg-transparent active:bg-transparent"
             >
               <PlusIcon className="size-6" />
             </Button>
+          </div>
+          <div
+            className={cn(
+              "absolute bottom-0 flex h-1/4 min-h-10 w-full translate-y-full flex-col justify-between opacity-0 transition-all duration-300 ease-in-out",
+              isUpdatable && "opacity-50",
+            )}
+          >
             <Button
-              variant="ghost"
-              size="icon"
               onClick={() =>
                 updateTime({ minutes: time.m, seconds: time.s - 10 })
               }
+              variant="ghost"
+              size="sm"
+              className="h-full hover:bg-transparent active:bg-transparent"
             >
               <MinusIcon className="size-6" />
             </Button>
           </div>
         </WheelPicker>
 
-        <div className="absolute top-0 right-0 flex items-center justify-center">
+        <div
+          className={cn(
+            "absolute top-0 right-0 flex items-center justify-center",
+            status !== "paused" && "pointer-events-none touch-none select-none",
+          )}
+        >
           <Button
             onClick={() => reset()}
             variant="outline"
