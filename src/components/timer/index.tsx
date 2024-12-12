@@ -5,7 +5,7 @@ import { cn, sequenceNumbers } from "@/lib/utils";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
-import { NumberWheel } from "./number-wheel";
+import { NumberWheel } from "../wheel-picker/number-wheel";
 import { TimerController } from "./timer-controller";
 import { useTimer as useTimerHook } from "./use-timer";
 
@@ -35,21 +35,23 @@ export const Timer = (props?: {
           viewTransitionName: "web-timer",
         }}
       >
-        <WheelPicker
-          className="relative inline-flex items-center justify-center"
-          value={time.m}
-          options={sequenceNumbers(1000)}
-          onChange={(value) => {
-            updateTime({ minutes: value, seconds: time.s });
-          }}
-          isScrollable={isUpdatable}
-        >
-          <NumberWheel
-            value={paddedFullMinutes[0]}
-            className={cn(paddedFullMinutes[0] === "0" && "hidden opacity-0")}
-          />
-          <NumberWheel value={paddedFullMinutes[1]} />
-          <NumberWheel value={paddedFullMinutes[2]} />
+        <div className="relative flex items-center justify-center">
+          <WheelPicker
+            value={time.m}
+            options={sequenceNumbers(1000)}
+            onChange={(value) => {
+              updateTime({ minutes: value, seconds: time.s });
+            }}
+            isScrollable={isUpdatable}
+            className="inline-flex items-center justify-center"
+          >
+            <NumberWheel
+              value={paddedFullMinutes[0]}
+              className={cn(paddedFullMinutes[0] === "0" && "hidden opacity-0")}
+            />
+            <NumberWheel value={paddedFullMinutes[1]} />
+            <NumberWheel value={paddedFullMinutes[2]} />
+          </WheelPicker>
 
           <div
             className={cn(
@@ -85,7 +87,8 @@ export const Timer = (props?: {
               <MinusIcon className="size-6" />
             </Button>
           </div>
-        </WheelPicker>
+        </div>
+
         <span
           className={cn(
             "font-normal opacity-20 transition-opacity duration-500 ease-in-out",
@@ -94,17 +97,20 @@ export const Timer = (props?: {
         >
           :
         </span>
-        <WheelPicker
-          className="relative inline-flex items-center justify-center"
-          value={time.s}
-          options={sequenceNumbers(6, 10)}
-          onChange={(value) => {
-            updateTime({ minutes: time.m, seconds: value });
-          }}
-          isScrollable={isUpdatable}
-        >
-          <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
-          <NumberWheel value={time.ss[1]} />
+
+        <div className="relative inline-flex items-center justify-center">
+          <WheelPicker
+            value={time.s}
+            options={sequenceNumbers(6, 10)}
+            onChange={(value) => {
+              updateTime({ minutes: time.m, seconds: value });
+            }}
+            isScrollable={isUpdatable}
+            className="inline-flex items-center justify-center"
+          >
+            <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
+            <NumberWheel value={time.ss[1]} />
+          </WheelPicker>
 
           <div
             className={cn(
@@ -140,7 +146,7 @@ export const Timer = (props?: {
               <MinusIcon className="size-6" />
             </Button>
           </div>
-        </WheelPicker>
+        </div>
 
         <div
           className={cn(
