@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "PORT=8888 next dev --turbopack",
+    "scan": "PORT=8888 next dev & bunx react-scan@latest localhost:8888",
     "build": "next build",
     "start": "next start",
     "lint": "bunx @biomejs/biome check .",
