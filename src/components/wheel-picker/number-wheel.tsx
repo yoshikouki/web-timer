@@ -6,7 +6,7 @@ import { cn, sequenceNumbers } from "@/lib/utils";
 import style from "./number-wheel.module.css";
 
 const WHEEL_SIZE_RATIO = 0.8;
-const getWheelSize = () =>
+const calculateWheelDiameter = () =>
   Math.max(
     document.documentElement.clientHeight || 0,
     document.documentElement.clientWidth || 0,
@@ -25,28 +25,30 @@ export const NumberWheel: FC<NumberWheelProps> = ({
   options = sequenceNumbers(10),
 }) => {
   const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
-  const optionAngle = 360 / options.length;
-  const [wheelAngle, setWheelAngle] = useState(() => value * optionAngle);
-  const [wheelSize, setWheelSize] = useState(3000);
-  const wheelRadius = wheelSize * 0.5;
+  const anglePerOption = 360 / options.length;
+  const [currentAngle, setCurrentAngle] = useState(
+    () => value * anglePerOption,
+  );
+  const [wheelDiameter, setWheelDiameter] = useState(3000);
+  const wheelRadius = wheelDiameter * 0.5;
 
   useEffect(() => {
-    const resizeWheelSize = () => setWheelSize(getWheelSize());
+    const resizeWheelSize = () => setWheelDiameter(calculateWheelDiameter());
     resizeWheelSize();
     window.addEventListener("resize", resizeWheelSize);
     return () => window.removeEventListener("resize", resizeWheelSize);
   }, []);
 
   useEffect(() => {
-    setWheelAngle((prevAngle) => {
-      const targetAngle = value * optionAngle;
-      const currentAngle = prevAngle % 360;
-      let deltaAngle = targetAngle - currentAngle;
+    setCurrentAngle((prevAngle) => {
+      const targetAngle = value * anglePerOption;
+      const normalizedPrevAngle = prevAngle % 360;
+      let deltaAngle = targetAngle - normalizedPrevAngle;
       if (deltaAngle > 180) deltaAngle -= 360;
       if (deltaAngle < -180) deltaAngle += 360;
       return prevAngle + deltaAngle;
     });
-  }, [value, optionAngle]);
+  }, [value, anglePerOption]);
 
   return (
     <div
@@ -61,7 +63,7 @@ export const NumberWheel: FC<NumberWheelProps> = ({
         className="h-full w-full transition-transform duration-500 ease-in-out"
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateX(${wheelAngle}deg)`,
+          transform: `rotateX(${currentAngle}deg)`,
         }}
       >
         {options.map((option) => (
@@ -73,7 +75,7 @@ export const NumberWheel: FC<NumberWheelProps> = ({
             )}
             style={{
               backfaceVisibility: "hidden",
-              transform: `rotateX(${option * -optionAngle}deg) translateZ(${wheelRadius}px)`,
+              transform: `rotateX(${option * -anglePerOption}deg) translateZ(${wheelRadius}px)`,
             }}
             aria-hidden={option !== value}
           >
