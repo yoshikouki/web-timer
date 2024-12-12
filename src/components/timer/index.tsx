@@ -5,7 +5,6 @@ import { cn, sequenceNumbers } from "@/lib/utils";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
-import { NumberWheel } from "../wheel-picker/number-wheel";
 import { TimerController } from "./timer-controller";
 import { useTimer as useTimerHook } from "./use-timer";
 
@@ -15,7 +14,6 @@ export const Timer = (props?: {
   const useTimer = props?.useTimer || useTimerHook;
   const { time, status, updateTime, isOvertime, timerControlSettings, reset } =
     useTimer();
-  const paddedFullMinutes = time.fullMinutes.toString().padStart(3, "0");
   const font = fonts[timerControlSettings.font];
   const isUpdatable = ["ready"].includes(status);
 
@@ -44,14 +42,7 @@ export const Timer = (props?: {
             }}
             isScrollable={isUpdatable}
             className="inline-flex items-center justify-center"
-          >
-            <NumberWheel
-              value={paddedFullMinutes[0]}
-              className={cn(paddedFullMinutes[0] === "0" && "hidden opacity-0")}
-            />
-            <NumberWheel value={paddedFullMinutes[1]} />
-            <NumberWheel value={paddedFullMinutes[2]} />
-          </WheelPicker>
+          />
 
           <div
             className={cn(
@@ -107,10 +98,8 @@ export const Timer = (props?: {
             }}
             isScrollable={isUpdatable}
             className="inline-flex items-center justify-center"
-          >
-            <NumberWheel value={time.ss[0]} options={sequenceNumbers(6)} />
-            <NumberWheel value={time.ss[1]} />
-          </WheelPicker>
+            variant="minutes"
+          />
 
           <div
             className={cn(

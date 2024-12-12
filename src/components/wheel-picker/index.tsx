@@ -1,25 +1,29 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { type TouchEventHandler, useEffect, useRef } from "react";
+import { cn, sequenceNumbers } from "@/lib/utils";
+import { type TouchEventHandler, useEffect, useId, useRef } from "react";
+import { NumberWheel } from "./number-wheel";
 
 export const WheelPicker = ({
-  children,
   className,
   value,
   options,
   scrollThreshold = 40,
   onChange,
   isScrollable = true,
+  variant = "default",
 }: {
   value: number;
   options: number[];
   scrollThreshold?: number;
   onChange: (value: number) => void;
-  children: React.ReactNode;
   className?: string;
   isScrollable?: boolean;
+  variant?: "default" | "minutes";
 }) => {
+  const paddedLength = Math.max(value.toString().length, 2);
+  const paddedValues = [...value.toString().padStart(paddedLength, "0")];
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollDelta = useRef(0);
   const valueIndex = useRef(options.findIndex((v) => v === value) ?? 0);
@@ -78,6 +82,8 @@ export const WheelPicker = ({
     // biome-ignore lint/correctness/useExhaustiveDependencies: React Compiler is enabled
   }, [onWheel, onTouchMove]);
 
+  const componentIdRef = useRef(useId());
+
   return (
     <div
       ref={containerRef}
@@ -85,7 +91,28 @@ export const WheelPicker = ({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {children}
+      {variant === "default" ? (
+        paddedValues.map((paddedValue, index) => (
+          <NumberWheel
+            value={paddedValue}
+            options={sequenceNumbers(10)}
+            key={`${componentIdRef.current}-${index}`}
+          />
+        ))
+      ) : (
+        <>
+          <NumberWheel
+            value={paddedValues[0]}
+            options={sequenceNumbers(6)}
+            key={`${componentIdRef.current}-0`}
+          />
+          <NumberWheel
+            value={paddedValues[1]}
+            options={sequenceNumbers(10)}
+            key={`${componentIdRef.current}-1`}
+          />
+        </>
+      )}
     </div>
   );
 };
