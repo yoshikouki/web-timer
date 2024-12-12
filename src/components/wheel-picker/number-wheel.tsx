@@ -1,17 +1,19 @@
 "use client";
 
-import { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 
 import { cn, sequenceNumbers } from "@/lib/utils";
 import style from "./number-wheel.module.css";
 
 const WHEEL_SIZE_RATIO = 0.8;
-const calculateWheelDiameter = () =>
-  Math.max(
+const calculateWheelRadius = () => {
+  const maxSize = Math.max(
     document.documentElement.clientHeight || 0,
     document.documentElement.clientWidth || 0,
     window.innerHeight || 0,
-  ) * WHEEL_SIZE_RATIO;
+  );
+  return (maxSize * WHEEL_SIZE_RATIO) / 2;
+};
 
 interface NumberWheelProps {
   value: number | string;
@@ -25,30 +27,26 @@ export const NumberWheel: FC<NumberWheelProps> = ({
   options = sequenceNumbers(10),
 }) => {
   const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
+  const previousAngle = useRef<number>(0);
+  const normalizedPreviousAngle = previousAngle.current % 360;
+
   const anglePerOption = 360 / options.length;
-  const [currentAngle, setCurrentAngle] = useState(
-    () => value * anglePerOption,
-  );
-  const [wheelDiameter, setWheelDiameter] = useState(3000);
-  const wheelRadius = wheelDiameter * 0.5;
+  const targetAngle = value * anglePerOption;
+
+  let deltaAngle = targetAngle - normalizedPreviousAngle;
+  if (deltaAngle > 180) deltaAngle -= 360;
+  if (deltaAngle < -180) deltaAngle += 360;
+  const currentAngle = previousAngle.current + deltaAngle;
+  previousAngle.current = currentAngle;
+
+  const [wheelRadius, setWheelRadius] = useState(3000);
 
   useEffect(() => {
-    const resizeWheelSize = () => setWheelDiameter(calculateWheelDiameter());
+    const resizeWheelSize = () => setWheelRadius(calculateWheelRadius());
     resizeWheelSize();
     window.addEventListener("resize", resizeWheelSize);
     return () => window.removeEventListener("resize", resizeWheelSize);
   }, []);
-
-  useEffect(() => {
-    setCurrentAngle((prevAngle) => {
-      const targetAngle = value * anglePerOption;
-      const normalizedPrevAngle = prevAngle % 360;
-      let deltaAngle = targetAngle - normalizedPrevAngle;
-      if (deltaAngle > 180) deltaAngle -= 360;
-      if (deltaAngle < -180) deltaAngle += 360;
-      return prevAngle + deltaAngle;
-    });
-  }, [value, anglePerOption]);
 
   return (
     <div
