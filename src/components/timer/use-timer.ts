@@ -104,9 +104,10 @@ export const useTimer = () => {
     setCurrentTimer(resetTimer);
   };
 
-  const updateTime = (value: { minutes: number; seconds: number }) => {
+  const updateTime = (value: Partial<{ minutes: number; seconds: number }>) => {
     if (currentTimer.status !== "ready") return;
-    const newTimer = updateTimer(currentTimer, value);
+    const { minutes = time.fullMinutes, seconds = time.s } = value;
+    const newTimer = updateTimer(currentTimer, { minutes, seconds });
     setCurrentTimer(newTimer);
     setTimers(updateTimers(timers, newTimer));
     storeCurrentTimer(newTimer);

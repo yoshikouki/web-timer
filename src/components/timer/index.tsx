@@ -38,7 +38,7 @@ export const Timer = (props?: {
             value={time.fullMinutes}
             options={sequenceNumbers(1000)}
             onChange={(value) => {
-              updateTime({ minutes: value, seconds: time.s });
+              updateTime({ minutes: value });
             }}
             isScrollable={isUpdatable}
             className="inline-flex items-center justify-center"
@@ -51,9 +51,7 @@ export const Timer = (props?: {
             )}
           >
             <Button
-              onClick={() =>
-                updateTime({ minutes: time.m + 1, seconds: time.s })
-              }
+              onClick={() => updateTime({ minutes: time.fullMinutes + 1 })}
               variant="ghost"
               size="sm"
               className="h-full hover:bg-transparent active:bg-transparent"
@@ -68,9 +66,7 @@ export const Timer = (props?: {
             )}
           >
             <Button
-              onClick={() =>
-                updateTime({ minutes: time.m - 1, seconds: time.s })
-              }
+              onClick={() => updateTime({ minutes: time.fullMinutes - 1 })}
               variant="ghost"
               size="sm"
               className="h-full hover:bg-transparent active:bg-transparent"
@@ -94,7 +90,7 @@ export const Timer = (props?: {
             value={time.s}
             options={sequenceNumbers(6, 10)}
             onChange={(value) => {
-              updateTime({ minutes: time.m, seconds: value });
+              updateTime({ seconds: value });
             }}
             isScrollable={isUpdatable}
             className="inline-flex items-center justify-center"
@@ -108,9 +104,7 @@ export const Timer = (props?: {
             )}
           >
             <Button
-              onClick={() =>
-                updateTime({ minutes: time.m, seconds: time.s + 10 })
-              }
+              onClick={() => updateTime({ seconds: time.s + 10 })}
               variant="ghost"
               size="sm"
               className="h-full hover:bg-transparent active:bg-transparent"
@@ -125,9 +119,7 @@ export const Timer = (props?: {
             )}
           >
             <Button
-              onClick={() =>
-                updateTime({ minutes: time.m, seconds: time.s - 10 })
-              }
+              onClick={() => updateTime({ seconds: time.s - 10 })}
               variant="ghost"
               size="sm"
               className="h-full hover:bg-transparent active:bg-transparent"
