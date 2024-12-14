@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { type FC, useEffect, useRef, useState } from "react";
 
 import { cn, sequenceNumbers } from "@/lib/utils";
@@ -49,7 +50,8 @@ export const NumberWheel: FC<NumberWheelProps> = ({
   }, []);
 
   return (
-    <div
+    <motion.div
+      layout
       className={cn(
         "relative h-[27vw] w-[16vw] overflow-hidden",
         style.wheelContainerGradient,
@@ -81,6 +83,6 @@ export const NumberWheel: FC<NumberWheelProps> = ({
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };

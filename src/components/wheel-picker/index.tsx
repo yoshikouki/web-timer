@@ -1,6 +1,7 @@
 "use client";
 
 import { cn, sequenceNumbers } from "@/lib/utils";
+import { motion } from "motion/react";
 import { type TouchEventHandler, useEffect, useId, useRef } from "react";
 import { NumberWheel } from "./number-wheel";
 
@@ -85,7 +86,8 @@ export const WheelPicker = ({
   const componentIdRef = useRef(useId());
 
   return (
-    <div
+    <motion.div
+      layout
       ref={containerRef}
       className={cn("touch-none select-none", className)}
       onTouchStart={onTouchStart}
@@ -113,6 +115,6 @@ export const WheelPicker = ({
           />
         </>
       )}
-    </div>
+    </motion.div>
   );
 };

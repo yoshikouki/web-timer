@@ -3,6 +3,7 @@
 import { fonts } from "@/app/fonts";
 import { cn, sequenceNumbers } from "@/lib/utils";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { TimerController } from "./timer-controller";
@@ -76,14 +77,15 @@ export const Timer = (props?: {
           </div>
         </div>
 
-        <span
+        <motion.span
+          layout
           className={cn(
             "font-normal opacity-20 transition-opacity duration-500 ease-in-out",
             0 < time.ms && time.ms < 500 && "opacity-10",
           )}
         >
           :
-        </span>
+        </motion.span>
 
         <div className="relative inline-flex items-center justify-center">
           <WheelPicker
