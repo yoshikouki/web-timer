@@ -35,7 +35,7 @@ export const Timer = (props?: {
       >
         <div className="relative flex items-center justify-center">
           <WheelPicker
-            value={time.m}
+            value={time.fullMinutes}
             options={sequenceNumbers(1000)}
             onChange={(value) => {
               updateTime({ minutes: value, seconds: time.s });
