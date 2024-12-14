@@ -45,8 +45,8 @@ export const WheelPicker = ({
     if (!isScrollable) return;
     event.preventDefault();
     // deltaMode 1: line, 0: pixel
-    const deltaFactor = event.deltaMode === 1 ? 16 : 1; // 1 line = 16px
-    const deltaY = event.deltaY * deltaFactor;
+    const deltaFactor = event.deltaMode === 1 ? scrollThreshold / 2 : 1; // 2 line = scrollThreshold
+    const deltaY = event.deltaY * deltaFactor * 0.7;
     handleScroll(deltaY);
   };
 
