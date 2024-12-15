@@ -9,7 +9,7 @@ export const WheelPicker = ({
   className,
   value,
   options,
-  scrollThreshold = 40,
+  scrollThreshold = 28,
   onChange,
   isScrollable = true,
   variant = "default",
@@ -29,11 +29,7 @@ export const WheelPicker = ({
   const scrollDelta = useRef(0);
   const touchStartY = useRef<number | null>(null);
 
-  const handleScroll = (deltaY: number) => {
-    scrollDelta.current += deltaY;
-    if (Math.abs(scrollDelta.current) < scrollThreshold) return;
-    const steps = Math.sign(scrollDelta.current);
-    scrollDelta.current = 0;
+  const handleScroll = (steps: number) => {
     const valueIndex = options.findIndex((v) => v === value) ?? 0;
     const nextIndex = valueIndex - steps;
     const nextValue = options[nextIndex];
@@ -46,8 +42,12 @@ export const WheelPicker = ({
     event.preventDefault();
     // deltaMode 1: line, 0: pixel
     const deltaFactor = event.deltaMode === 1 ? scrollThreshold / 2 : 1; // 2 line = scrollThreshold
-    const deltaY = event.deltaY * deltaFactor * 0.7;
-    handleScroll(deltaY);
+    const deltaY = event.deltaY * deltaFactor * 0.5;
+    scrollDelta.current += deltaY;
+    if (Math.abs(scrollDelta.current) < scrollThreshold) return;
+    const steps = Math.sign(scrollDelta.current);
+    scrollDelta.current = 0;
+    handleScroll(steps);
   };
 
   const onTouchStart: TouchEventHandler = (event) => {
@@ -60,11 +60,16 @@ export const WheelPicker = ({
     const currentY = event.touches[0].clientY;
     const deltaY = -(touchStartY.current - currentY);
     touchStartY.current = currentY;
-    handleScroll(deltaY);
+    scrollDelta.current += deltaY;
+    if (Math.abs(scrollDelta.current) < scrollThreshold) return;
+    const steps = Math.round(scrollDelta.current / scrollThreshold);
+    scrollDelta.current = 0;
+    handleScroll(steps);
   };
 
   const onTouchEnd = () => {
     touchStartY.current = null;
+    scrollDelta.current = 0;
   };
 
   useEffect(() => {
