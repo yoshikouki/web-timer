@@ -27,7 +27,6 @@ export const WheelPicker = ({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollDelta = useRef(0);
-  const valueIndex = useRef(options.findIndex((v) => v === value) ?? 0);
   const touchStartY = useRef<number | null>(null);
 
   const handleScroll = (deltaY: number) => {
@@ -35,11 +34,11 @@ export const WheelPicker = ({
     if (Math.abs(scrollDelta.current) < scrollThreshold) return;
     const steps = Math.sign(scrollDelta.current);
     scrollDelta.current = 0;
-    const nextIndex = valueIndex.current - steps;
+    const valueIndex = options.findIndex((v) => v === value) ?? 0;
+    const nextIndex = valueIndex - steps;
     const nextValue = options[nextIndex];
     if (nextValue === undefined) return;
     onChange(nextValue);
-    valueIndex.current = nextIndex;
   };
 
   const onWheel = (event: WheelEvent) => {
