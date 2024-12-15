@@ -103,6 +103,7 @@ export const WheelPicker = ({
             value={paddedValue}
             options={sequenceNumbers(10)}
             key={`${componentIdRef.current}-${index}`}
+            transitionDuration={isScrollable ? 0.1 : 0.5}
           />
         ))
       ) : (
@@ -111,11 +112,13 @@ export const WheelPicker = ({
             value={paddedValues[0]}
             options={sequenceNumbers(6)}
             key={`${componentIdRef.current}-0`}
+            transitionDuration={isScrollable ? 0.1 : 0.5}
           />
           <NumberWheel
             value={paddedValues[1]}
             options={sequenceNumbers(10)}
             key={`${componentIdRef.current}-1`}
+            transitionDuration={isScrollable ? 0.1 : 0.5}
           />
         </>
       )}

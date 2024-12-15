@@ -20,12 +20,14 @@ interface NumberWheelProps {
   value: number | string;
   className?: string;
   options?: number[];
+  transitionDuration?: number;
 }
 
 export const NumberWheel: FC<NumberWheelProps> = ({
   value: _value,
   className,
   options = sequenceNumbers(10),
+  transitionDuration = 0.5,
 }) => {
   const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
   const previousAngle = useRef<number>(0);
@@ -60,10 +62,11 @@ export const NumberWheel: FC<NumberWheelProps> = ({
       aria-label={`Current number: ${value}`}
     >
       <div
-        className="h-full w-full transition-transform duration-500 ease-in-out"
+        className="h-full w-full transition-transform ease-in-out"
         style={{
           transformStyle: "preserve-3d",
           transform: `rotateX(${currentAngle}deg)`,
+          transitionDuration: `${transitionDuration}s`,
         }}
       >
         {options.map((option) => (
