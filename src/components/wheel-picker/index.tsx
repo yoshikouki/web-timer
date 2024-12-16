@@ -1,40 +1,35 @@
 "use client";
 
-import { cn, sequenceNumbers } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { type TouchEventHandler, useEffect, useId, useRef } from "react";
-import { NumberWheel } from "./number-wheel";
+import { type TouchEventHandler, useEffect, useRef } from "react";
+import { NumbersWheel } from "./numbers-wheel";
 
 export const WheelPicker = ({
-  className,
   value,
-  options,
+  max,
+  increment = 1,
   scrollThreshold = 28,
-  onChange,
   isScrollable = true,
-  variant = "default",
+  className,
+  onChange,
 }: {
   value: number;
-  options: number[];
+  max: number;
+  increment?: number;
   scrollThreshold?: number;
-  onChange: (value: number) => void;
-  className?: string;
   isScrollable?: boolean;
-  variant?: "default" | "minutes";
+  className?: string;
+  onChange: (value: number) => void;
 }) => {
-  const paddedLength = Math.max(value.toString().length, 2);
-  const paddedValues = [...value.toString().padStart(paddedLength, "0")];
-
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollDelta = useRef(0);
   const touchStartY = useRef<number | null>(null);
 
   const handleScroll = (steps: number) => {
-    const valueIndex = options.findIndex((v) => v === value) ?? 0;
-    const nextIndex = valueIndex - steps;
-    const nextValue = options[nextIndex];
-    if (nextValue === undefined) return;
-    onChange(nextValue);
+    const next = value + steps * increment;
+    const newValue = Math.max(0, Math.min(max, next));
+    onChange(newValue);
   };
 
   const onWheel = (event: WheelEvent) => {
@@ -87,8 +82,6 @@ export const WheelPicker = ({
     // biome-ignore lint/correctness/useExhaustiveDependencies: React Compiler is enabled
   }, [onWheel, onTouchMove]);
 
-  const componentIdRef = useRef(useId());
-
   return (
     <motion.div
       layout
@@ -97,31 +90,11 @@ export const WheelPicker = ({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {variant === "default" ? (
-        paddedValues.map((paddedValue, index) => (
-          <NumberWheel
-            value={paddedValue}
-            options={sequenceNumbers(10)}
-            key={`${componentIdRef.current}-${index}`}
-            transitionDuration={isScrollable ? 0.1 : 0.5}
-          />
-        ))
-      ) : (
-        <>
-          <NumberWheel
-            value={paddedValues[0]}
-            options={sequenceNumbers(6)}
-            key={`${componentIdRef.current}-0`}
-            transitionDuration={isScrollable ? 0.1 : 0.5}
-          />
-          <NumberWheel
-            value={paddedValues[1]}
-            options={sequenceNumbers(10)}
-            key={`${componentIdRef.current}-1`}
-            transitionDuration={isScrollable ? 0.1 : 0.5}
-          />
-        </>
-      )}
+      <NumbersWheel
+        value={value}
+        transitionDuration={isScrollable ? 0.1 : 0.5}
+        max={max}
+      />
     </motion.div>
   );
 };

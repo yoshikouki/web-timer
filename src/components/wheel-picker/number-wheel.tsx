@@ -17,23 +17,22 @@ const calculateWheelRadius = () => {
 };
 
 interface NumberWheelProps {
-  value: number | string;
+  value: number;
+  max: number;
   className?: string;
-  options?: number[];
   transitionDuration?: number;
 }
 
 export const NumberWheel: FC<NumberWheelProps> = ({
-  value: _value,
+  value,
+  max,
   className,
-  options = sequenceNumbers(10),
   transitionDuration = 0.5,
 }) => {
-  const value = typeof _value === "string" ? Number.parseInt(_value) : _value;
   const previousAngle = useRef<number>(0);
   const normalizedPreviousAngle = previousAngle.current % 360;
 
-  const anglePerOption = 360 / options.length;
+  const anglePerOption = 360 / (max + 1);
   const targetAngle = value * anglePerOption;
 
   let deltaAngle = targetAngle - normalizedPreviousAngle;
@@ -69,7 +68,7 @@ export const NumberWheel: FC<NumberWheelProps> = ({
           transitionDuration: `${transitionDuration}s`,
         }}
       >
-        {options.map((option) => (
+        {sequenceNumbers(max + 1).map((option) => (
           <div
             key={option}
             className={cn(

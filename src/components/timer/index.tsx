@@ -1,7 +1,7 @@
 "use client";
 
 import { fonts } from "@/app/fonts";
-import { cn, sequenceNumbers } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "../ui/button";
@@ -42,12 +42,12 @@ export const Timer = (props?: {
           <div className="relative flex items-center justify-center">
             <WheelPicker
               value={time.fullMinutes}
-              options={sequenceNumbers(1000)}
               onChange={(value) => {
                 updateTime({ minutes: value });
               }}
               isScrollable={isUpdatable}
               className="inline-flex items-center justify-center"
+              max={999}
             />
 
             <div
@@ -95,13 +95,13 @@ export const Timer = (props?: {
           <div className="relative inline-flex items-center justify-center">
             <WheelPicker
               value={time.s}
-              options={sequenceNumbers(6, 10)}
               onChange={(value) => {
                 updateTime({ seconds: value });
               }}
               isScrollable={isUpdatable}
               className="inline-flex items-center justify-center"
-              variant="minutes"
+              max={59}
+              increment={10}
             />
 
             <div
