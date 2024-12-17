@@ -16,30 +16,36 @@ const calculateWheelRadius = () => {
   return (maxSize * WHEEL_SIZE_RATIO) / 2;
 };
 
+const TILT_RATIO = 0.5;
+
 interface NumberWheelProps {
   value: number;
-  max: number;
+  tilt?: number;
+  max?: number;
   className?: string;
   transitionDuration?: number;
 }
 
 export const NumberWheel: FC<NumberWheelProps> = ({
   value,
-  max,
+  tilt = 0,
+  max = 9,
   className,
   transitionDuration = 0.5,
 }) => {
-  const previousAngle = useRef<number>(0);
-  const normalizedPreviousAngle = previousAngle.current % 360;
-
   const anglePerOption = 360 / (max + 1);
   const targetAngle = value * anglePerOption;
+
+  const previousValue = useRef<number>(0);
+  const previousAngle = previousValue.current * anglePerOption;
+  previousValue.current = value;
+  const normalizedPreviousAngle = previousAngle % 360;
 
   let deltaAngle = targetAngle - normalizedPreviousAngle;
   if (deltaAngle > 180) deltaAngle -= 360;
   if (deltaAngle < -180) deltaAngle += 360;
-  const currentAngle = previousAngle.current + deltaAngle;
-  previousAngle.current = currentAngle;
+  const currentAngle =
+    previousAngle + deltaAngle + tilt * anglePerOption * TILT_RATIO;
 
   const [wheelRadius, setWheelRadius] = useState(3000);
 

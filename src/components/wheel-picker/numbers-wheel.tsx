@@ -1,20 +1,23 @@
 "use client";
+
 import { type FC, useId, useRef } from "react";
 import { NumberWheel } from "./number-wheel";
 
 interface NumberWheelProps {
   value: number;
   max: number;
+  tilt?: number;
   className?: string;
   options?: number[];
   transitionDuration?: number;
 }
 
-type Numbers = Array<{ value: number; max: number }>;
+type Numbers = Array<{ value: number; max: number; tilt?: number }>;
 
 export const NumbersWheel: FC<NumberWheelProps> = ({
   value: _value,
   max,
+  tilt = 0,
   className,
   transitionDuration = 0.5,
 }) => {
@@ -28,6 +31,7 @@ export const NumbersWheel: FC<NumberWheelProps> = ({
   const numbers: Numbers = paddedValues.map((paddedValue, index) => ({
     value: Number(paddedValue),
     max: Number(max.toString()[maxLength - paddedLength + index]),
+    tilt: index + 1 === paddedLength ? tilt : 0,
   }));
 
   const componentIdRef = useRef(useId());
@@ -37,6 +41,7 @@ export const NumbersWheel: FC<NumberWheelProps> = ({
       key={`${componentIdRef.current}-${index}`}
       value={number.value}
       max={number.max}
+      tilt={number.tilt}
       className={className}
       transitionDuration={transitionDuration}
     />

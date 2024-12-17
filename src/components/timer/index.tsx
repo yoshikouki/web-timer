@@ -42,12 +42,12 @@ export const Timer = (props?: {
           <div className="relative flex items-center justify-center">
             <WheelPicker
               value={time.fullMinutes}
+              max={999}
+              isScrollable={isUpdatable}
               onChange={(value) => {
                 updateTime({ minutes: value });
               }}
-              isScrollable={isUpdatable}
               className="inline-flex items-center justify-center"
-              max={999}
             />
 
             <div
@@ -95,13 +95,13 @@ export const Timer = (props?: {
           <div className="relative inline-flex items-center justify-center">
             <WheelPicker
               value={time.s}
+              max={59}
+              increment={10}
+              isScrollable={isUpdatable}
               onChange={(value) => {
                 updateTime({ seconds: value });
               }}
-              isScrollable={isUpdatable}
               className="inline-flex items-center justify-center"
-              max={59}
-              increment={10}
             />
 
             <div

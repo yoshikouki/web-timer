@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { type TouchEventHandler, useEffect, useRef } from "react";
+import { type TouchEventHandler, useEffect, useRef, useState } from "react";
 import { NumbersWheel } from "./numbers-wheel";
 
 export const WheelPicker = ({
@@ -25,11 +25,19 @@ export const WheelPicker = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollDelta = useRef(0);
   const touchStartY = useRef<number | null>(null);
+  const wheelEndTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [tilt, setTilt] = useState(0);
 
   const handleScroll = (steps: number) => {
     const next = value + steps * increment;
     const newValue = Math.max(0, Math.min(max, next));
     onChange(newValue);
+    setTilt(0);
+  };
+
+  const onWheelEnd = () => {
+    setTilt(0);
   };
 
   const onWheel = (event: WheelEvent) => {
@@ -39,6 +47,9 @@ export const WheelPicker = ({
     const deltaFactor = event.deltaMode === 1 ? scrollThreshold / 2 : 1; // 2 line = scrollThreshold
     const deltaY = event.deltaY * deltaFactor * 0.5;
     scrollDelta.current += deltaY;
+    setTilt(Math.round((scrollDelta.current / scrollThreshold) * 10) / 10);
+    if (wheelEndTimeoutRef.current) clearTimeout(wheelEndTimeoutRef.current);
+    wheelEndTimeoutRef.current = setTimeout(onWheelEnd, 100);
     if (Math.abs(scrollDelta.current) < scrollThreshold) return;
     const steps = Math.sign(scrollDelta.current);
     scrollDelta.current = 0;
@@ -56,6 +67,7 @@ export const WheelPicker = ({
     const deltaY = -(touchStartY.current - currentY);
     touchStartY.current = currentY;
     scrollDelta.current += deltaY;
+    setTilt(Math.round((scrollDelta.current / scrollThreshold) * 10) / 10);
     if (Math.abs(scrollDelta.current) < scrollThreshold) return;
     const steps = Math.round(scrollDelta.current / scrollThreshold);
     scrollDelta.current = 0;
@@ -65,6 +77,7 @@ export const WheelPicker = ({
   const onTouchEnd = () => {
     touchStartY.current = null;
     scrollDelta.current = 0;
+    setTilt(0);
   };
 
   useEffect(() => {
@@ -92,8 +105,9 @@ export const WheelPicker = ({
     >
       <NumbersWheel
         value={value}
-        transitionDuration={isScrollable ? 0.1 : 0.5}
         max={max}
+        tilt={isScrollable ? tilt : 0}
+        transitionDuration={isScrollable ? 0.1 : 0.5}
       />
     </motion.div>
   );
