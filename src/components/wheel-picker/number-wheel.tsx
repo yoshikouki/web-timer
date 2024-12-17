@@ -75,9 +75,8 @@ export const NumberWheel: FC<NumberWheelProps> = ({
       aria-label={`Current number: ${value}`}
     >
       <div
-        className="h-full w-full transition-transform ease-in-out"
+        className="h-full w-full transition-transform ease-in-out [transform-style:preserve-3d]"
         style={{
-          transformStyle: "preserve-3d",
           transform: `rotateX(${currentAngle}deg)`,
           transitionDuration: `${transitionDuration}s`,
         }}
@@ -86,11 +85,10 @@ export const NumberWheel: FC<NumberWheelProps> = ({
           <div
             key={option}
             className={cn(
-              "absolute flex h-full w-full items-center justify-center opacity-30 transition-opacity duration-300 ease-in-out",
+              "absolute flex h-full w-full items-center justify-center opacity-30 transition-opacity duration-300 ease-in-out [backface-visibility:hidden]",
               option === value && "opacity-100",
             )}
             style={{
-              backfaceVisibility: "hidden",
               transform: `rotateX(${option * -anglePerOption}deg) translateZ(${wheelRadius}px)`,
             }}
             aria-hidden={option !== value}
