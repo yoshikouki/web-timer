@@ -31,7 +31,8 @@ export const WheelPicker = ({
 
   const handleScroll = (steps: number) => {
     const next = value + steps * increment;
-    const newValue = Math.max(0, Math.min(max, next));
+    const newValue =
+      Math.floor(Math.max(0, Math.min(max, next)) / increment) * increment;
     onChange(newValue);
     setTilt(0);
   };
