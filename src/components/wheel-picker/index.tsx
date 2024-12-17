@@ -29,6 +29,17 @@ export const WheelPicker = ({
 
   const [tilt, setTilt] = useState(0);
 
+  const handleTilt = (props?: { isWheel?: boolean }) => {
+    if (value === 0 || value + increment >= max) {
+      setTilt(0);
+      return;
+    }
+    setTilt(Math.round((scrollDelta.current / scrollThreshold) * 100) / 100);
+    if (!props?.isWheel) return;
+    if (wheelEndTimeoutRef.current) clearTimeout(wheelEndTimeoutRef.current);
+    wheelEndTimeoutRef.current = setTimeout(onWheelEnd, 300);
+  };
+
   const handleScroll = (steps: number) => {
     const next = value + steps * increment;
     const newValue =
@@ -48,9 +59,7 @@ export const WheelPicker = ({
     const deltaFactor = event.deltaMode === 1 ? scrollThreshold / 2 : 1; // 2 line = scrollThreshold
     const deltaY = event.deltaY * deltaFactor * 0.5;
     scrollDelta.current += deltaY;
-    setTilt(Math.round((scrollDelta.current / scrollThreshold) * 100) / 100);
-    if (wheelEndTimeoutRef.current) clearTimeout(wheelEndTimeoutRef.current);
-    wheelEndTimeoutRef.current = setTimeout(onWheelEnd, 300);
+    handleTilt({ isWheel: true });
     if (Math.abs(scrollDelta.current) < scrollThreshold) return;
     const steps = Math.sign(scrollDelta.current);
     scrollDelta.current = 0;
@@ -68,7 +77,7 @@ export const WheelPicker = ({
     const deltaY = touchStartY.current - currentY;
     touchStartY.current = currentY;
     scrollDelta.current += deltaY;
-    setTilt(Math.round((scrollDelta.current / scrollThreshold) * 100) / 100);
+    handleTilt();
     if (Math.abs(scrollDelta.current) < scrollThreshold) return;
     const steps = Math.round(scrollDelta.current / scrollThreshold);
     scrollDelta.current = 0;
