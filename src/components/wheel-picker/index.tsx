@@ -117,6 +117,7 @@ export const WheelPicker = ({
         value={value}
         max={max}
         tilt={isScrollable ? tilt : 0}
+        tiltDigits={increment.toString().length}
         transitionDuration={isScrollable ? 0 : 0.5}
       />
     </motion.div>
