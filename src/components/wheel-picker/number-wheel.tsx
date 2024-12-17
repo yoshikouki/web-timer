@@ -16,7 +16,7 @@ const calculateWheelRadius = () => {
   return (maxSize * WHEEL_SIZE_RATIO) / 2;
 };
 
-const TILT_RATIO = 0.5;
+const TILT_RATIO = 0.3;
 
 interface NumberWheelProps {
   value: number;
