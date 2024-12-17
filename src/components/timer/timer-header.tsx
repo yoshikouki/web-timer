@@ -13,7 +13,7 @@ export const TimerHeader = () => {
 
   return (
     <>
-      <TimerHeaderContainer className="fixed left-0">
+      <TimerHeaderContainer className="fixed left-0 z-50">
         <AnimatedLink href="/">
           <h1
             className={cn(

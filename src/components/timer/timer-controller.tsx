@@ -16,7 +16,7 @@ export const TimerController = ({
   return (
     <div
       className={cn(
-        "fixed bottom-0 flex items-center justify-center md:static",
+        "pointer-events-none fixed bottom-0 z-50 flex items-center justify-center md:static",
         timerControlSettings.orientation === "horizontal" &&
           "absolute bottom-auto left-0 rotate-90 md:absolute",
       )}
@@ -45,7 +45,7 @@ export const TimerController = ({
             variant={status === "running" ? "ghost" : "outline"}
             size="icon"
             className={cn(
-              "group h-auto rounded-full p-4 transition-all duration-300 md:p-7 [&_svg]:size-8 md:[&_svg]:size-20",
+              "group pointer-events-auto h-auto rounded-full p-4 transition-all duration-300 md:p-7 [&_svg]:size-8 md:[&_svg]:size-20",
               status === "running" ? "rounded-lg" : "rounded-full",
             )}
           >
