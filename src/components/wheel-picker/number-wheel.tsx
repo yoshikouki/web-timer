@@ -6,14 +6,17 @@ import { type FC, useEffect, useRef, useState } from "react";
 import { cn, sequenceNumbers } from "@/lib/utils";
 import style from "./number-wheel.module.css";
 
-const WHEEL_SIZE_RATIO = 0.8;
-const calculateWheelRadius = () => {
-  const maxSize = Math.max(
-    document.documentElement.clientHeight || 0,
-    document.documentElement.clientWidth || 0,
-    window.innerHeight || 0,
-  );
-  return (maxSize * WHEEL_SIZE_RATIO) / 2;
+const WHEEL_SIZE_RATIO = 0.85;
+const calculateWheelRadius = (
+  container: HTMLDivElement | null,
+  anglePerOption: number,
+) => {
+  if (!container) return 0;
+  const angleRad = (anglePerOption * Math.PI) / 180;
+  const rect = container.getBoundingClientRect();
+  const radius =
+    (rect.height / (2 * Math.sin(angleRad / 2))) * WHEEL_SIZE_RATIO;
+  return radius;
 };
 
 const TILT_RATIO = 0.3;
@@ -47,23 +50,29 @@ export const NumberWheel: FC<NumberWheelProps> = ({
   const currentAngle =
     previousAngle + deltaAngle + tilt * anglePerOption * TILT_RATIO;
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const [wheelRadius, setWheelRadius] = useState(3000);
 
   useEffect(() => {
-    const resizeWheelSize = () => setWheelRadius(calculateWheelRadius());
+    const resizeWheelSize = () => {
+      setWheelRadius(
+        calculateWheelRadius(containerRef.current, anglePerOption),
+      );
+    };
     resizeWheelSize();
     window.addEventListener("resize", resizeWheelSize);
     return () => window.removeEventListener("resize", resizeWheelSize);
-  }, []);
+  }, [anglePerOption]);
 
   return (
     <motion.div
       layout
       className={cn(
-        "relative h-[27vw] w-[16vw] overflow-hidden",
+        "relative h-[27vw] w-[16vw]",
         style.wheelContainerGradient,
         className,
       )}
+      ref={containerRef}
       aria-label={`Current number: ${value}`}
     >
       <div
