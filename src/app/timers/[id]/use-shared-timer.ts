@@ -54,6 +54,7 @@ export const useSharedTimer = ({
     time: Partial<{ minutes: number; seconds: number }>,
   ) => {
     if (timer.currentTimer.status !== "ready") return;
+    updateCurrentTimer(time);
     await push(id, {
       event: "updateTime",
       time: {

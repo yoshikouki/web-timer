@@ -10,7 +10,7 @@ export const WheelPicker = ({
   max,
   increment = 1,
   scrollThreshold = 28,
-  isInteractive = true,
+  isInteractive = false,
   className,
   onChange,
 }: {
@@ -27,9 +27,11 @@ export const WheelPicker = ({
   const touchStartY = useRef<number | null>(null);
   const wheelEndTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const [isTilting, setIsTilting] = useState(false);
   const [tilt, setTilt] = useState(0);
 
   const handleTilt = (props?: { isWheel?: boolean }) => {
+    setIsTilting(true);
     if (value === 0 || value + increment >= max) {
       setTilt(0);
       return;
@@ -40,6 +42,7 @@ export const WheelPicker = ({
     wheelEndTimeoutRef.current = setTimeout(() => {
       scrollDelta.current = 0;
       setTilt(0);
+      setIsTilting(false);
     }, 300);
   };
 
@@ -87,6 +90,7 @@ export const WheelPicker = ({
     touchStartY.current = null;
     scrollDelta.current = 0;
     setTilt(0);
+    setIsTilting(false);
   };
 
   useEffect(() => {
@@ -117,7 +121,7 @@ export const WheelPicker = ({
         max={max}
         tilt={tilt}
         tiltDigits={increment.toString().length}
-        isInteractive={isInteractive}
+        isInteractive={isInteractive && isTilting}
       />
     </motion.div>
   );
