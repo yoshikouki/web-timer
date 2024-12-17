@@ -39,16 +39,15 @@ export const NumberWheel: FC<NumberWheelProps> = ({
   const anglePerOption = 360 / (max + 1);
   const targetAngle = value * anglePerOption;
 
-  const previousValue = useRef<number>(0);
-  const previousAngle = previousValue.current * anglePerOption;
-  previousValue.current = value;
-  const normalizedPreviousAngle = previousAngle % 360;
+  const previousAngle = useRef<number>(0);
+  const normalizedPreviousAngle = previousAngle.current % 360;
 
   let deltaAngle = targetAngle - normalizedPreviousAngle;
   if (deltaAngle > 180) deltaAngle -= 360;
   if (deltaAngle < -180) deltaAngle += 360;
   const currentAngle =
-    previousAngle + deltaAngle + tilt * anglePerOption * TILT_RATIO;
+    previousAngle.current + deltaAngle + tilt * anglePerOption * TILT_RATIO;
+  previousAngle.current = currentAngle;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [wheelRadius, setWheelRadius] = useState(3000);
