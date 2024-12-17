@@ -43,7 +43,7 @@ export const Timer = (props?: {
             <WheelPicker
               value={time.fullMinutes}
               max={999}
-              isScrollable={isUpdatable}
+              isInteractive={isUpdatable}
               onChange={(value) => {
                 updateTime({ minutes: value });
               }}
@@ -97,7 +97,7 @@ export const Timer = (props?: {
               value={time.s}
               max={59}
               increment={10}
-              isScrollable={isUpdatable}
+              isInteractive={isUpdatable}
               onChange={(value) => {
                 updateTime({ seconds: value });
               }}

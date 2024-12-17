@@ -10,7 +10,7 @@ export const WheelPicker = ({
   max,
   increment = 1,
   scrollThreshold = 28,
-  isScrollable = true,
+  isInteractive = true,
   className,
   onChange,
 }: {
@@ -18,7 +18,7 @@ export const WheelPicker = ({
   max: number;
   increment?: number;
   scrollThreshold?: number;
-  isScrollable?: boolean;
+  isInteractive?: boolean;
   className?: string;
   onChange: (value: number) => void;
 }) => {
@@ -53,7 +53,7 @@ export const WheelPicker = ({
   };
 
   const onWheel = (event: WheelEvent) => {
-    if (!isScrollable) return;
+    if (!isInteractive) return;
     event.preventDefault();
     // deltaMode 1: line, 0: pixel
     const deltaFactor = event.deltaMode === 1 ? scrollThreshold / 2 : 1; // 2 line = scrollThreshold
@@ -71,7 +71,7 @@ export const WheelPicker = ({
   };
 
   const onTouchMove = (event: TouchEvent) => {
-    if (!isScrollable || touchStartY.current === null) return;
+    if (!isInteractive || touchStartY.current === null) return;
     event.preventDefault();
     const currentY = event.touches[0].clientY;
     const deltaY = touchStartY.current - currentY;
@@ -116,9 +116,9 @@ export const WheelPicker = ({
       <NumbersWheel
         value={value}
         max={max}
-        tilt={isScrollable ? tilt : 0}
+        tilt={isInteractive ? tilt : 0}
         tiltDigits={increment.toString().length}
-        transitionDuration={isScrollable ? 0 : 0.5}
+        transitionDuration={isInteractive ? 0 : 0.5}
       />
     </motion.div>
   );
