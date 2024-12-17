@@ -37,19 +37,18 @@ export const WheelPicker = ({
     setTilt(Math.round((scrollDelta.current / scrollThreshold) * 100) / 100);
     if (!props?.isWheel) return;
     if (wheelEndTimeoutRef.current) clearTimeout(wheelEndTimeoutRef.current);
-    wheelEndTimeoutRef.current = setTimeout(onWheelEnd, 300);
+    wheelEndTimeoutRef.current = setTimeout(() => {
+      scrollDelta.current = 0;
+      setTilt(0);
+    }, 300);
   };
 
   const handleScroll = (steps: number) => {
     const next = value + steps * increment;
     const newValue =
       Math.floor(Math.max(0, Math.min(max, next)) / increment) * increment;
+    setTilt(0);
     onChange(newValue);
-    setTilt(0);
-  };
-
-  const onWheelEnd = () => {
-    setTilt(0);
   };
 
   const onWheel = (event: WheelEvent) => {
@@ -116,9 +115,9 @@ export const WheelPicker = ({
       <NumbersWheel
         value={value}
         max={max}
-        tilt={isInteractive ? tilt : 0}
+        tilt={tilt}
         tiltDigits={increment.toString().length}
-        transitionDuration={isInteractive ? 0 : 0.5}
+        isInteractive={isInteractive}
       />
     </motion.div>
   );

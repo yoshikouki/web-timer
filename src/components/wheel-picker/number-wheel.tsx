@@ -19,7 +19,7 @@ const calculateWheelRadius = (
   return radius;
 };
 
-const TILT_RATIO = 0.3;
+const TILT_RATIO = 1;
 
 interface NumberWheelProps {
   value: number;
