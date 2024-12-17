@@ -1,6 +1,7 @@
 "use client";
 
 import { type FC, useId, useRef } from "react";
+import { isTiltableDigit } from "./helper";
 import { NumberWheel } from "./number-wheel";
 
 interface NumberWheelProps {
@@ -12,13 +13,6 @@ interface NumberWheelProps {
   options?: number[];
   isInteractive?: boolean;
 }
-
-export const isTiltable = (value: number, max: number, tiltDigits: number) => {
-  if (tiltDigits === 1) {
-    return value.toString().length === 2;
-  }
-  return value.toString().length === tiltDigits;
-};
 
 export const NumbersWheel: FC<NumberWheelProps> = ({
   value: _value,
@@ -35,15 +29,8 @@ export const NumbersWheel: FC<NumberWheelProps> = ({
   const paddedLength = Math.max(value.toString().length, 2);
   const paddedValues = [...value.toString().padStart(paddedLength, "0")];
   const maxLength = max.toString().length;
-  const isTiltable = (index: number) => {
-    if (tiltDigits === 1) {
-      return index + 1 === paddedLength;
-    }
-    if (paddedLength === tiltDigits) {
-      return index === 0;
-    }
-    return index + 1 === paddedLength;
-  };
+  const isTiltable = (index: number) =>
+    isTiltableDigit({ index, paddedLength, tiltDigits });
   const numbers = paddedValues.map((paddedValue, index) => ({
     index: paddedLength - index,
     value: Number(paddedValue),
