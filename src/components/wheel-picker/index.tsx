@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 import { type TouchEventHandler, useEffect, useRef, useState } from "react";
 import { NumbersWheel } from "./numbers-wheel";
 
+const WHEEL_INTERACTION_TIMEOUT = 300;
+
 export const WheelPicker = ({
   value,
   max,
@@ -43,7 +45,7 @@ export const WheelPicker = ({
       scrollDelta.current = 0;
       setTilt(0);
       setIsTilting(false);
-    }, 300);
+    }, WHEEL_INTERACTION_TIMEOUT);
   };
 
   const handleScroll = (steps: number) => {
