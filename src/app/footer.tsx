@@ -24,11 +24,15 @@ export const Footer = () => {
           rel="noreferrer noopener"
           prefetch={false}
         >
-          <XIcon className="size-4 stroke-primary" />
+          <XIcon className="size-4" />
         </Link>
       </div>
       <div>
-        <Button variant="link" asChild className="text-primary/50 text-sm">
+        <Button
+          variant="link"
+          asChild
+          className="text-muted-foreground text-sm"
+        >
           <Link
             href="https://maou.audio/"
             target="_blank"
@@ -40,7 +44,9 @@ export const Footer = () => {
         </Button>
       </div>
       {/* copyright */}
-      <div className="text-primary/50 text-sm">Copyright © 2024 yoshikouki</div>
+      <div className="text-muted-foreground text-sm">
+        Copyright © 2024 yoshikouki
+      </div>
     </footer>
   );
 };
