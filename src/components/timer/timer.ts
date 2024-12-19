@@ -8,7 +8,7 @@ type BaseTimerType = {
   duration: number;
 };
 
-const TimerNameSchema = z.string().max(64).nullish();
+export const TimerNameSchema = z.string().max(64).nullish();
 export type TimerNameType = z.infer<typeof TimerNameSchema>;
 
 // ReadyTimer -> RunningTimer -> StoppedTimer
