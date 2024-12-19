@@ -3,6 +3,6 @@
 import { Timer } from "@/components/timer";
 import { useSharedTimer } from "./use-shared-timer";
 
-export const SharedTimer = ({ id }: { id: string }) => {
-  return <Timer useTimer={() => useSharedTimer({ id })} />;
+export const SharedTimer = ({ timerId }: { timerId: string }) => {
+  return <Timer useTimer={() => useSharedTimer({ id: timerId })} />;
 };

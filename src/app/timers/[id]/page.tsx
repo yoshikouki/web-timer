@@ -19,7 +19,7 @@ export default async function TimerPage({
       <TimerHeader />
       <main className="flex h-full w-full flex-col items-center justify-center gap-10">
         <section className="flex h-full min-h-svh w-full items-center justify-center">
-          <SharedTimer id={id} />
+          <SharedTimer timerId={id} />
         </section>
         <section className="flex w-full flex-col items-center justify-center gap-10">
           <div className="flex w-full max-w-sm flex-col items-start justify-center gap-2 px-4">
