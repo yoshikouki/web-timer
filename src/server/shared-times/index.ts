@@ -63,6 +63,12 @@ const updateCurrentTimer = (id: ChannelId, data: TimerEventMessageType) => {
       if (currentTimer.status !== "ready") return;
       newTimer = updateTimer(currentTimer, data.time);
       break;
+    case "currentTimer":
+      newTimer = {
+        ...currentTimer,
+        ...data.currentTimer,
+      };
+      break;
     default:
       return;
   }

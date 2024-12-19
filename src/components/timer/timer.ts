@@ -8,11 +8,15 @@ type BaseTimerType = {
   duration: number;
 };
 
+const TimerNameSchema = z.string().max(64).nullish();
+export type TimerNameType = z.infer<typeof TimerNameSchema>;
+
 // ReadyTimer -> RunningTimer -> StoppedTimer
 //               RunningTimer <-> PausedTimer -> StoppedTimer
 
 const ReadyTimerSchema = z.object({
   id: z.string(),
+  name: TimerNameSchema,
   status: z.literal("ready"),
   startTime: z.null(),
   duration: z.number(), // ms
@@ -22,6 +26,7 @@ export type ReadyTimerType = z.infer<typeof ReadyTimerSchema>;
 
 const RunningTimerSchema = z.object({
   id: z.string(),
+  name: TimerNameSchema,
   status: z.literal("running"),
   startTime: z.number(),
   duration: z.number(), // ms
@@ -31,6 +36,7 @@ export type RunningTimerType = z.infer<typeof RunningTimerSchema>;
 
 const PausedTimerSchema = z.object({
   id: z.string(),
+  name: TimerNameSchema,
   status: z.literal("paused"),
   startTime: z.number(),
   duration: z.number(),
@@ -41,6 +47,7 @@ export type PausedTimerType = z.infer<typeof PausedTimerSchema>;
 
 const StoppedTimerSchema = z.object({
   id: z.string(),
+  name: TimerNameSchema,
   status: z.literal("stopped"),
   startTime: z.number(),
   duration: z.number(), // ms
@@ -50,8 +57,8 @@ export type StoppedTimerType = z.infer<typeof StoppedTimerSchema>;
 
 // TimerType has common properties
 export const CurrentTimerSchema = z.union([
-  RunningTimerSchema,
   ReadyTimerSchema,
+  RunningTimerSchema,
   PausedTimerSchema,
   StoppedTimerSchema,
 ]);

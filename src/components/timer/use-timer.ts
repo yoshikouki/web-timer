@@ -7,6 +7,7 @@ import {
   finishSoundOptions,
 } from "./settings";
 import {
+  type CurrentTimerType,
   pauseTimer,
   resetTimer,
   resumeTimer,
@@ -17,6 +18,10 @@ import {
   updateTimers,
 } from "./timer";
 import { TimerContext } from "./timer-provider";
+
+type UpdateCurrentTimerProps =
+  | Pick<CurrentTimerType, "name">
+  | CurrentTimerType;
 
 export const useTimer = () => {
   const {
@@ -108,10 +113,8 @@ export const useTimer = () => {
     if (currentTimer.status !== "ready") return;
     const { minutes = time.fullMinutes, seconds = time.s } = value;
     const newTimer = updateTimer(currentTimer, { minutes, seconds });
-    setCurrentTimer(newTimer);
-    setTimers(updateTimers(timers, newTimer));
-    storeCurrentTimer(newTimer);
-    storeTimers(timers);
+    updateCurrentTimer(newTimer);
+    return newTimer;
   };
 
   const prepareFinishSound = (
@@ -141,6 +144,18 @@ export const useTimer = () => {
     sound.volume = timerControlSettings.finishSoundVolume;
     sound.currentTime = 0;
     sound.play();
+  };
+
+  const updateCurrentTimer = (props: UpdateCurrentTimerProps) => {
+    const newTimer = {
+      ...currentTimer,
+      ...props,
+    };
+    setCurrentTimer(newTimer);
+    setTimers(updateTimers(timers, newTimer));
+    storeCurrentTimer(newTimer);
+    storeTimers(timers);
+    return newTimer;
   };
 
   const updateTimerControlSettings = (
@@ -173,8 +188,6 @@ export const useTimer = () => {
     currentTimer,
     timerControlSettings,
     isOvertime: currentTimer.remainingTime < 0,
-    setCurrentTimer,
-    setTimerControlSettings,
     start,
     pause,
     resume,
@@ -182,6 +195,7 @@ export const useTimer = () => {
     reset,
     updateTime,
     playFinishSound,
+    updateCurrentTimer,
     updateTimerControlSettings,
   };
 };

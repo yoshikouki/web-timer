@@ -1,5 +1,6 @@
 "use client";
 
+import type { CurrentTimerType } from "@/components/timer/timer";
 import { useTimer } from "@/components/timer/use-timer";
 import {
   type TimerActionEventType,
@@ -31,7 +32,8 @@ export const useSharedTimer = ({
     resume: resumeTimer,
     stop: stopTimer,
     reset: resetTimer,
-    updateTime: updateCurrentTimer,
+    updateTime: updateCurrentTime,
+    updateCurrentTimer: updateLocalTimer,
     ...timer
   } = useTimer();
 
@@ -53,14 +55,21 @@ export const useSharedTimer = ({
   const updateTime = async (
     time: Partial<{ minutes: number; seconds: number }>,
   ) => {
-    if (timer.currentTimer.status !== "ready") return;
-    updateCurrentTimer(time);
+    const newTimer = updateCurrentTime(time);
+    if (!newTimer) return;
     await push(id, {
       event: "updateTime",
       time: {
         minutes: time.minutes ?? timer.time.fullMinutes,
         seconds: time.seconds ?? timer.time.s,
       },
+    });
+  };
+  const updateCurrentTimer = async (props: Pick<CurrentTimerType, "name">) => {
+    const newTimer = updateLocalTimer(props);
+    await push(id, {
+      event: "currentTimer",
+      currentTimer: newTimer,
     });
   };
 
@@ -82,10 +91,10 @@ export const useSharedTimer = ({
         resetTimer();
         break;
       case "updateTime":
-        updateCurrentTimer(message.time);
+        updateCurrentTime(message.time);
         break;
       case "currentTimer":
-        timer.setCurrentTimer(message.currentTimer);
+        updateLocalTimer(message.currentTimer);
         if (message.currentTimer.status === "running") {
           resumeTimer();
         }
@@ -127,6 +136,7 @@ export const useSharedTimer = ({
     stop,
     reset,
     updateTime,
+    updateCurrentTimer,
     ...timer,
   };
 };

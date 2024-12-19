@@ -16,7 +16,7 @@ export default async function TimerPage({
   return (
     <TimerProvider>
       <HeadTitleController />
-      <TimerHeader />
+      <TimerHeader timerId={id} />
       <main className="flex h-full w-full flex-col items-center justify-center gap-10">
         <section className="flex h-full min-h-svh w-full items-center justify-center">
           <SharedTimer timerId={id} />
