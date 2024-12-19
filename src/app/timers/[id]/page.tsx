@@ -22,14 +22,14 @@ export default async function TimerPage({
           <SharedTimer id={id} />
         </section>
         <section className="flex w-full flex-col items-center justify-center gap-10">
-          <div className="flex w-full max-w-sm flex-col items-start justify-center gap-2">
+          <div className="flex w-full max-w-sm flex-col items-start justify-center gap-2 px-4">
             <h2 className="text-center font-bold text-2xl">Share</h2>
             <p className="text-muted-foreground text-sm">
               Share the synced timer with others to collaborate.
             </p>
             <CopyLink />
           </div>
-          <div className="flex aspect-square w-full max-w-sm items-center justify-center">
+          <div className="flex aspect-square w-full max-w-sm items-center justify-center px-4">
             <QRCode url={url.sharedTimers.show(id, { url: true })} />
           </div>
         </section>
