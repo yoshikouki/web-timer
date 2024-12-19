@@ -21,8 +21,7 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
     FormData
   >(async (_previousState, formData) => {
     const name = formData.get("name");
-    console.log(name);
-    if (!name || typeof name !== "string") return "Name is required";
+    if (name && typeof name !== "string") return null;
     updateCurrentTimer({
       name,
     });
