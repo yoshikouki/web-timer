@@ -17,7 +17,7 @@ export const TimerHeader = () => {
         <AnimatedLink href="/">
           <h1
             className={cn(
-              "font-bold text-2xl opacity-100 transition-opacity duration-300 ease-in-out",
+              "font-bold text-2xl text-primary opacity-100 transition-opacity duration-300 ease-in-out",
               status === "running" && "opacity-0",
             )}
           >
