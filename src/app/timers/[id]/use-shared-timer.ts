@@ -52,25 +52,25 @@ export const useSharedTimer = ({
   const stop = async () => {
     await pushEvent(id, "stop");
   };
-  const updateTime = async (
-    time: Partial<{ minutes: number; seconds: number }>,
-  ) => {
+  const updateTime = (time: Partial<{ minutes: number; seconds: number }>) => {
     const newTimer = updateCurrentTime(time);
     if (!newTimer) return;
-    await push(id, {
+    push(id, {
       event: "updateTime",
       time: {
         minutes: time.minutes ?? timer.time.fullMinutes,
         seconds: time.seconds ?? timer.time.s,
       },
     });
+    return newTimer;
   };
-  const updateCurrentTimer = async (props: Pick<CurrentTimerType, "name">) => {
+  const updateCurrentTimer = (props: Pick<CurrentTimerType, "name">) => {
     const newTimer = updateLocalTimer(props);
-    await push(id, {
+    push(id, {
       event: "currentTimer",
       currentTimer: newTimer,
     });
+    return newTimer;
   };
 
   const onEventMessage = (message: TimerEventMessageType) => {
