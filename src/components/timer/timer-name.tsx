@@ -3,7 +3,7 @@
 import { useSharedTimer } from "@/app/timers/[id]/use-shared-timer";
 import { cn } from "@/lib/utils";
 import { PenIcon, PinIcon, XIcon } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useActionState, useState } from "react";
 import { AnimatedLink } from "../animated-link";
 import { Button } from "../ui/button";
@@ -30,82 +30,90 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
   }, null);
 
   return (
-    <motion.div className="flex items-start" layout>
-      {!isEditing && (
-        <AnimatedLink href="/" className="flex h-10 items-center">
-          <motion.h1
-            className={cn(
-              "font-bold text-2xl text-primary opacity-100 transition-opacity duration-300 ease-in-out",
-              status === "running" && "opacity-0",
-            )}
+    <div className="flex items-start">
+      <AnimatePresence mode="wait">
+        {!isEditing ? (
+          <motion.div
+            className="flex items-center gap-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            layoutId="timer-name"
+            transition={{ duration: 0.2 }}
           >
-            {currentTimer.name || "Web Timer"}
-          </motion.h1>
-        </AnimatedLink>
-      )}
-
-      {isEditing ? (
-        <form
-          action={submitAction}
-          className="flex flex-col items-center gap-2"
-        >
-          <div className="flex items-center gap-2">
-            <Input
-              type="text"
-              name="name"
-              defaultValue={currentTimer.name || ""}
-              placeholder="Web Timer"
-              autoFocus
-              className="h-10 bg-background py-0 font-bold text-2xl text-primary placeholder:text-primary"
-            />
+            <AnimatedLink href="/" className="flex h-10 items-center">
+              <h1
+                className={cn(
+                  "font-bold text-2xl text-primary opacity-100 transition-all duration-300 ease-in-out",
+                  status === "running" &&
+                    currentTimer.name &&
+                    "text-foreground opacity-30",
+                  status === "running" && !currentTimer.name && "opacity-0",
+                )}
+              >
+                {currentTimer.name || "Web Timer"}
+              </h1>
+            </AnimatedLink>
             <Button
+              onClick={() => setIsEditing(true)}
               disabled={isPending}
-              type="submit"
               variant="ghost"
               size="icon"
-              className="[&_svg]:size-4"
-              asChild
+              className={cn(
+                "bg-background/80 [&_svg]:size-4",
+                status === "running" && currentTimer.name && "opacity-30",
+                status === "running" && !currentTimer.name && "opacity-0",
+              )}
             >
-              <motion.button layoutId="timer-name-navigation-button">
+              <PenIcon className="stroke-muted-foreground" />
+            </Button>
+          </motion.div>
+        ) : (
+          <form
+            action={submitAction}
+            className="flex flex-col items-center gap-2"
+          >
+            <motion.div
+              className="flex items-center gap-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Input
+                type="text"
+                name="name"
+                defaultValue={currentTimer.name || ""}
+                placeholder="Web Timer"
+                autoFocus
+                autoComplete="off"
+                className="h-10 bg-background/80 py-0 font-bold text-2xl text-primary placeholder:text-primary"
+              />
+              <Button
+                disabled={isPending}
+                type="submit"
+                variant="ghost"
+                size="icon"
+                className="bg-background/80 [&_svg]:size-4"
+              >
                 <PinIcon className="stroke-primary" />
-              </motion.button>
-            </Button>
-            <Button
-              onClick={() => setIsEditing(false)}
-              disabled={isPending}
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="[&_svg]:size-4"
-              asChild
-            >
-              <motion.button>
+              </Button>
+              <Button
+                onClick={() => setIsEditing(false)}
+                disabled={isPending}
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="bg-background [&_svg]:size-4"
+              >
                 <XIcon className="stroke-muted-foreground" />
-              </motion.button>
-            </Button>
-          </div>
-          {errorMessage && (
-            <p className="text-muted-foreground text-sm">{errorMessage}</p>
-          )}
-        </form>
-      ) : (
-        <Button
-          onClick={() => setIsEditing(true)}
-          disabled={isPending}
-          variant="ghost"
-          size="icon"
-          className="[&_svg]:size-4"
-          asChild
-        >
-          <motion.button layoutId="timer-name-navigation-button">
-            <PenIcon className="stroke-muted-foreground" />
-          </motion.button>
-        </Button>
-      )}
-    </motion.div>
+              </Button>
+            </motion.div>
+            {errorMessage && (
+              <p className="text-muted-foreground text-sm">{errorMessage}</p>
+            )}
+          </form>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
