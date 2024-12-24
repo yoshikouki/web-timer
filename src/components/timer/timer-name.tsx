@@ -39,6 +39,9 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
+            style={{
+              viewTransitionName: "web-timer-name",
+            }}
           >
             <AnimatedLink href="/" className="flex h-10 items-center">
               <h1
