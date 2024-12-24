@@ -25,7 +25,7 @@ export const QRCode = ({
     setSize(
       isZoomed
         ? renderedSizeRef.current
-        : Math.min(window.innerWidth, window.innerHeight) * 0.9,
+        : Math.min(window.innerWidth, window.innerHeight) - 16,
     );
   });
 
