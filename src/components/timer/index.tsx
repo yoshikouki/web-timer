@@ -10,7 +10,7 @@ import { TimerController } from "./timer-controller";
 import { useTimer as useTimerHook } from "./use-timer";
 
 export const Timer = (props?: {
-  useTimer?: () => ReturnType<typeof useTimerHook>;
+  useTimer?: typeof useTimerHook;
 }) => {
   const useTimer = props?.useTimer || useTimerHook;
   const { time, status, updateTime, isOvertime, timerControlSettings, reset } =

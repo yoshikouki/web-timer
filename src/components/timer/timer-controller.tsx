@@ -8,7 +8,7 @@ import type { useTimer as useTimerHook } from "./use-timer";
 export const TimerController = ({
   useTimer,
 }: {
-  useTimer: () => ReturnType<typeof useTimerHook>;
+  useTimer: typeof useTimerHook;
 }) => {
   const { status, timerControlSettings, start, pause, resume, reset } =
     useTimer();

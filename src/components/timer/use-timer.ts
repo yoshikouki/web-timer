@@ -151,10 +151,11 @@ export const useTimer = () => {
       ...currentTimer,
       ...props,
     };
+    const newTimers = updateTimers(timers, newTimer);
     setCurrentTimer(newTimer);
-    setTimers(updateTimers(timers, newTimer));
+    setTimers(newTimers);
     storeCurrentTimer(newTimer);
-    storeTimers(timers);
+    storeTimers(newTimers);
     return newTimer;
   };
 
