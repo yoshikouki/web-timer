@@ -116,13 +116,24 @@ export const startTimer = (
   };
 };
 
+export const calculateRemainingTime = (currentTimer: CurrentTimerType) => {
+  const elapsedTime = currentTimer.startTime
+    ? Date.now() - currentTimer.startTime
+    : 0;
+  if (currentTimer.status !== "paused") {
+    return currentTimer.duration - elapsedTime;
+  }
+  const pausedDuration =
+    "pausedTime" in currentTimer ? Date.now() - currentTimer.pausedTime : 0;
+  return currentTimer.duration - elapsedTime + pausedDuration;
+};
+
 export const tickTimer = (currentTimer: CurrentTimerType): RunningTimerType => {
   switch (currentTimer.status) {
     case "running": {
-      const elapsedTime = Date.now() - currentTimer.startTime;
       return {
         ...currentTimer,
-        remainingTime: currentTimer.duration - elapsedTime,
+        remainingTime: calculateRemainingTime(currentTimer),
       };
     }
     case "paused": {

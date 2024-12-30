@@ -1,5 +1,5 @@
 import { isSamePath } from "@/lib/url";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { storeTimerControlSettings, storeTimers } from "./local-storage";
 import { storeCurrentTimer } from "./local-storage";
 import {
@@ -33,9 +33,8 @@ export const useTimer = () => {
     setTimerControlSettings,
     finishSoundAudio,
     setFinishSoundAudio,
+    tickIntervalRef,
   } = useContext(TimerContext);
-
-  const tickIntervalRef = useRef<Timer>(undefined);
 
   const absRemainingMs = Math.abs(currentTimer.remainingTime);
   const ms = absRemainingMs % 1000;
@@ -74,8 +73,14 @@ export const useTimer = () => {
       return newTimer;
     });
   };
+  const clearTickInterval = () => {
+    if (tickIntervalRef.current) {
+      clearInterval(tickIntervalRef.current);
+      tickIntervalRef.current = null;
+    }
+  };
   const loopTick = () => {
-    clearInterval(tickIntervalRef.current);
+    clearTickInterval();
     tickIntervalRef.current = setInterval(
       tick,
       timerControlSettings.timerResolution,
@@ -83,30 +88,28 @@ export const useTimer = () => {
   };
 
   const start = () => {
-    setCurrentTimer(startTimer);
+    updateCurrentTimer(startTimer(currentTimer));
     prepareFinishSound();
     loopTick();
   };
 
   const pause = () => {
-    setCurrentTimer(pauseTimer);
-    clearInterval(tickIntervalRef.current);
-    tickIntervalRef.current = undefined;
+    updateCurrentTimer(pauseTimer(currentTimer));
+    clearTickInterval();
   };
 
   const resume = () => {
-    setCurrentTimer(resumeTimer);
+    updateCurrentTimer(resumeTimer(currentTimer));
     loopTick();
   };
 
   const stop = () => {
-    setCurrentTimer(stopTimer);
-    clearInterval(tickIntervalRef.current);
-    tickIntervalRef.current = undefined;
+    updateCurrentTimer(stopTimer(currentTimer));
+    clearTickInterval();
   };
 
   const reset = () => {
-    setCurrentTimer(resetTimer);
+    updateCurrentTimer(resetTimer(currentTimer));
   };
 
   const updateTime = (value: Partial<{ minutes: number; seconds: number }>) => {
@@ -178,8 +181,17 @@ export const useTimer = () => {
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: for initial render
   useEffect(() => {
-    return () => clearInterval(tickIntervalRef.current);
+    const isTickingDesynchronized =
+      currentTimer.status === "running" && !tickIntervalRef.current;
+    if (!isTickingDesynchronized) return;
+    loopTick();
+  }, [currentTimer.status]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: for cleanup
+  useEffect(() => {
+    return () => clearTickInterval();
   }, []);
 
   return {

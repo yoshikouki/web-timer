@@ -3,7 +3,7 @@ import {
   CurrentTimerSchema,
   type CurrentTimerType,
   type TimersType,
-  tickTimer,
+  calculateRemainingTime,
 } from "./timer";
 
 const storage = globalThis.localStorage;
@@ -31,7 +31,10 @@ export const loadCurrentTimer = (): CurrentTimerType | null => {
     console.error("Invalid current timer", result.error);
     return null;
   }
-  const currentTimer = tickTimer(result.data);
+  const currentTimer = {
+    ...result.data,
+    remainingTime: calculateRemainingTime(result.data),
+  };
   return currentTimer;
 };
 
