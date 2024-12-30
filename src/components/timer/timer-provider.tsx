@@ -48,9 +48,10 @@ export const TimerContext = createContext<TimerContextType>({
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [timers, setTimers] = useState<TimersType>(initTimers());
+  const newTimers = initTimers();
+  const [timers, setTimers] = useState<TimersType>(newTimers);
   const [currentTimer, setCurrentTimer] = useState<CurrentTimerType>(
-    initReadyTimer(timers[0]),
+    initReadyTimer(newTimers[0]),
   );
   const [timerControlSettings, setTimerControlSettings] =
     useState<TimerControllerSettingsType>(initialTimerControllerSettings);
@@ -58,15 +59,9 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (loadTimerControlSettings()) {
-      setTimerControlSettings(loadTimerControlSettings());
-    }
-    if (loadCurrentTimer()) {
-      setCurrentTimer(loadCurrentTimer());
-    }
-    if (loadTimers()) {
-      setTimers(loadTimers());
-    }
+    setTimerControlSettings((prev) => loadTimerControlSettings() || prev);
+    setCurrentTimer((prev) => loadCurrentTimer() || prev);
+    setTimers((prev) => loadTimers() || prev);
   }, []);
 
   return (
