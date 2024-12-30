@@ -1,5 +1,10 @@
 import type { TimerControllerSettingsType } from "./settings";
-import type { CurrentTimerType, TimersType } from "./timer";
+import {
+  CurrentTimerSchema,
+  type CurrentTimerType,
+  type TimersType,
+  tickTimer,
+} from "./timer";
 
 const storage = globalThis.localStorage;
 
@@ -18,9 +23,16 @@ export const storeCurrentTimer = (timer: CurrentTimerType) => {
   storage.setItem("currentTimer", JSON.stringify(timer));
 };
 
-export const loadCurrentTimer = (): CurrentTimerType => {
+export const loadCurrentTimer = (): CurrentTimerType | null => {
   const timer = storage?.getItem("currentTimer");
-  return timer ? JSON.parse(timer) : null;
+  if (!timer) return null;
+  const result = CurrentTimerSchema.safeParse(JSON.parse(timer));
+  if (!result.success) {
+    console.error("Invalid current timer", result.error);
+    return null;
+  }
+  const currentTimer = tickTimer(result.data);
+  return currentTimer;
 };
 
 export const storeTimerControlSettings = (
@@ -30,7 +42,8 @@ export const storeTimerControlSettings = (
   storage.setItem("timerControlSettings", JSON.stringify(settings));
 };
 
-export const loadTimerControlSettings = (): TimerControllerSettingsType => {
-  const settings = storage?.getItem("timerControlSettings");
-  return settings ? JSON.parse(settings) : null;
-};
+export const loadTimerControlSettings =
+  (): TimerControllerSettingsType | null => {
+    const settings = storage?.getItem("timerControlSettings");
+    return settings ? JSON.parse(settings) : null;
+  };
