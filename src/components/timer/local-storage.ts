@@ -2,21 +2,10 @@ import type { TimerControllerSettingsType } from "./settings";
 import {
   CurrentTimerSchema,
   type CurrentTimerType,
-  type TimersType,
   calculateRemainingTime,
 } from "./timer";
 
 const storage = globalThis.localStorage;
-
-export const storeTimers = (timers: TimersType) => {
-  if (!storage) return;
-  storage.setItem("timers", JSON.stringify(timers));
-};
-
-export const loadTimers = (): TimersType => {
-  const timers = storage?.getItem("timers");
-  return timers ? JSON.parse(timers) : null;
-};
 
 export const storeCurrentTimer = (timer: CurrentTimerType) => {
   if (!storage) return;

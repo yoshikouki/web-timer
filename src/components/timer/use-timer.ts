@@ -1,6 +1,6 @@
 import { isSamePath } from "@/lib/url";
 import { useContext, useEffect } from "react";
-import { storeTimerControlSettings, storeTimers } from "./local-storage";
+import { storeTimerControlSettings } from "./local-storage";
 import { storeCurrentTimer } from "./local-storage";
 import {
   type TimerControllerSettingsType,
@@ -15,7 +15,6 @@ import {
   stopTimer,
   tickTimer,
   updateTimer,
-  updateTimers,
 } from "./timer";
 import { TimerContext } from "./timer-provider";
 
@@ -25,8 +24,6 @@ type UpdateCurrentTimerProps =
 
 export const useTimer = () => {
   const {
-    timers,
-    setTimers,
     currentTimer,
     setCurrentTimer,
     timerControlSettings,
@@ -154,11 +151,8 @@ export const useTimer = () => {
       ...currentTimer,
       ...props,
     };
-    const newTimers = updateTimers(timers, newTimer);
     setCurrentTimer(newTimer);
-    setTimers(newTimers);
     storeCurrentTimer(newTimer);
-    storeTimers(newTimers);
     return newTimer;
   };
 
@@ -197,7 +191,6 @@ export const useTimer = () => {
   return {
     time,
     status: currentTimer.status,
-    timers,
     currentTimer,
     timerControlSettings,
     isOvertime: currentTimer.remainingTime < 0,

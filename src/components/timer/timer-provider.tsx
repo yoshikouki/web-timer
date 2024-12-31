@@ -8,25 +8,14 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  loadCurrentTimer,
-  loadTimerControlSettings,
-  loadTimers,
-} from "./local-storage";
+import { loadCurrentTimer, loadTimerControlSettings } from "./local-storage";
 import {
   type TimerControllerSettingsType,
   initialTimerControllerSettings,
 } from "./settings";
-import {
-  type CurrentTimerType,
-  type TimersType,
-  initReadyTimer,
-  initTimers,
-} from "./timer";
+import { type CurrentTimerType, initReadyTimer } from "./timer";
 
 type TimerContextType = {
-  timers: TimersType;
-  setTimers: Dispatch<SetStateAction<TimersType>>;
   currentTimer: CurrentTimerType;
   setCurrentTimer: Dispatch<SetStateAction<CurrentTimerType>>;
   timerControlSettings: TimerControllerSettingsType;
@@ -39,8 +28,6 @@ type TimerContextType = {
 };
 
 export const TimerContext = createContext<TimerContextType>({
-  timers: [],
-  setTimers: () => {},
   currentTimer: initReadyTimer(),
   setCurrentTimer: () => {},
   timerControlSettings: initialTimerControllerSettings,
@@ -51,11 +38,8 @@ export const TimerContext = createContext<TimerContextType>({
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const newTimers = initTimers();
-  const [timers, setTimers] = useState<TimersType>(newTimers);
-  const [currentTimer, setCurrentTimer] = useState<CurrentTimerType>(
-    initReadyTimer(newTimers[0]),
-  );
+  const [currentTimer, setCurrentTimer] =
+    useState<CurrentTimerType>(initReadyTimer);
   const [timerControlSettings, setTimerControlSettings] =
     useState<TimerControllerSettingsType>(initialTimerControllerSettings);
   const [finishSoundAudio, setFinishSoundAudio] =
@@ -66,14 +50,11 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setTimerControlSettings((prev) => loadTimerControlSettings() || prev);
     setCurrentTimer((prev) => loadCurrentTimer() || prev);
-    setTimers((prev) => loadTimers() || prev);
   }, []);
 
   return (
     <TimerContext.Provider
       value={{
-        timers,
-        setTimers,
         timerControlSettings,
         setTimerControlSettings,
         currentTimer,

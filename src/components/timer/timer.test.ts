@@ -5,7 +5,6 @@ import {
   type ReadyTimerType,
   type RunningTimerType,
   initReadyTimer,
-  initTimers,
   pauseTimer,
   resetTimer,
   resumeTimer,
@@ -13,17 +12,7 @@ import {
   stopTimer,
   tickTimer,
   updateTimer,
-  updateTimers,
 } from "./timer";
-
-describe("#initTimers", () => {
-  it("should return an array with one ready timer", () => {
-    const timers = initTimers();
-    expect(timers.length).toBe(1);
-    expect(timers[0].id).toBeDefined();
-    expect(timers[0].duration).toBe(300_000);
-  });
-});
 
 describe("#initReadyTimer", () => {
   it("should return a ready timer with default values when no baseTimer is provided", () => {
@@ -33,58 +22,6 @@ describe("#initReadyTimer", () => {
     expect(timer.startTime).toBeNull();
     expect(timer.duration).toBe(300_000);
     expect(timer.remainingTime).toBe(300_000);
-  });
-
-  it("should return a ready timer with values from baseTimer", () => {
-    const baseTimer = { id: "test-id", duration: 600_000 };
-    const timer = initReadyTimer(baseTimer);
-    expect(timer.id).toBe("test-id");
-    expect(timer.status).toBe("ready");
-    expect(timer.startTime).toBeNull();
-    expect(timer.duration).toBe(600_000);
-    expect(timer.remainingTime).toBe(600_000);
-  });
-});
-
-describe("#updateTimers", () => {
-  it("should update the timer with the matching id", () => {
-    const timers = [
-      { id: "timer1", duration: 300_000 },
-      { id: "timer2", duration: 600_000 },
-    ];
-
-    const newTimer: CurrentTimerType = {
-      id: "timer1",
-      status: "ready",
-      startTime: null,
-      duration: 450_000,
-      remainingTime: 450_000,
-    };
-
-    const updatedTimers = updateTimers(timers, newTimer);
-
-    expect(updatedTimers.length).toBe(2);
-    expect(updatedTimers[0].duration).toBe(450_000);
-    expect(updatedTimers[1].duration).toBe(600_000);
-  });
-
-  it("should not modify timers if no id matches", () => {
-    const timers = [
-      { id: "timer1", duration: 300_000 },
-      { id: "timer2", duration: 600_000 },
-    ];
-
-    const newTimer: CurrentTimerType = {
-      id: "timer3",
-      status: "ready",
-      startTime: null,
-      duration: 450_000,
-      remainingTime: 450_000,
-    };
-
-    const updatedTimers = updateTimers(timers, newTimer);
-
-    expect(updatedTimers).toEqual(timers);
   });
 });
 

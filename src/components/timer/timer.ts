@@ -1,13 +1,6 @@
 import { randomID } from "@/lib/utils";
 import { z } from "zod";
 
-export type TimersType = BaseTimerType[];
-
-type BaseTimerType = {
-  id: string;
-  duration: number;
-};
-
 export const TimerNameSchema = z.string().max(64).nullish();
 export type TimerNameType = z.infer<typeof TimerNameSchema>;
 
@@ -64,34 +57,12 @@ export const CurrentTimerSchema = z.union([
 ]);
 export type CurrentTimerType = z.infer<typeof CurrentTimerSchema>;
 
-export const initTimers = (): TimersType => [
-  {
-    id: randomID(),
-    duration: 300_000,
-  },
-];
-
-export const updateTimers = (
-  timers: TimersType,
-  newTimer: CurrentTimerType,
-) => {
-  const newTimers = timers.map((timer) =>
-    timer.id === newTimer.id
-      ? {
-          ...timer,
-          duration: newTimer.duration,
-        }
-      : timer,
-  );
-  return newTimers;
-};
-
-export const initReadyTimer = (baseTimer?: BaseTimerType): ReadyTimerType => ({
-  id: baseTimer?.id ?? randomID(),
+export const initReadyTimer = (): ReadyTimerType => ({
+  id: randomID(),
   status: "ready",
   startTime: null,
-  duration: baseTimer?.duration ?? 300_000, // 5 minutes
-  remainingTime: baseTimer?.duration ?? 300_000,
+  duration: 300_000, // 5 minutes
+  remainingTime: 300_000,
 });
 
 const commonTimerProps = (
