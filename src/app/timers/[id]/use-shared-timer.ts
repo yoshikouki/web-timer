@@ -1,13 +1,13 @@
 "use client";
 
 import type { CurrentTimerType } from "@/components/timer/timer";
-import { useTimer } from "@/components/timer/use-timer";
+import { TimerContext } from "@/components/timer/timer-provider";
 import {
   type TimerActionEventType,
   TimerEventMessageSchema,
   type TimerEventMessageType,
 } from "@/schema/timer-event";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 const pushEvent = async (id: string, event: TimerActionEventType["event"]) => {
   return await push(id, { event });
@@ -35,7 +35,7 @@ export const useSharedTimer = ({
     updateTime: updateCurrentTime,
     updateCurrentTimer: updateLocalTimer,
     ...timer
-  } = useTimer();
+  } = useContext(TimerContext);
 
   const start = async () => {
     await pushEvent(id, "start");

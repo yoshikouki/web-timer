@@ -1,70 +1,50 @@
 "use client";
 
-import {
-  type Dispatch,
-  type SetStateAction,
-  createContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { loadCurrentTimer, loadTimerControlSettings } from "./local-storage";
+import { createContext } from "react";
 import {
   type TimerControllerSettingsType,
   initialTimerControllerSettings,
 } from "./settings";
 import { type CurrentTimerType, initReadyTimer } from "./timer";
+import { useTimerCore } from "./use-timer-core";
 
-type TimerContextType = {
-  currentTimer: CurrentTimerType;
-  setCurrentTimer: Dispatch<SetStateAction<CurrentTimerType>>;
-  timerControlSettings: TimerControllerSettingsType;
-  setTimerControlSettings: Dispatch<
-    SetStateAction<TimerControllerSettingsType>
-  >;
-  finishSoundAudio: HTMLAudioElement | null;
-  setFinishSoundAudio: Dispatch<SetStateAction<HTMLAudioElement | null>>;
-  tickIntervalRef: React.RefObject<Timer | null>;
-};
+type UpdateCurrentTimerProps =
+  | Pick<CurrentTimerType, "name">
+  | CurrentTimerType;
 
-export const TimerContext = createContext<TimerContextType>({
+export const TimerContext = createContext<ReturnType<typeof useTimerCore>>({
+  time: {
+    h: 0,
+    hh: "00",
+    m: 0,
+    mm: "00",
+    s: 0,
+    ss: "00",
+    ms: 0,
+    msPad: "000",
+    fullSeconds: 0,
+    fullMinutes: 0,
+    elapsedSeconds: 0,
+    elapsedMinutes: 0,
+  },
+  status: "ready",
   currentTimer: initReadyTimer(),
-  setCurrentTimer: () => {},
   timerControlSettings: initialTimerControllerSettings,
-  setTimerControlSettings: () => {},
-  finishSoundAudio: null,
-  setFinishSoundAudio: () => {},
-  tickIntervalRef: { current: null },
+  isOvertime: false,
+  start: () => {},
+  pause: () => {},
+  resume: () => {},
+  stop: () => {},
+  reset: () => {},
+  updateTime: (_: Partial<{ minutes: number; seconds: number }>) => undefined,
+  playFinishSound: () => {},
+  updateCurrentTimer: (_: UpdateCurrentTimerProps) => initReadyTimer(),
+  updateTimerControlSettings: (_: Partial<TimerControllerSettingsType>) => {},
 });
 
 export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentTimer, setCurrentTimer] =
-    useState<CurrentTimerType>(initReadyTimer);
-  const [timerControlSettings, setTimerControlSettings] =
-    useState<TimerControllerSettingsType>(initialTimerControllerSettings);
-  const [finishSoundAudio, setFinishSoundAudio] =
-    useState<HTMLAudioElement | null>(null);
-
-  const tickIntervalRef = useRef<Timer | null>(null);
-
-  useEffect(() => {
-    setTimerControlSettings((prev) => loadTimerControlSettings() || prev);
-    setCurrentTimer((prev) => loadCurrentTimer() || prev);
-  }, []);
-
+  const timerCore = useTimerCore();
   return (
-    <TimerContext.Provider
-      value={{
-        timerControlSettings,
-        setTimerControlSettings,
-        currentTimer,
-        setCurrentTimer,
-        finishSoundAudio,
-        setFinishSoundAudio,
-        tickIntervalRef,
-      }}
-    >
-      {children}
-    </TimerContext.Provider>
+    <TimerContext.Provider value={timerCore}>{children}</TimerContext.Provider>
   );
 };
