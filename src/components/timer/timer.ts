@@ -182,3 +182,31 @@ export const updateTimer = (
     remainingTime: duration,
   };
 };
+
+export const calculateTime = (currentTimer: CurrentTimerType) => {
+  const absRemainingMs = Math.abs(currentTimer.remainingTime);
+  const ms = absRemainingMs % 1000;
+  const fullSeconds = Math.floor(absRemainingMs / 1000);
+  const s = fullSeconds % 60;
+  const fullMinutes = Math.floor(fullSeconds / 60);
+  const m = fullMinutes % 60;
+  const h = Math.floor(fullMinutes / 60);
+  const elapsedSeconds =
+    Math.floor(currentTimer.duration - currentTimer.remainingTime) / 1000;
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  const time = {
+    h,
+    hh: h.toString().padStart(2, "0"),
+    m,
+    mm: m.toString().padStart(2, "0"),
+    s,
+    ss: s.toString().padStart(2, "0"),
+    ms,
+    msPad: ms.toString().padStart(3, "0"),
+    fullSeconds,
+    fullMinutes,
+    elapsedSeconds,
+    elapsedMinutes,
+  };
+  return time;
+};

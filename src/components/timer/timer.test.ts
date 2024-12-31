@@ -4,6 +4,7 @@ import {
   type PausedTimerType,
   type ReadyTimerType,
   type RunningTimerType,
+  calculateTime,
   initReadyTimer,
   pauseTimer,
   resetTimer,
@@ -283,5 +284,122 @@ describe("#updateTimer", () => {
 
     expect(updatedTimer.duration).toBe(expectedDuration);
     expect(updatedTimer.remainingTime).toBe(expectedDuration);
+  });
+});
+
+describe("#calculateTime", () => {
+  it("should calculate time correctly", () => {
+    const currentTimer: RunningTimerType = {
+      id: "timer1",
+      status: "running",
+      startTime: 1000,
+      duration: 300_000,
+      remainingTime: 3661234, // 1h 1m 1s 234ms
+    };
+
+    const time = calculateTime(currentTimer);
+
+    expect(time.h).toBe(1);
+    expect(time.hh).toBe("01");
+    expect(time.m).toBe(1);
+    expect(time.mm).toBe("01");
+    expect(time.s).toBe(1);
+    expect(time.ss).toBe("01");
+    expect(time.ms).toBe(234);
+    expect(time.msPad).toBe("234");
+    expect(time.fullSeconds).toBe(3661);
+    expect(time.fullMinutes).toBe(61);
+  });
+
+  it("should handle negative remaining time", () => {
+    const currentTimer: RunningTimerType = {
+      id: "timer1",
+      status: "running",
+      startTime: 1000,
+      duration: 300_000,
+      remainingTime: -3661234, // -1h 1m 1s 234ms
+    };
+
+    const time = calculateTime(currentTimer);
+
+    expect(time.h).toBe(1);
+    expect(time.hh).toBe("01");
+    expect(time.m).toBe(1);
+    expect(time.mm).toBe("01");
+    expect(time.s).toBe(1);
+    expect(time.ss).toBe("01");
+    expect(time.ms).toBe(234);
+    expect(time.msPad).toBe("234");
+    expect(time.fullSeconds).toBe(3661);
+    expect(time.fullMinutes).toBe(61);
+  });
+
+  it("should handle zero remaining time", () => {
+    const currentTimer: RunningTimerType = {
+      id: "timer1",
+      status: "running",
+      startTime: 1000,
+      duration: 300_000,
+      remainingTime: 0,
+    };
+
+    const time = calculateTime(currentTimer);
+
+    expect(time.h).toBe(0);
+    expect(time.hh).toBe("00");
+    expect(time.m).toBe(0);
+    expect(time.mm).toBe("00");
+    expect(time.s).toBe(0);
+    expect(time.ss).toBe("00");
+    expect(time.ms).toBe(0);
+    expect(time.msPad).toBe("000");
+    expect(time.fullSeconds).toBe(0);
+    expect(time.fullMinutes).toBe(0);
+  });
+
+  it("should handle small values (less than 1 minute)", () => {
+    const currentTimer: RunningTimerType = {
+      id: "timer1",
+      status: "running",
+      startTime: 1000,
+      duration: 300_000,
+      remainingTime: 45678, // 45s 678ms
+    };
+
+    const time = calculateTime(currentTimer);
+
+    expect(time.h).toBe(0);
+    expect(time.hh).toBe("00");
+    expect(time.m).toBe(0);
+    expect(time.mm).toBe("00");
+    expect(time.s).toBe(45);
+    expect(time.ss).toBe("45");
+    expect(time.ms).toBe(678);
+    expect(time.msPad).toBe("678");
+    expect(time.fullSeconds).toBe(45);
+    expect(time.fullMinutes).toBe(0);
+  });
+
+  it("should handle large values (more than 24 hours)", () => {
+    const currentTimer: RunningTimerType = {
+      id: "timer1",
+      status: "running",
+      startTime: 1000,
+      duration: 300_000,
+      remainingTime: 90_000_000, // 25h
+    };
+
+    const time = calculateTime(currentTimer);
+
+    expect(time.h).toBe(25);
+    expect(time.hh).toBe("25");
+    expect(time.m).toBe(0);
+    expect(time.mm).toBe("00");
+    expect(time.s).toBe(0);
+    expect(time.ss).toBe("00");
+    expect(time.ms).toBe(0);
+    expect(time.msPad).toBe("000");
+    expect(time.fullSeconds).toBe(90000);
+    expect(time.fullMinutes).toBe(1500);
   });
 });
