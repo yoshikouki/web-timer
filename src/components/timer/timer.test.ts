@@ -35,19 +35,13 @@ describe("#startTimer", () => {
       duration: 300_000,
       remainingTime: 300_000,
     };
-
-    // Date.now() をモックします
     const originalDateNow = Date.now;
     const mockStartTime = 1000;
     Date.now = () => mockStartTime;
-
     const runningTimer = startTimer(currentTimer);
-
     expect(runningTimer.status).toBe("running");
     expect(runningTimer.startTime).toBe(mockStartTime);
     expect(runningTimer.remainingTime).toBe(300_000);
-
-    // Date.now() を元に戻します
     Date.now = originalDateNow;
   });
 });
@@ -55,11 +49,9 @@ describe("#startTimer", () => {
 describe("#tickTimer", () => {
   it("should update remainingTime for a running timer", () => {
     const originalDateNow = Date.now;
-
     const mockStartTime = 1000;
     const mockCurrentTime = 2000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: RunningTimerType = {
       id: "timer1",
       status: "running",
@@ -67,21 +59,16 @@ describe("#tickTimer", () => {
       duration: 300_000,
       remainingTime: 300_000,
     };
-
     const updatedTimer = tickTimer(currentTimer);
-
     expect(updatedTimer.remainingTime).toBe(299_000);
-
     Date.now = originalDateNow;
   });
 
   it("should start running from paused timer", () => {
     const originalDateNow = Date.now;
-
     const mockStartTime = 1000;
     const mockCurrentTime = 2000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: PausedTimerType = {
       id: "timer1",
       status: "paused",
@@ -90,15 +77,12 @@ describe("#tickTimer", () => {
       remainingTime: 299_000,
       pausedTime: 1500,
     };
-
     const updatedTimer = tickTimer(currentTimer);
-
     expect(updatedTimer.status).toBe("running");
     expect(updatedTimer.startTime).toBe(
       mockCurrentTime - currentTimer.pausedTime + mockStartTime,
     );
     expect(updatedTimer.remainingTime).toBe(299_500);
-
     Date.now = originalDateNow;
   });
 });
@@ -106,10 +90,8 @@ describe("#tickTimer", () => {
 describe("#pauseTimer", () => {
   it("should pause a running timer", () => {
     const originalDateNow = Date.now;
-
     const mockPausedTime = 2000;
     Date.now = () => mockPausedTime;
-
     const currentTimer: RunningTimerType = {
       id: "timer1",
       status: "running",
@@ -117,21 +99,16 @@ describe("#pauseTimer", () => {
       duration: 300_000,
       remainingTime: 299_000,
     };
-
     const pausedTimer = pauseTimer(currentTimer);
-
     expect(pausedTimer.status).toBe("paused");
     expect(pausedTimer.pausedTime).toBe(mockPausedTime);
-
     Date.now = originalDateNow;
   });
 
   it("should pause a timer not in running state", () => {
     const originalDateNow = Date.now;
-
     const mockCurrentTime = 2000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: CurrentTimerType = {
       id: "timer1",
       status: "ready",
@@ -139,13 +116,10 @@ describe("#pauseTimer", () => {
       duration: 300_000,
       remainingTime: 300_000,
     };
-
     const pausedTimer = pauseTimer(currentTimer);
-
     expect(pausedTimer.status).toBe("paused");
     expect(pausedTimer.startTime).toBe(mockCurrentTime);
     expect(pausedTimer.pausedTime).toBe(mockCurrentTime);
-
     Date.now = originalDateNow;
   });
 });
@@ -153,12 +127,10 @@ describe("#pauseTimer", () => {
 describe("#resumeTimer", () => {
   it("should resume a paused timer", () => {
     const originalDateNow = Date.now;
-
     const mockStartTime = 1000;
     const mockPausedTime = 2000;
     const mockCurrentTime = 3000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: PausedTimerType = {
       id: "timer1",
       status: "paused",
@@ -167,27 +139,21 @@ describe("#resumeTimer", () => {
       remainingTime: 298_000,
       pausedTime: mockPausedTime,
     };
-
     const elapsedTime = mockPausedTime - mockStartTime;
     const newStartTime = mockCurrentTime - elapsedTime;
     const expectedRemainingTime =
       currentTimer.duration - (mockCurrentTime - newStartTime);
-
     const resumedTimer = resumeTimer(currentTimer);
-
     expect(resumedTimer.status).toBe("running");
     expect(resumedTimer.startTime).toBe(newStartTime);
     expect(resumedTimer.remainingTime).toBe(expectedRemainingTime);
-
     Date.now = originalDateNow;
   });
 
   it("should start a timer not in paused state", () => {
     const originalDateNow = Date.now;
-
     const mockCurrentTime = 3000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: CurrentTimerType = {
       id: "timer1",
       status: "ready",
@@ -195,12 +161,9 @@ describe("#resumeTimer", () => {
       duration: 300_000,
       remainingTime: 300_000,
     };
-
     const resumedTimer = resumeTimer(currentTimer);
-
     expect(resumedTimer.status).toBe("running");
     expect(resumedTimer.startTime).toBe(mockCurrentTime);
-
     Date.now = originalDateNow;
   });
 });
@@ -215,12 +178,9 @@ describe("#stopTimer", () => {
       remainingTime: 298_000,
       pausedTime: 2000,
     };
-
     const stoppedTimer = stopTimer(currentTimer);
-
     expect(stoppedTimer.status).toBe("stopped");
     expect(stoppedTimer.startTime).toBe(1000);
-    // pausedTime は存在しないため、型ガードを使用
     if ("pausedTime" in stoppedTimer) {
       expect(stoppedTimer.pausedTime).toBeUndefined();
     }
@@ -228,10 +188,8 @@ describe("#stopTimer", () => {
 
   it("should stop a timer not in paused state", () => {
     const originalDateNow = Date.now;
-
     const mockCurrentTime = 3000;
     Date.now = () => mockCurrentTime;
-
     const currentTimer: RunningTimerType = {
       id: "timer1",
       status: "running",
@@ -239,12 +197,9 @@ describe("#stopTimer", () => {
       duration: 300_000,
       remainingTime: 297_000,
     };
-
     const stoppedTimer = stopTimer(currentTimer);
-
     expect(stoppedTimer.status).toBe("stopped");
     expect(stoppedTimer.startTime).toBe(1000);
-
     Date.now = originalDateNow;
   });
 });
@@ -258,9 +213,7 @@ describe("#resetTimer", () => {
       duration: 300_000,
       remainingTime: 297_000,
     };
-
     const resetTimerObj = resetTimer(currentTimer);
-
     expect(resetTimerObj.status).toBe("ready");
     expect(resetTimerObj.startTime).toBeNull();
     expect(resetTimerObj.remainingTime).toBe(300_000);
@@ -276,12 +229,9 @@ describe("#updateTimer", () => {
       duration: 300_000,
       remainingTime: 300_000,
     };
-
     const newValue = { minutes: 10, seconds: 30 };
     const updatedTimer = updateTimer(currentTimer, newValue);
-
     const expectedDuration = 10 * 60_000 + 30 * 1_000;
-
     expect(updatedTimer.duration).toBe(expectedDuration);
     expect(updatedTimer.remainingTime).toBe(expectedDuration);
   });
@@ -296,9 +246,7 @@ describe("#calculateTime", () => {
       duration: 300_000,
       remainingTime: 3661234, // 1h 1m 1s 234ms
     };
-
     const time = calculateTime(currentTimer);
-
     expect(time.h).toBe(1);
     expect(time.hh).toBe("01");
     expect(time.m).toBe(1);
@@ -319,9 +267,7 @@ describe("#calculateTime", () => {
       duration: 300_000,
       remainingTime: -3661234, // -1h 1m 1s 234ms
     };
-
     const time = calculateTime(currentTimer);
-
     expect(time.h).toBe(1);
     expect(time.hh).toBe("01");
     expect(time.m).toBe(1);
@@ -342,9 +288,7 @@ describe("#calculateTime", () => {
       duration: 300_000,
       remainingTime: 0,
     };
-
     const time = calculateTime(currentTimer);
-
     expect(time.h).toBe(0);
     expect(time.hh).toBe("00");
     expect(time.m).toBe(0);
@@ -365,9 +309,7 @@ describe("#calculateTime", () => {
       duration: 300_000,
       remainingTime: 45678, // 45s 678ms
     };
-
     const time = calculateTime(currentTimer);
-
     expect(time.h).toBe(0);
     expect(time.hh).toBe("00");
     expect(time.m).toBe(0);
@@ -388,9 +330,7 @@ describe("#calculateTime", () => {
       duration: 300_000,
       remainingTime: 90_000_000, // 25h
     };
-
     const time = calculateTime(currentTimer);
-
     expect(time.h).toBe(25);
     expect(time.hh).toBe("25");
     expect(time.m).toBe(0);
