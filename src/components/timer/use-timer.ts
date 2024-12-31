@@ -88,28 +88,28 @@ export const useTimer = () => {
   };
 
   const start = () => {
-    updateCurrentTimer(startTimer(currentTimer));
+    setCurrentTimer(startTimer);
     prepareFinishSound();
     loopTick();
   };
 
   const pause = () => {
-    updateCurrentTimer(pauseTimer(currentTimer));
+    setCurrentTimer(pauseTimer);
     clearTickInterval();
   };
 
   const resume = () => {
-    updateCurrentTimer(resumeTimer(currentTimer));
+    setCurrentTimer(resumeTimer);
     loopTick();
   };
 
   const stop = () => {
-    updateCurrentTimer(stopTimer(currentTimer));
+    setCurrentTimer(stopTimer);
     clearTickInterval();
   };
 
   const reset = () => {
-    updateCurrentTimer(resetTimer(currentTimer));
+    setCurrentTimer(resetTimer);
   };
 
   const updateTime = (value: Partial<{ minutes: number; seconds: number }>) => {
