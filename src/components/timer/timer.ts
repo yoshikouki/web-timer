@@ -150,11 +150,16 @@ export const tickTimer = (currentTimer: CurrentTimerType): RunningTimerType => {
 
 export const pauseTimer = (currentTimer: CurrentTimerType): PausedTimerType => {
   if (currentTimer.status === "paused") return currentTimer;
-  return {
+  const pausedTime = Date.now();
+  const pausedTimer: PausedTimerType = {
     ...currentTimer,
     status: "paused",
-    startTime: currentTimer.startTime ?? Date.now(),
-    pausedTime: Date.now(),
+    startTime: currentTimer.startTime ?? pausedTime,
+    pausedTime,
+  };
+  return {
+    ...pausedTimer,
+    remainingTime: calculateRemainingTime(pausedTimer),
   };
 };
 
