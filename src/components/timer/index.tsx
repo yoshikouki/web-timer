@@ -18,7 +18,7 @@ export const Timer = (props?: {
   const font = fonts[timerControlSettings.font];
   const isUpdatable = ["ready"].includes(status);
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, 300]);
+  const y = useTransform(scrollY, [0, 1000], [0, 300], { clamp: false });
 
   return (
     <div
@@ -26,8 +26,8 @@ export const Timer = (props?: {
     >
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ y }}
       >
         <div
