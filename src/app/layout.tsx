@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { ViewTransitionProvider } from "@/components/animated-link/view-transition-provider";
 import { HeadTitleProvider } from "@/components/head-title";
 import { Toaster } from "@/components/ui/sonner";
@@ -20,6 +21,7 @@ export default function RootLayout({
       <HeadTitleProvider>
         <html lang="en" className="dark">
           <body className={cn("antialiased", font.className)}>
+            <GoogleAnalytics />
             {children}
             <Footer />
             <Toaster />

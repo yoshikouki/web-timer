@@ -12,6 +12,7 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 ENV NEXT_PUBLIC_APP_URL="https://web-timer.fly.dev"
+ENV NEXT_PUBLIC_GA_MEASUREMENT_ID="G-MMBJ6QJ3PM"
 
 
 # Throw-away build stage to reduce size of final image

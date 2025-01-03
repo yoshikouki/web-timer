@@ -11,6 +11,8 @@ primary_region = 'nrt'
 
 [env]
   NODE_ENV = "production"
+  NEXT_PUBLIC_APP_URL = "https://web-timer.fly.dev"
+  NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-MMBJ6QJ3PM"
 
 [http_service]
   internal_port = 3000
