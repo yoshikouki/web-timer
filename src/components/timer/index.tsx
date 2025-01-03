@@ -3,7 +3,7 @@
 import { fonts } from "@/app/fonts";
 import { cn } from "@/lib/utils";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { TimerController } from "./timer-controller";
@@ -17,6 +17,8 @@ export const Timer = (props?: {
     useTimer();
   const font = fonts[timerControlSettings.font];
   const isUpdatable = ["ready"].includes(status);
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, 300]);
 
   return (
     <div
@@ -26,6 +28,7 @@ export const Timer = (props?: {
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        style={{ y }}
       >
         <div
           className={cn(
