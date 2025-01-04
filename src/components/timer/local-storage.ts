@@ -1,9 +1,9 @@
-import type { TimerControllerSettingsType } from "./settings";
 import {
   CurrentTimerSchema,
   type CurrentTimerType,
   calculateRemainingTime,
 } from "./timer";
+import type { TimerControllerSettingsType } from "./timer-controller-settings/settings";
 
 const storage = globalThis.localStorage;
 

@@ -7,8 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BellRingIcon } from "lucide-react";
-import { type FinishSoundOptionKeys, finishSoundOptions } from "../settings";
 import { useTimer } from "../use-timer";
+import { type FinishSoundOptionKeys, finishSoundOptions } from "./settings";
 
 export const FinishSoundSelector = () => {
   const { timerControlSettings, updateTimerControlSettings, playFinishSound } =

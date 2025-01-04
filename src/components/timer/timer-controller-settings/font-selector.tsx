@@ -7,8 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { TimerControllerFont } from "../settings";
 import { useTimer } from "../use-timer";
+import type { TimerControllerFont } from "./settings";
 
 export const FontSelector = () => {
   const { timerControlSettings, updateTimerControlSettings } = useTimer();

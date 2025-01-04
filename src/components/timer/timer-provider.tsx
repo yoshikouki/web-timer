@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext } from "react";
+import { type CurrentTimerType, initReadyTimer } from "./timer";
 import {
   type TimerControllerSettingsType,
   initialTimerControllerSettings,
-} from "./settings";
-import { type CurrentTimerType, initReadyTimer } from "./timer";
+} from "./timer-controller-settings/settings";
 import { useTimerCore } from "./use-timer-core";
 
 type UpdateCurrentTimerProps =

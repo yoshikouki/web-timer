@@ -7,11 +7,6 @@ import {
   storeTimerControlSettings,
 } from "./local-storage";
 import {
-  type TimerControllerSettingsType,
-  finishSoundOptions,
-  initialTimerControllerSettings,
-} from "./settings";
-import {
   type CurrentTimerType,
   calculateTime,
   initReadyTimer,
@@ -24,6 +19,11 @@ import {
   tickTimer,
   updateTimer,
 } from "./timer";
+import {
+  type TimerControllerSettingsType,
+  finishSoundOptions,
+  initialTimerControllerSettings,
+} from "./timer-controller-settings/settings";
 
 type UpdateCurrentTimerProps =
   | Pick<CurrentTimerType, "name">
