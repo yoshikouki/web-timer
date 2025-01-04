@@ -25,11 +25,12 @@ import {
   initialTimerControllerSettings,
 } from "./timer-controller-settings/settings";
 
-type UpdateCurrentTimerProps =
+export type UpdateCurrentTimerProps =
   | Pick<CurrentTimerType, "name">
   | CurrentTimerType;
 
-type TimerUpdater = (prev: CurrentTimerType) => CurrentTimerType;
+export type TimerUpdater = (prev: CurrentTimerType) => CurrentTimerType;
+
 const isTimerUpdater = (value: unknown): value is TimerUpdater =>
   typeof value === "function";
 

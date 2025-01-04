@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext } from "react";
-import { type CurrentTimerType, initReadyTimer } from "./timer";
+import { initReadyTimer } from "./timer";
 import {
   type TimerControllerSettingsType,
   initialTimerControllerSettings,
 } from "./timer-controller-settings/settings";
-import { useTimerCore } from "./use-timer-core";
-
-type UpdateCurrentTimerProps =
-  | Pick<CurrentTimerType, "name">
-  | CurrentTimerType;
+import {
+  type TimerUpdater,
+  type UpdateCurrentTimerProps,
+  useTimerCore,
+} from "./use-timer-core";
 
 export const TimerContext = createContext<ReturnType<typeof useTimerCore>>({
   time: {
@@ -38,7 +38,8 @@ export const TimerContext = createContext<ReturnType<typeof useTimerCore>>({
   reset: () => {},
   updateTime: (_: Partial<{ minutes: number; seconds: number }>) => undefined,
   playFinishSound: () => {},
-  updateCurrentTimer: (_: UpdateCurrentTimerProps) => initReadyTimer(),
+  updateCurrentTimer: (_: UpdateCurrentTimerProps | TimerUpdater) =>
+    initReadyTimer(),
   updateTimerControlSettings: (_: Partial<TimerControllerSettingsType>) => {},
 });
 

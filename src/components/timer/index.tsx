@@ -8,6 +8,9 @@ import { Button } from "../ui/button";
 import { WheelPicker } from "../wheel-picker";
 import { TimerController } from "./timer-controller";
 import { useTimer as useTimerHook } from "./use-timer";
+import type { useTimerCore } from "./use-timer-core";
+
+export type UseTimerType = typeof useTimerCore;
 
 export const Timer = (props?: {
   useTimer?: typeof useTimerHook;
