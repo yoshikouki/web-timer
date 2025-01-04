@@ -65,6 +65,15 @@ export const initReadyTimer = (): ReadyTimerType => ({
   remainingTime: 300_000,
 });
 
+export const isInitialTimer = (currentTimer: CurrentTimerType) => {
+  return (
+    currentTimer.status === "ready" &&
+    currentTimer.startTime === null &&
+    currentTimer.duration === 300_000 &&
+    currentTimer.remainingTime === 300_000
+  );
+};
+
 const commonTimerProps = (
   _currentTimer: CurrentTimerType,
 ): Omit<CurrentTimerType, "pausedTime"> => {

@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import {
   loadCurrentTimer,
   loadTimerControlSettings,
+  storeCurrentTimer,
   storeTimerControlSettings,
 } from "./local-storage";
-import { storeCurrentTimer } from "./local-storage";
 import {
   type TimerControllerSettingsType,
   finishSoundOptions,
@@ -15,6 +15,7 @@ import {
   type CurrentTimerType,
   calculateTime,
   initReadyTimer,
+  isInitialTimer,
   pauseTimer,
   resetTimer,
   resumeTimer,
@@ -128,13 +129,10 @@ export const useTimerCore = () => {
   };
 
   const updateCurrentTimer = (props: UpdateCurrentTimerProps) => {
-    const newTimer = {
-      ...currentTimer,
+    setCurrentTimer((prev) => ({
+      ...prev,
       ...props,
-    };
-    setCurrentTimer(newTimer);
-    storeCurrentTimer(newTimer);
-    return newTimer;
+    }));
   };
 
   const updateTimerControlSettings = (
@@ -156,12 +154,6 @@ export const useTimerCore = () => {
     });
   };
 
-  // Load from local storage
-  useEffect(() => {
-    setTimerControlSettings((prev) => loadTimerControlSettings() || prev);
-    setCurrentTimer((prev) => loadCurrentTimer() || prev);
-  }, []);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: for initial render
   useEffect(() => {
     const isTickingDesynchronized =
@@ -169,6 +161,17 @@ export const useTimerCore = () => {
     if (!isTickingDesynchronized) return;
     loopTick();
   }, [currentTimer.status]);
+
+  useEffect(() => {
+    if (isInitialTimer(currentTimer)) return;
+    storeCurrentTimer(currentTimer);
+  }, [currentTimer]);
+
+  // Load from local storage
+  useEffect(() => {
+    setTimerControlSettings((prev) => loadTimerControlSettings() || prev);
+    setCurrentTimer((prev) => loadCurrentTimer() || prev);
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: for cleanup
   useEffect(() => {
