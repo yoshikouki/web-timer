@@ -9,10 +9,25 @@ jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
-    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    concurrency: deploy-group
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  notify:
+    name: Discord Notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send Discord notification
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_DEV_WEBHOOK }}
+          status: ${{ job.status }}
+          title: ${{ job.status == 'success' && '🚀 Deployed to Production' || '🚨 Deploy Failed' }}
+          description: ${{ job.status == 'success' && 'Production deployment completed successfully' || 'Production deployment failed' }}
+          color: ${{ job.status == 'success' && 0x28A745 || 0xFF0000 }}
