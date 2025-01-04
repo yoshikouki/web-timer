@@ -1,4 +1,4 @@
-import type { TimerControllerFont } from "@/components/timer/settings";
+import type { TimerControllerFont } from "@/components/timer/timer-controller-settings/settings";
 import type { NextFont } from "next/dist/compiled/@next/font";
 import { Comfortaa, Poppins, Sora, Teko } from "next/font/google";
 
