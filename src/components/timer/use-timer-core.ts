@@ -31,7 +31,7 @@ export type UpdateCurrentTimerProps =
 
 export type TimerUpdater = (prev: CurrentTimerType) => CurrentTimerType;
 
-const isTimerUpdater = (value: unknown): value is TimerUpdater =>
+export const isTimerUpdater = (value: unknown): value is TimerUpdater =>
   typeof value === "function";
 
 export const useTimerCore = () => {

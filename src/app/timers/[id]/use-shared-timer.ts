@@ -1,7 +1,11 @@
 "use client";
 
-import type { CurrentTimerType } from "@/components/timer/timer";
 import { TimerContext } from "@/components/timer/timer-provider";
+import {
+  type TimerUpdater,
+  type UpdateCurrentTimerProps,
+  isTimerUpdater,
+} from "@/components/timer/use-timer-core";
 import {
   type TimerActionEventType,
   TimerEventMessageSchema,
@@ -64,12 +68,13 @@ export const useSharedTimer = ({
     });
     return newTimer;
   };
-  const updateCurrentTimer = (props: Pick<CurrentTimerType, "name">) => {
+  const updateCurrentTimer = (
+    props: UpdateCurrentTimerProps | TimerUpdater,
+  ) => {
     updateLocalTimer((prev) => {
-      const newTimer = {
-        ...prev,
-        ...props,
-      };
+      const newTimer = isTimerUpdater(props)
+        ? props(prev)
+        : { ...prev, ...props };
       push(id, {
         event: "currentTimer",
         currentTimer: newTimer,
