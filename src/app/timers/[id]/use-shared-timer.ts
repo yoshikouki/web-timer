@@ -65,12 +65,17 @@ export const useSharedTimer = ({
     return newTimer;
   };
   const updateCurrentTimer = (props: Pick<CurrentTimerType, "name">) => {
-    const newTimer = updateLocalTimer(props);
-    push(id, {
-      event: "currentTimer",
-      currentTimer: newTimer,
+    updateLocalTimer((prev) => {
+      const newTimer = {
+        ...prev,
+        ...props,
+      };
+      push(id, {
+        event: "currentTimer",
+        currentTimer: newTimer,
+      });
+      return newTimer;
     });
-    return newTimer;
   };
 
   const onEventMessage = (message: TimerEventMessageType) => {

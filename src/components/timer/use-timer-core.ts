@@ -29,6 +29,10 @@ type UpdateCurrentTimerProps =
   | Pick<CurrentTimerType, "name">
   | CurrentTimerType;
 
+type TimerUpdater = (prev: CurrentTimerType) => CurrentTimerType;
+const isTimerUpdater = (value: unknown): value is TimerUpdater =>
+  typeof value === "function";
+
 export const useTimerCore = () => {
   const [currentTimer, setCurrentTimer] =
     useState<CurrentTimerType>(initReadyTimer);
@@ -41,7 +45,7 @@ export const useTimerCore = () => {
   const tickIntervalRef = useRef<Timer | null>(null);
 
   const tick = () => {
-    setCurrentTimer((prev) => {
+    updateCurrentTimer((prev) => {
       const newTimer = tickTimer(prev);
       if (0 < newTimer.remainingTime) return newTimer;
       // Just passed 0
@@ -67,28 +71,28 @@ export const useTimerCore = () => {
   };
 
   const start = () => {
-    setCurrentTimer(startTimer);
+    updateCurrentTimer(startTimer);
     prepareFinishSound();
     loopTick();
   };
 
   const pause = () => {
-    setCurrentTimer(pauseTimer);
+    updateCurrentTimer(pauseTimer);
     clearTickInterval();
   };
 
   const resume = () => {
-    setCurrentTimer(resumeTimer);
+    updateCurrentTimer(resumeTimer);
     loopTick();
   };
 
   const stop = () => {
-    setCurrentTimer(stopTimer);
+    updateCurrentTimer(stopTimer);
     clearTickInterval();
   };
 
   const reset = () => {
-    setCurrentTimer(resetTimer);
+    updateCurrentTimer(resetTimer);
   };
 
   const updateTime = (value: Partial<{ minutes: number; seconds: number }>) => {
@@ -128,11 +132,17 @@ export const useTimerCore = () => {
     sound.play();
   };
 
-  const updateCurrentTimer = (props: UpdateCurrentTimerProps) => {
-    setCurrentTimer((prev) => ({
-      ...prev,
-      ...props,
-    }));
+  const updateCurrentTimer = (
+    props: UpdateCurrentTimerProps | TimerUpdater,
+  ) => {
+    if (isTimerUpdater(props)) {
+      setCurrentTimer(props);
+    } else {
+      setCurrentTimer((prev) => ({
+        ...prev,
+        ...props,
+      }));
+    }
   };
 
   const updateTimerControlSettings = (
