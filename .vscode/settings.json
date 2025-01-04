@@ -10,6 +10,5 @@
   },
   "workbench.editor.customLabels.patterns": {
     "**/{index,page,actions,hooks,components,utils,types,functions}.{js,ts,jsx,tsx,mjs,mts}": "${dirname}/${filename}"
-  },
-  "cSpell.words": ["maoudamashii"]
+  }
 }

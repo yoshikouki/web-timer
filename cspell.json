@@ -1,0 +1,10 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "fly.toml",
+    "Dockerfile",
+    "src/components/timer/timer-controller-settings/settings.ts"
+  ],
+  "words": ["flyctl", "maoudamashii", "superfly"]
+}
