@@ -63,7 +63,7 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
               size="icon"
               className={cn(
                 "bg-background/80 [&_svg]:size-4",
-                status === "running" && currentTimer.name && "opacity-30",
+                status === "running" && currentTimer.name && "opacity-20",
                 status === "running" && !currentTimer.name && "opacity-0",
               )}
             >
