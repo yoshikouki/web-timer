@@ -22,9 +22,6 @@ export const Timer = (props?: {
   const isUpdatable = ["ready"].includes(status);
   const { scrollY } = useScroll();
   const timerY = useTransform(scrollY, [0, 1000], [0, 600], { clamp: false });
-  const timerOpacity = useTransform(scrollY, [200, 1000], [1, 0.5], {
-    clamp: false,
-  });
 
   return (
     <div
@@ -34,7 +31,7 @@ export const Timer = (props?: {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        style={{ y: timerY, opacity: timerOpacity }}
+        style={{ y: timerY }}
       >
         <div
           className={cn(
