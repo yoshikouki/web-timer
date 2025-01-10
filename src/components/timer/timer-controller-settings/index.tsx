@@ -1,6 +1,7 @@
 "use client";
 
 import { fonts } from "@/app/fonts";
+import { events } from "@/components/analytics/events";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -24,7 +25,15 @@ export const TimerControllerSettings = ({
   const { timerControlSettings, playFinishSound } = useTimer();
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (open) {
+          events.timerSettingsOpen();
+        } else {
+          events.timerSettingsClose();
+        }
+      }}
+    >
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-80 bg-popover/90" align="end">
         <div className="grid gap-10">

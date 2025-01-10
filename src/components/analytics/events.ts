@@ -79,6 +79,42 @@ const timerOrientationChange = (orientation: "horizontal" | "vertical") =>
     label: orientation,
   });
 
+const timerSettingsOpen = () =>
+  event({
+    action: "timer_settings_open",
+    category: "timer_settings",
+    label: "open",
+  });
+
+const timerSettingsClose = () =>
+  event({
+    action: "timer_settings_close",
+    category: "timer_settings",
+    label: "close",
+  });
+
+const timerResolutionChange = (resolution: number) =>
+  event({
+    action: "timer_resolution_change",
+    category: "timer_settings",
+    label: `${resolution}ms`,
+  });
+
+const timerFinishSoundChange = (soundName: string) =>
+  event({
+    action: "timer_finish_sound_change",
+    category: "timer_settings",
+    label: soundName,
+  });
+
+const timerFinishSoundVolumeChange = (volume: number) =>
+  event({
+    action: "timer_finish_sound_volume_change",
+    category: "timer_settings",
+    label: "volume",
+    value: volume,
+  });
+
 // Share Events
 const timerShare = (seconds: number) =>
   event({
@@ -114,6 +150,11 @@ export const events = {
   timerTimeSet,
   timerFontChange,
   timerOrientationChange,
+  timerSettingsOpen,
+  timerSettingsClose,
+  timerResolutionChange,
+  timerFinishSoundChange,
+  timerFinishSoundVolumeChange,
   timerShare,
   timerShareJoin,
   error,

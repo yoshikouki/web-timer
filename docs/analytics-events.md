@@ -29,6 +29,14 @@ Events related to timer operations
   - **value**: Total time that was set (in seconds)
 
 #### Timer Settings
+- **action**: `timer_settings_open`
+  - **category**: `timer_settings`
+  - **label**: `open`
+
+- **action**: `timer_settings_close`
+  - **category**: `timer_settings`
+  - **label**: `close`
+
 - **action**: `timer_time_set`
   - **category**: `timer_settings`
   - **label**: `time`
@@ -41,6 +49,19 @@ Events related to timer operations
 - **action**: `timer_orientation_change`
   - **category**: `timer_settings`
   - **label**: `horizontal` | `vertical`
+
+- **action**: `timer_resolution_change`
+  - **category**: `timer_settings`
+  - **label**: Resolution in milliseconds
+
+- **action**: `timer_finish_sound_change`
+  - **category**: `timer_settings`
+  - **label**: Sound name
+
+- **action**: `timer_finish_sound_volume_change`
+  - **category**: `timer_settings`
+  - **label**: `volume`
+  - **value**: Volume level (0-1)
 
 ### Share
 Events related to sharing functionality
@@ -73,6 +94,10 @@ events.timerStart(300); // 5 minutes = 300 seconds
 // When timer settings change
 events.timerFontChange("Inter");
 events.timerOrientationChange("horizontal");
+
+// When settings dialog opens/closes
+events.timerSettingsOpen();
+events.timerSettingsClose();
 
 // When error occurs
 events.error("Failed to connect to shared timer");

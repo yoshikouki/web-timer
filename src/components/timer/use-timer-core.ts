@@ -21,6 +21,8 @@ import {
   updateTimer,
 } from "./timer";
 import {
+  type FinishSoundOptionKeys,
+  type TimerControllerFont,
   type TimerControllerSettingsType,
   finishSoundOptions,
   initialTimerControllerSettings,
@@ -167,12 +169,28 @@ export const useTimerCore = () => {
       ) {
         prepareFinishSound(newTimerControlSettings);
       }
-      if (timerControlSettings.font) {
-        events.timerFontChange(timerControlSettings.font);
+
+      // Track settings changes
+      for (const [key, value] of Object.entries(timerControlSettings)) {
+        switch (key) {
+          case "font":
+            events.timerFontChange(value as TimerControllerFont);
+            break;
+          case "orientation":
+            events.timerOrientationChange(value as "horizontal" | "vertical");
+            break;
+          case "timerResolution":
+            events.timerResolutionChange(value as number);
+            break;
+          case "finishSound":
+            events.timerFinishSoundChange(value as FinishSoundOptionKeys);
+            break;
+          case "finishSoundVolume":
+            events.timerFinishSoundVolumeChange(value as number);
+            break;
+        }
       }
-      if (timerControlSettings.orientation) {
-        events.timerOrientationChange(timerControlSettings.orientation);
-      }
+
       storeTimerControlSettings(newTimerControlSettings);
       return newTimerControlSettings;
     });
