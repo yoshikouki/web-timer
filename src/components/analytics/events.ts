@@ -23,4 +23,98 @@ const event = ({ action, category, label, value }: GtagEvent) => {
   });
 };
 
-export const events = { pageview, event };
+// Timer Events
+const timerStart = (seconds: number) =>
+  event({
+    action: "timer_start",
+    category: "timer",
+    label: "start",
+    value: seconds,
+  });
+
+const timerPause = (remainingSeconds: number) =>
+  event({
+    action: "timer_pause",
+    category: "timer",
+    label: "pause",
+    value: remainingSeconds,
+  });
+
+const timerReset = (remainingSeconds: number) =>
+  event({
+    action: "timer_reset",
+    category: "timer",
+    label: "reset",
+    value: remainingSeconds,
+  });
+
+const timerComplete = (totalSeconds: number) =>
+  event({
+    action: "timer_complete",
+    category: "timer",
+    label: "complete",
+    value: totalSeconds,
+  });
+
+// Timer Settings Events
+const timerTimeSet = (seconds: number) =>
+  event({
+    action: "timer_time_set",
+    category: "timer_settings",
+    label: "time",
+    value: seconds,
+  });
+
+const timerFontChange = (fontName: string) =>
+  event({
+    action: "timer_font_change",
+    category: "timer_settings",
+    label: fontName,
+  });
+
+const timerOrientationChange = (orientation: "horizontal" | "vertical") =>
+  event({
+    action: "timer_orientation_change",
+    category: "timer_settings",
+    label: orientation,
+  });
+
+// Share Events
+const timerShare = (seconds: number) =>
+  event({
+    action: "timer_share",
+    category: "share",
+    label: "create",
+    value: seconds,
+  });
+
+const timerShareJoin = (remainingSeconds: number) =>
+  event({
+    action: "timer_share_join",
+    category: "share",
+    label: "join",
+    value: remainingSeconds,
+  });
+
+// Error Events
+const error = (message: string) =>
+  event({
+    action: "error",
+    category: "error",
+    label: message,
+  });
+
+export const events = {
+  pageview,
+  event,
+  timerStart,
+  timerPause,
+  timerReset,
+  timerComplete,
+  timerTimeSet,
+  timerFontChange,
+  timerOrientationChange,
+  timerShare,
+  timerShareJoin,
+  error,
+};
