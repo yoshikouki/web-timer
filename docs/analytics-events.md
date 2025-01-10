@@ -83,6 +83,60 @@ Events related to error tracking
   - **category**: `error`
   - **label**: Error message
 
+## Best Practices
+
+### Event Tracking Implementation
+
+1. **Centralize Event Tracking in Custom Hooks**
+   - Consolidate related event tracking logic in custom hooks
+   - Example: Timer settings events are tracked in `useTimerCore` hook
+   - This approach reduces code duplication and improves maintainability
+
+2. **Event Tracking in State Management**
+   - Track events where state changes occur
+   - Avoid scattering event tracking across UI components
+   - Example: All timer settings events are tracked in `updateTimerControlSettings`
+
+```typescript
+// Good: Centralized event tracking in state management
+const updateTimerControlSettings = (settings: Partial<TimerControllerSettingsType>) => {
+  setTimerControlSettings((prev) => {
+    // Track all settings changes in one place
+    for (const [key, value] of Object.entries(settings)) {
+      switch (key) {
+        case "font":
+          events.timerFontChange(value);
+          break;
+        // ... other settings
+      }
+    }
+    return { ...prev, ...settings };
+  });
+};
+
+// Bad: Scattered event tracking in components
+const FontSelector = () => {
+  return (
+    <Select
+      onValueChange={(font) => {
+        updateTimerControlSettings({ font });
+        events.timerFontChange(font); // Avoid tracking here
+      }}
+    />
+  );
+};
+```
+
+3. **Type Safety**
+   - Use TypeScript to ensure event parameters are correct
+   - Define clear interfaces for event tracking functions
+   - Leverage type inference and validation
+
+4. **Testing Considerations**
+   - Event tracking should be easily mockable for testing
+   - Consider creating test utilities for event tracking
+   - Verify events are fired with correct parameters
+
 ## Usage Example
 
 ```typescript
