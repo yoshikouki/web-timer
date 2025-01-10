@@ -1,5 +1,6 @@
 import { isSamePath } from "@/lib/url";
 import { useEffect, useRef, useState } from "react";
+import { events } from "../analytics/events";
 import {
   loadCurrentTimer,
   loadTimerControlSettings,
@@ -75,16 +76,19 @@ export const useTimerCore = () => {
     updateCurrentTimer(startTimer);
     prepareFinishSound();
     loopTick();
+    events.timerStart(time.fullSeconds);
   };
 
   const pause = () => {
     updateCurrentTimer(pauseTimer);
     clearTickInterval();
+    events.timerPause(time.fullSeconds);
   };
 
   const resume = () => {
     updateCurrentTimer(resumeTimer);
     loopTick();
+    events.timerStart(time.fullSeconds);
   };
 
   const stop = () => {
@@ -94,6 +98,7 @@ export const useTimerCore = () => {
 
   const reset = () => {
     updateCurrentTimer(resetTimer);
+    events.timerReset(time.fullSeconds);
   };
 
   const updateTime = (value: Partial<{ minutes: number; seconds: number }>) => {
@@ -101,6 +106,7 @@ export const useTimerCore = () => {
     const { minutes = time.fullMinutes, seconds = time.s } = value;
     const newTimer = updateTimer(currentTimer, { minutes, seconds });
     updateCurrentTimer(newTimer);
+    events.timerTimeSet(minutes * 60 + seconds);
     return newTimer;
   };
 
@@ -131,6 +137,7 @@ export const useTimerCore = () => {
     sound.volume = timerControlSettings.finishSoundVolume;
     sound.currentTime = 0;
     sound.play();
+    events.timerComplete(time.fullSeconds);
   };
 
   const updateCurrentTimer = (
@@ -159,6 +166,12 @@ export const useTimerCore = () => {
         newTimerControlSettings.finishSoundVolume
       ) {
         prepareFinishSound(newTimerControlSettings);
+      }
+      if (timerControlSettings.font) {
+        events.timerFontChange(timerControlSettings.font);
+      }
+      if (timerControlSettings.orientation) {
+        events.timerOrientationChange(timerControlSettings.orientation);
       }
       storeTimerControlSettings(newTimerControlSettings);
       return newTimerControlSettings;

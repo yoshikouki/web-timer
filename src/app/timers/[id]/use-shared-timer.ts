@@ -1,5 +1,6 @@
 "use client";
 
+import { events } from "@/components/analytics/events";
 import { TimerContext } from "@/components/timer/timer-provider";
 import {
   type TimerUpdater,
@@ -87,6 +88,7 @@ export const useSharedTimer = ({
     switch (message.event) {
       case "start":
         startTimer();
+        events.timerShareJoin(timer.time.fullSeconds);
         break;
       case "pause":
         pauseTimer();
@@ -105,6 +107,7 @@ export const useSharedTimer = ({
         break;
       case "currentTimer":
         updateLocalTimer(message.currentTimer);
+        events.timerShare(timer.time.fullSeconds);
         break;
       default:
         break;
@@ -123,12 +126,14 @@ export const useSharedTimer = ({
       const parsed = TimerEventMessageSchema.safeParse(JSON.parse(event.data));
       if (!parsed.success) {
         console.error("Invalid timer event message", event.data);
+        events.error("Invalid timer event message");
         return;
       }
       onEventMessage(parsed.data);
     };
     eventSource.onerror = () => {
       console.error("Server-Sent Events connection error");
+      events.error("Server-Sent Events connection error");
       eventSource.close();
     };
     return () => {
