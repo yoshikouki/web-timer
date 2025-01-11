@@ -12,7 +12,7 @@ import {
   VolumeIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTimer } from "../use-timer";
 import { FinishSoundSelector } from "./finish-sound-selector";
 import { FinishSoundVolumeSlider } from "./finish-sound-volume-slider";
@@ -22,26 +22,45 @@ import { HorizontalLayoutToggle } from "./horizontal-layout-toggle";
 export const TimerControllerSettings = () => {
   const { timerControlSettings, playFinishSound, status } = useTimer();
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleToggle = () => {
-    const nextIsOpen = !isOpen;
-    if (nextIsOpen) {
-      events.timerSettingsOpen();
-    } else {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        !(
+          containerRef.current &&
+          event.target instanceof Node &&
+          !containerRef.current.contains(event.target)
+        )
+      ) {
+        return;
+      }
+      setIsOpen(false);
       events.timerSettingsClose();
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      events.timerSettingsOpen();
     }
-    setIsOpen(nextIsOpen);
-  };
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="fixed top-0 right-0 z-50 flex flex-col items-end gap-4 p-4">
+    <div
+      ref={containerRef}
+      className="fixed top-0 right-0 z-50 flex flex-col items-end gap-4 p-4"
+    >
       <Button
         variant="ghost"
         size="icon"
         className={cn(
           "group bg-card/90 transition-all duration-300 [&_svg]:size-6",
         )}
-        onClick={handleToggle}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <Settings2Icon
           className={cn(
