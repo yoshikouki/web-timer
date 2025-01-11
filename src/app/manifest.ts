@@ -17,9 +17,9 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
       },
       {
-        src: "/logo.webp",
-        sizes: "600x600",
-        type: "image/webp",
+        src: "/icon.png",
+        sizes: "1024x1024",
+        type: "image/png",
       },
       {
         src: "/icon-192x192.webp",

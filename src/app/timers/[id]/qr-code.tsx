@@ -70,7 +70,7 @@ export const QRCode = ({
           bgColor="transparent"
           fgColor="currentColor"
           imageSettings={{
-            src: "/logo.webp",
+            src: "/icon-192x192.webp",
             x: undefined,
             y: undefined,
             height: size / 2,

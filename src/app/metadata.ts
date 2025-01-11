@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   authors: { name: "yoshikouki", url: "https://yoshikouki.com/" },
   icons: [
     {
-      url: "/logo.webp",
-      sizes: "1200x1200",
-      type: "image/webp",
+      url: "/icon.png",
+      sizes: "1024x1024",
+      type: "image/png",
       color: "#211E1E",
       fetchPriority: "high",
     },
@@ -45,10 +45,10 @@ export const metadata: Metadata = {
         height: 256,
       },
       {
-        url: "/logo.webp",
+        url: "/icon.png",
         alt: title,
-        width: 1200,
-        height: 1200,
+        width: 1024,
+        height: 1024,
       },
     ],
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     creator: "@yoshikouki_",
     title,
     description,
-    images: "/logo.webp",
+    images: "/icon.png",
   },
 };
 
