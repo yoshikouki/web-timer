@@ -10,6 +10,7 @@ import {
   Volume1Icon,
   Volume2Icon,
   VolumeIcon,
+  XIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -59,13 +60,17 @@ export const TimerControllerSettings = () => {
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Settings2Icon
-          className={cn(
-            "opacity-100 transition-all duration-300 ease-in-out group-hover:opacity-100",
-            status === "running" && "opacity-30",
-            timerControlSettings.orientation === "horizontal" && "rotate-90",
-          )}
-        />
+        {isOpen ? (
+          <XIcon className="fade-in animate-in duration-300 ease-in-out" />
+        ) : (
+          <Settings2Icon
+            className={cn(
+              "fade-in animate-in transition-all duration-300 ease-in-out group-hover:opacity-100",
+              status === "running" && "opacity-30",
+              timerControlSettings.orientation === "horizontal" && "rotate-90",
+            )}
+          />
+        )}
       </Button>
 
       <AnimatePresence>
