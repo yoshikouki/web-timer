@@ -6,6 +6,7 @@ import { PenIcon, PinIcon, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useActionState, useState } from "react";
 import { AnimatedLink } from "../animated-link";
+import { LogoIcon } from "../icons/logo-icon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { TimerNameSchema } from "./timer";
@@ -31,9 +32,13 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
 
   return (
     <div className="flex items-start">
+      <AnimatedLink href="/" className="flex h-10 items-center">
+        <LogoIcon className="mr-2 size-[22px] fill-primary stroke-primary text-primary" />
+      </AnimatedLink>
       <AnimatePresence mode="wait">
         {!isEditing ? (
           <motion.div
+            key="timer-name-display"
             className="flex items-center gap-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,7 +67,7 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
               variant="ghost"
               size="icon"
               className={cn(
-                "bg-background/80 [&_svg]:size-4",
+                "bg-background/80 [&_svg]:size-[14px]",
                 status === "running" && currentTimer.name && "opacity-20",
                 status === "running" && !currentTimer.name && "opacity-0",
               )}
@@ -71,50 +76,47 @@ export const TimerName = ({ timerId }: { timerId?: string }) => {
             </Button>
           </motion.div>
         ) : (
-          <form
+          <motion.form
             action={submitAction}
-            className="flex flex-col items-center gap-2"
+            key="timer-name-edit"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
           >
-            <motion.div
-              className="flex items-center gap-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+            <Input
+              type="text"
+              name="name"
+              defaultValue={currentTimer.name || ""}
+              placeholder="Web Timer"
+              autoFocus
+              autoComplete="off"
+              className="h-10 bg-background/80 py-0 font-bold text-2xl text-primary placeholder:text-primary"
+            />
+            <Button
+              disabled={isPending}
+              type="submit"
+              variant="ghost"
+              size="icon"
+              className="bg-background/80 [&_svg]:size-4"
             >
-              <Input
-                type="text"
-                name="name"
-                defaultValue={currentTimer.name || ""}
-                placeholder="Web Timer"
-                autoFocus
-                autoComplete="off"
-                className="h-10 bg-background/80 py-0 font-bold text-2xl text-primary placeholder:text-primary"
-              />
-              <Button
-                disabled={isPending}
-                type="submit"
-                variant="ghost"
-                size="icon"
-                className="bg-background/80 [&_svg]:size-4"
-              >
-                <PinIcon className="stroke-primary" />
-              </Button>
-              <Button
-                onClick={() => setIsEditing(false)}
-                disabled={isPending}
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="bg-background [&_svg]:size-4"
-              >
-                <XIcon className="stroke-muted-foreground" />
-              </Button>
-            </motion.div>
+              <PinIcon className="stroke-primary" />
+            </Button>
+            <Button
+              onClick={() => setIsEditing(false)}
+              disabled={isPending}
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="bg-background [&_svg]:size-4"
+            >
+              <XIcon className="stroke-muted-foreground" />
+            </Button>
             {errorMessage && (
               <p className="text-muted-foreground text-sm">{errorMessage}</p>
             )}
-          </form>
+          </motion.form>
         )}
       </AnimatePresence>
     </div>

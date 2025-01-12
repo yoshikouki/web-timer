@@ -50,10 +50,7 @@ export const TimerControllerSettings = () => {
   }, [isOpen]);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed top-0 right-0 z-50 flex flex-col items-end gap-4 p-4"
-    >
+    <div ref={containerRef} className="z-50 flex flex-col items-end gap-4">
       <Button
         variant="ghost"
         size="icon"
@@ -74,7 +71,7 @@ export const TimerControllerSettings = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="flex flex-col items-end gap-10"
+            className="fixed top-14 right-0 flex flex-col items-end gap-10 p-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
