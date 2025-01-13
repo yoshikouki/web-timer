@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 
 export const title = "Web Timer";
-export const description = "Web Timer is an awesome app!";
+export const description =
+  "Easily share timers with QR codes or URLs. Perfect for meetings, events, and more!";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://web-timer.vercel.app/"),
