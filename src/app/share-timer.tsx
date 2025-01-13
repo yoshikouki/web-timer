@@ -16,14 +16,9 @@ export const ShareTimer = () => {
     router.push(response.url);
   };
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      <Button size="lg" onClick={onShareClick}>
-        <ShareIcon className="size-4" />
-        Share Timer
-      </Button>
-      <p className="text-muted-foreground text-sm">
-        Share the synced timer with others to collaborate.
-      </p>
-    </div>
+    <Button size="lg" onClick={onShareClick}>
+      <ShareIcon className="size-4" />
+      Share Timer
+    </Button>
   );
 };

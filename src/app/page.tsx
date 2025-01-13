@@ -2,7 +2,7 @@ import { Timer } from "@/components/timer";
 import { TimerHeader } from "@/components/timer/timer-header";
 import { TimerProvider } from "@/components/timer/timer-provider";
 import { HeadTitleController } from "./head-title-controller";
-import { ShareTimer } from "./share-timer";
+import { ShareSection } from "./share-section";
 
 export default function Home() {
   return (
@@ -13,9 +13,7 @@ export default function Home() {
         <section className="flex h-full min-h-svh w-full items-center justify-center">
           <Timer />
         </section>
-        <section>
-          <ShareTimer />
-        </section>
+        <ShareSection />
       </main>
     </TimerProvider>
   );
