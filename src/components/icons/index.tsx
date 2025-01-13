@@ -1,5 +1,13 @@
 import { cn } from "@/lib/utils";
-import { FileIcon, Laptop, Smartphone, Tablet, Zap } from "lucide-react";
+import {
+  Check,
+  FileIcon,
+  Laptop,
+  Share,
+  Smartphone,
+  Tablet,
+  Zap,
+} from "lucide-react";
 import type { HTMLAttributes } from "react";
 
 type IconProps = HTMLAttributes<HTMLDivElement | SVGElement>;
@@ -14,4 +22,6 @@ export const Icons = {
   ),
   notion: FileIcon,
   zap: Zap,
+  share: Share,
+  check: Check,
 };

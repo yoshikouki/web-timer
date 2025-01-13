@@ -8,14 +8,12 @@ export const ShareSection = ({ className }: { className?: string }) => {
       <div className="flex flex-col items-center gap-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <h2 className="font-bold text-2xl">
-            Share Time Together
-            <br />
+            Share Time Together <br />
             in 3 Seconds
           </h2>
           <p className="text-muted-foreground">
-            Scan QR code or share URL.
-            <br />
-            That's all you need to sync time with everyone.
+            Scan QR code or share URL. That's all you need to sync time with
+            everyone.
           </p>
         </div>
 
@@ -28,27 +26,24 @@ export const ShareSection = ({ className }: { className?: string }) => {
             <Icons.devices className="h-8 w-8 text-primary" />
             <h3 className="font-semibold">Any Device</h3>
             <p className="text-muted-foreground text-sm">
-              Works on all devices
-              <br />
-              with a web browser
+              Works on all devices with a web browser
             </p>
           </div>
           <div className="flex flex-col items-center gap-2 p-4 text-center">
             <Icons.notion className="h-8 w-8 text-primary" />
             <h3 className="font-semibold">Embed Anywhere</h3>
             <p className="text-muted-foreground text-sm">
-              Notion, Confluence
-              <br />
-              and more
+              Notion, Confluence and more
+              <span className="mt-1 block">
+                Enhance your workspace with live timers
+              </span>
             </p>
           </div>
           <div className="flex flex-col items-center gap-2 p-4 text-center">
             <Icons.zap className="h-8 w-8 text-primary" />
             <h3 className="font-semibold">No Setup</h3>
             <p className="text-muted-foreground text-sm">
-              No account required
-              <br />
-              Start instantly
+              No account required. Just share and start collaborating
             </p>
           </div>
         </div>
