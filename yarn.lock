@@ -113,17 +113,48 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.8.tgz"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
-"@flydotio/dockerfile@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/@flydotio/dockerfile/-/dockerfile-0.6.1.tgz"
-  integrity sha512-zGZK6OdqpBmFaWzKaORkSvUzvUnAsSkr0dwYqr+vimV0EU5j9C3trOHnmXdqCXswr45eGlietk8hYBdKWV/fIg==
+"@flydotio/dockerfile@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@flydotio/dockerfile/-/dockerfile-0.7.0.tgz#9f96bada180c7b6b389838c928777ef01032e6c5"
+  integrity sha512-Rg+v+kX3hrPGLITwk+H9HDa65YYkD8fNjNl8LzpZDA7mII+D8/s45/ZukHblwWqb1F3r2URPenIIkPEyJj51Ag==
   dependencies:
+    "@flydotio/litestream" "^1.0.1"
     "@sveltejs/adapter-node" "^5.2.11"
     chalk "^5.3.0"
     diff "^5.2.0"
     ejs "^3.1.10"
     shell-quote "^1.8.1"
     yargs "^17.7.2"
+
+"@flydotio/litestream-darwin-arm64@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@flydotio/litestream-darwin-arm64/-/litestream-darwin-arm64-1.0.1.tgz#8cb385a63a3e38fab280f14fa037837bcf6abd09"
+  integrity sha512-LI663pEbO1RZzzkqDbXen6UIDeOBkGJqfyl8FGm4Y+zbcKiLQhopuQLMs4BHlWelGMb2ZnwpcpM+OcimoDhqHA==
+
+"@flydotio/litestream-darwin-x64@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@flydotio/litestream-darwin-x64/-/litestream-darwin-x64-1.0.1.tgz#4f4d9df79e3b4fa55cb7708019e39c084b476913"
+  integrity sha512-AecPpC1mu5QJ12+UWEaeCZbtNbde+t7qqgxrIYEZ+ZmrfgvCmsuZIqz67/IuRtaXTzr0COKD/uv9KRHIx+xHsQ==
+
+"@flydotio/litestream-linux-arm64@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@flydotio/litestream-linux-arm64/-/litestream-linux-arm64-1.0.1.tgz#2f28ba86679bee59f206181865be89dda35ddc6a"
+  integrity sha512-/kukXjY+8xnAVUY3ywZIHIrW2gmKg5dXFVmSR/IQtdEwWZrKqdJ77fbK4u9bkacZqf94xn9jej8Cr4sToy6gNg==
+
+"@flydotio/litestream-linux-x64@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@flydotio/litestream-linux-x64/-/litestream-linux-x64-1.0.1.tgz#68acc68bf74841e778b1841cda5d113ba7a9248e"
+  integrity sha512-zmcAR8q2TNiAsWRSWscrN+r4NNQ+FwfatKhcE3G/YticNSkNyIhtCTlvXxIyOG+E+UWa+j441cjbmb7p83JPEw==
+
+"@flydotio/litestream@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@flydotio/litestream/-/litestream-1.0.1.tgz#82290d18433d1101d6333e7f271bf3490a39cb9c"
+  integrity sha512-hGIR37D1o8+AKcHa0PmdOG7dPm1RQsFQE3cqgt2udQVo3Q0NI5ruarLeaFWTFB6l+hjs97Xdlt0TgEufxLTzaQ==
+  optionalDependencies:
+    "@flydotio/litestream-darwin-arm64" "1.0.1"
+    "@flydotio/litestream-darwin-x64" "1.0.1"
+    "@flydotio/litestream-linux-arm64" "1.0.1"
+    "@flydotio/litestream-linux-x64" "1.0.1"
 
 "@hono/zod-validator@^0.4.2":
   version "0.4.2"
