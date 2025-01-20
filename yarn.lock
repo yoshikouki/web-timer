@@ -113,13 +113,13 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.8.tgz"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
-"@flydotio/dockerfile@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@flydotio/dockerfile/-/dockerfile-0.7.0.tgz#9f96bada180c7b6b389838c928777ef01032e6c5"
-  integrity sha512-Rg+v+kX3hrPGLITwk+H9HDa65YYkD8fNjNl8LzpZDA7mII+D8/s45/ZukHblwWqb1F3r2URPenIIkPEyJj51Ag==
+"@flydotio/dockerfile@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@flydotio/dockerfile/-/dockerfile-0.7.2.tgz#164f96422391708085ac9dc37b91d619c75274b6"
+  integrity sha512-+BwCAt1D7GQJYq2eOSELcTPUp73oszvS0Ebg9bBLnMJvMoQr2k6zZ2v7sb712s+jdd7iFzDYNgxE92L8i/9Rrg==
   dependencies:
     "@flydotio/litestream" "^1.0.1"
-    "@sveltejs/adapter-node" "^5.2.11"
+    "@sveltejs/adapter-node" "^5.2.12"
     chalk "^5.3.0"
     diff "^5.2.0"
     ejs "^3.1.10"
@@ -814,10 +814,10 @@
   resolved "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.30.1.tgz"
   integrity sha512-D6qjsXGcvhTjv0kI4fU8tUuBDF/Ueee4SVX79VfNDXZa64TfCW1Slkb6Z7O1p7vflqZjcmOVdZlqf8gvJxc6og==
 
-"@sveltejs/adapter-node@^5.2.11":
-  version "5.2.11"
-  resolved "https://registry.npmjs.org/@sveltejs/adapter-node/-/adapter-node-5.2.11.tgz"
-  integrity sha512-lR7/dfUaKFf3aI408KRDy/BVDYoqUws7zNOJz2Hl4JoshlTnMgdha3brXBRFXB+cWtYvJjjPhvmq3xqpbioi4w==
+"@sveltejs/adapter-node@^5.2.12":
+  version "5.2.12"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-node/-/adapter-node-5.2.12.tgz#011b91b941bd37a52dfd725c775f2123c7148429"
+  integrity sha512-0bp4Yb3jKIEcZWVcJC/L1xXp9zzJS4hDwfb4VITAkfT4OVdkspSHsx7YhqJDbb2hgLl6R9Vs7VQR+fqIVOxPUQ==
   dependencies:
     "@rollup/plugin-commonjs" "^28.0.1"
     "@rollup/plugin-json" "^6.1.0"
