@@ -651,10 +651,10 @@ async@^3.2.3:
   resolved "https://registry.npmjs.org/async/-/async-3.2.6.tgz"
   integrity sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==
 
-babel-plugin-react-compiler@^19.0.0-beta-55955c9-20241229:
-  version "19.0.0-beta-df7b47d-20241124"
-  resolved "https://registry.npmjs.org/babel-plugin-react-compiler/-/babel-plugin-react-compiler-19.0.0-beta-df7b47d-20241124.tgz"
-  integrity sha512-93iSASR20HNsotcOTQ+KPL0zpgfRFVWL86AtXpmHp995HuMVnC9femd8Winr3GxkPEh8lEOyaw3nqY4q2HUm5w==
+babel-plugin-react-compiler@^19.0.0-beta-714736e-20250131:
+  version "19.0.0-beta-714736e-20250131"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-compiler/-/babel-plugin-react-compiler-19.0.0-beta-714736e-20250131.tgz#8efad3433e56701e19015713741f493e228c700f"
+  integrity sha512-frj2l6fRWVi26iw9WthFKyFyE4u5ZSHH3KdKiscOOwpz210seTtwnp0QbJmi8Zoa5HK7Fk2fH40JffN2y8GvLg==
   dependencies:
     "@babel/types" "^7.19.0"
 
