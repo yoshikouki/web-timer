@@ -838,10 +838,10 @@ has-flag@^4.0.0:
   resolved "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
   integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
 
-hono@^4.7.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.7.0.tgz#ccd1f607c7e5501c70e508729cd8868ffbf7f72a"
-  integrity sha512-hV97aIR4WYbG30k234sD9B3VNr1ZWdQRmrVF76LKFlmI7O9Yo70mG9+mFwyQ6Sjrz4wH71GfnBxv6CPjcx3QNw==
+hono@^4.7.1:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.7.1.tgz#0eea31bce9a4080510614b3bddb9fa5854229f0c"
+  integrity sha512-V3eWoPkBxoNgFCkSc5Y5rpLF6YoQQx1pkYO4qrF6YfOw8RZbujUNlJLZCxh0z9gZct70+je2Ih7Zrdpv21hP9w==
 
 is-arrayish@^0.3.1:
   version "0.3.2"
