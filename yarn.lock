@@ -1274,10 +1274,10 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-sonner@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/sonner/-/sonner-2.0.0.tgz#9e76d400d876fce8c99b6bf503cd5640f272a216"
-  integrity sha512-3WeSl3WrEdhmdiTniT8JsCiVRVDOdn7k+4MG2drqzSMOeqrExm03HIwDBPKuq52JBqL7wRLG17QBIiSleUbljw==
+sonner@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/sonner/-/sonner-2.0.1.tgz#f41774b2e0ee770152458a336570a4d577d03e6f"
+  integrity sha512-FRBphaehZ5tLdLcQ8g2WOIRE+Y7BCfWi5Zyd8bCvBjiW8TxxAyoWZIxS661Yz6TGPqFQ4VLzOF89WEYhfynSFQ==
 
 source-map-js@^1.0.2, source-map-js@^1.2.1:
   version "1.2.1"
