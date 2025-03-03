@@ -724,10 +724,10 @@
   dependencies:
     bun-types "1.2.3"
 
-"@types/dom-view-transitions@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.npmjs.org/@types/dom-view-transitions/-/dom-view-transitions-1.0.5.tgz"
-  integrity sha512-N2sILR7fxSMnaFaAPwGj4DtHCXjIyQTHt+xJyf9jATpzUsTkMNM0DWtqZB6W7f501B/Y0tq3uqat/VlbjuTpMA==
+"@types/dom-view-transitions@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@types/dom-view-transitions/-/dom-view-transitions-1.0.6.tgz#e6c53f17826be079fafe6df03623f37fcd1b86ac"
+  integrity sha512-Q5IoDouTOcZKEs4nDpmUti2MXP48MQDBkS2nUQKFrsDeTFIaArVmhWUon28vlDfNkbbaK4EROu4Fv0iKObWjSg==
 
 "@types/gtag.js@^0.0.20":
   version "0.0.20"
