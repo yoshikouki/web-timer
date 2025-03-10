@@ -46,7 +46,7 @@
     "@types/bun": "^1.2.4",
     "@types/dom-view-transitions": "^1.0.6",
     "@types/gtag.js": "^0.0.20",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "postcss": "^8.5.3",
