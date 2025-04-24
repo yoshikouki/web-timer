@@ -978,12 +978,12 @@ filelist@^1.0.4:
   dependencies:
     minimatch "^5.0.1"
 
-framer-motion@^12.7.5:
-  version "12.7.5"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.7.5.tgz#a6aeac5318a5d30011a80e0d83f3fc6a7d57d2f1"
-  integrity sha512-iD+vBOLn8E8bwBAFUQ1DYXjivm+cGGPgQUQ4Doleq7YP/zHdozUVwAMBJwOOfCTbtM8uOooMi77noD261Kxiyw==
+framer-motion@^12.8.2:
+  version "12.8.2"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.8.2.tgz#d006f28381b58fd68d86f7c7ecb2121a20c100a5"
+  integrity sha512-JCGFJPfVmvxL4rRJgCcVCnbzPniKj5N3Sa8XQ5/TQI1bN4PyVlKDHPWfWJ7AbnFuGm9IQvZysjk+ABFbkErCrA==
   dependencies:
-    motion-dom "^12.7.5"
+    motion-dom "^12.8.1"
     motion-utils "^12.7.5"
     tslib "^2.4.0"
 
@@ -1066,10 +1066,10 @@ minimatch@^5.0.1:
   dependencies:
     brace-expansion "^2.0.1"
 
-motion-dom@^12.7.5:
-  version "12.7.5"
-  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.7.5.tgz#c24206a05e266cc592789eb463aa717bf02a0d0f"
-  integrity sha512-0YjhPfv9n5O8DqCrSp8ny+JrsHqYu957oqlNKkrUrAvYpDKYWfp/7uM9Pu26DinbMn+H0p72rdUL8P8RzhSo1Q==
+motion-dom@^12.8.1:
+  version "12.8.1"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.8.1.tgz#8960a69c599f0254b2e2c7c528aedbf9af64f244"
+  integrity sha512-ap7SvhLzSaYiY7/YzPB/dXarHqjlABJRBXGvSr7S7Sk9bwnU5J9X8+WgS3uu4w5C+JD0Xh/qZkWoRYNDjNeesg==
   dependencies:
     motion-utils "^12.7.5"
 
@@ -1078,12 +1078,12 @@ motion-utils@^12.7.5:
   resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-12.7.5.tgz#d77df2c6e336540766d9927498e62571b81b66bd"
   integrity sha512-JIgrmEq7Vw1x0AUrjvkRp7oMMQkGqSUMT50O/Ag6RRCQWG3gRRTkOI+BirBAJT6m+GIPoiyxkJ1u98GgF/a6TQ==
 
-motion@12.7.5:
-  version "12.7.5"
-  resolved "https://registry.yarnpkg.com/motion/-/motion-12.7.5.tgz#e39a208e0d00edc121539ee3d3e99e784f0e7e1e"
-  integrity sha512-tNybSjfg3bf60Amh/zeMH4KZ96AxyrJdM4meTJUbeEVY7d3Edl6lrWTX/GNfgpmytXwx3ZuAB55KAP+q6IiZcg==
+motion@12.8.2:
+  version "12.8.2"
+  resolved "https://registry.yarnpkg.com/motion/-/motion-12.8.2.tgz#c92c94ec7c66f743658883794d53c770db843b64"
+  integrity sha512-Oy3hpk/10H9x5dKKLVjcAkv1rIn+hV42dGOliUdY9VL7admkmc3F0MBxK1YJ+7V9BgyokUyDRG3Ivs23H9Q/zA==
   dependencies:
-    framer-motion "^12.7.5"
+    framer-motion "^12.8.2"
     tslib "^2.4.0"
 
 mute-stream@^2.0.0:
