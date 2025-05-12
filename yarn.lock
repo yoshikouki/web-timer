@@ -730,12 +730,12 @@
   dependencies:
     tslib "^2.8.0"
 
-"@types/bun@^1.2.12":
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/@types/bun/-/bun-1.2.12.tgz#c4fddeeecceb47f737095578b94661f3a3714621"
-  integrity sha512-lY/GQTXDGsolT/TiH72p1tuyUORuRrdV7VwOTOjDOt8uTBJQOJc5zz3ufwwDl0VBaoxotSk4LdP0hhjLJ6ypIQ==
+"@types/bun@^1.2.13":
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/@types/bun/-/bun-1.2.13.tgz#fcca682a98adb51c3fc2736c980c53d914e39fc5"
+  integrity sha512-u6vXep/i9VBxoJl3GjZsl/BFIsvML8DfVDO0RYLEwtSZSp981kEO1V5NwRcO1CPJ7AmvpbnDCiMKo3JvbDEjAg==
   dependencies:
-    bun-types "1.2.12"
+    bun-types "1.2.13"
 
 "@types/dom-view-transitions@^1.0.6":
   version "1.0.6"
@@ -824,10 +824,10 @@ brace-expansion@^2.0.1:
   dependencies:
     balanced-match "^1.0.0"
 
-bun-types@1.2.12:
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/bun-types/-/bun-types-1.2.12.tgz#191b0db35f2d52452edcf8646bfdb4fab07129ba"
-  integrity sha512-tvWMx5vPqbRXgE8WUZI94iS1xAYs8bkqESR9cxBB1Wi+urvfTrF1uzuDgBHFAdO0+d2lmsbG3HmeKMvUyj6pWA==
+bun-types@1.2.13:
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/bun-types/-/bun-types-1.2.13.tgz#d0e4a49e510327011253e1cf5f4ecd02808457f5"
+  integrity sha512-rRjA1T6n7wto4gxhAO/ErZEtOXyEZEmnIHQfl0Dt1QQSB4QV0iP6BZ9/YB5fZaHFQ2dwHFrmPaRQ9GGMX01k9Q==
   dependencies:
     "@types/node" "*"
 
