@@ -120,10 +120,10 @@
     shell-quote "^1.8.2"
     yargs "^17.7.2"
 
-"@hono/zod-validator@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.5.0.tgz#2eb1c68c6746de91c58241674c26742b97fd8e7d"
-  integrity sha512-ds5bW6DCgAnNHP33E3ieSbaZFd5dkV52ZjyaXtGoR06APFrCtzAsKZxTHwOrJNBdXsi0e5wNwo5L4nVEVnJUdg==
+"@hono/zod-validator@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.6.0.tgz#012cd39d13eed83e7beb139031363f07cd9fe97c"
+  integrity sha512-3aVk+cvuOE/9D6H2ugaG1kt14NT9rFyZzwRW6+aaPhMufMSiyKNvb/7pscZ/U302F8cTPD2TSTJiOUmx6TPqGg==
 
 "@img/sharp-darwin-arm64@0.34.1":
   version "0.34.1"
