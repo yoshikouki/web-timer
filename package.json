@@ -37,12 +37,13 @@
     "react-dom": "^19.1.0",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
+    "tw-animate-css": "^1.3.4",
     "zod": "^3.25.64"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@flydotio/dockerfile": "^0.7.10",
+    "@tailwindcss/postcss": "^4.1.10",
     "@types/bun": "^1.2.16",
     "@types/dom-view-transitions": "^1.0.6",
     "@types/gtag.js": "^0.0.20",

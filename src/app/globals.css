@@ -1,6 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-duration: 1000ms;
+  --animate-delay: 0ms;
+  --animate-infinite: infinite;
+  
+  --radius: 0.5rem;
+}
 
 @layer base {
   :root {
@@ -67,7 +76,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
   body {
     @apply bg-background text-foreground;
