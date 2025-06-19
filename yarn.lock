@@ -1345,10 +1345,10 @@ lightningcss@1.30.1:
     lightningcss-win32-arm64-msvc "1.30.1"
     lightningcss-win32-x64-msvc "1.30.1"
 
-lucide-react@^0.517.0:
-  version "0.517.0"
-  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.517.0.tgz#195ed8bd18e72462b012ba4e36d4474e480ff44c"
-  integrity sha512-TQCwwbwIuVG6SSutUC2Ol6PRXcuZndqoVAnDa7S7xb/RWPaiKTvLwX7byUKeh0pUgvtFh0NZZwFIDuMSeB7Iwg==
+lucide-react@^0.518.0:
+  version "0.518.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.518.0.tgz#8cd9207fbbab39a64a6aa59af1e15fa934b81688"
+  integrity sha512-kFg34uQqnVl/7HwAiigxPSpj//43VIVHQbMygQPtS1yT4btMXHCWUipHcgcXHD2pm1Z2nUBA/M+Vnh/YmWXQUw==
 
 magic-string@^0.30.17:
   version "0.30.17"
