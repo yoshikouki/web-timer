@@ -1227,10 +1227,10 @@ has-flag@^4.0.0:
   resolved "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
   integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
 
-hono@^4.8.5:
-  version "4.8.5"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.8.5.tgz#a3b7703649a86f608c148e9aa1ca9ea41266cf8e"
-  integrity sha512-Up2cQbtNz1s111qpnnECdTGqSIUIhZJMLikdKkshebQSEBcoUKq6XJayLGqSZWidiH0zfHRCJqFu062Mz5UuRA==
+hono@^4.8.7:
+  version "4.8.7"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.8.7.tgz#e7b7fa5791b6c7cb8f8aff1ebb413e24efa4a4fe"
+  integrity sha512-gS/IyUw6MzcdnOyVRcRshn9hc/EygYc75glsnI3iESod3kGg9Mz194Y9NWJN8O/4qybIoonyIq6E4agc/t0i/g==
 
 iconv-lite@^0.4.24:
   version "0.4.24"
