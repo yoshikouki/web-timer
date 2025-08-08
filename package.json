@@ -26,7 +26,7 @@
     "babel-plugin-react-compiler": "^19.0.0-beta-714736e-20250131",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "hono": "^4.8.12",
+    "hono": "^4.9.0",
     "lucide-react": "^0.537.0",
     "motion": "12.23.12",
     "next": "15.4.6",
