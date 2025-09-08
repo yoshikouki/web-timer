@@ -41,7 +41,7 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.2",
+    "@biomejs/biome": "2.2.3",
     "@flydotio/dockerfile": "^0.7.10",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/bun": "^1.2.21",
